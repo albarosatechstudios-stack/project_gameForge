@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Scene
   m_RootView: {fileID: 6}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -363,7 +363,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Plugins
+    - Assets
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -373,15 +373,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Plugins
+  - Assets
   m_LastFoldersGridSize: 16
-  m_LastProjectPath: D:\Game Dev\project_gameForge\game\GameForge25
+  m_LastProjectPath: D:\Game Dev\project_gameForge\game
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 508f0000
-    m_LastClickedID: 36688
+    m_SelectedIDs: e08e0000
+    m_LastClickedID: 36576
     m_ExpandedIDs: 00000000e08e0000e28e0000e48e0000e68e0000e88e0000ea8e000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -557,9 +557,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: baf3ffff
-      m_LastClickedID: -3142
-      m_ExpandedIDs: 1afbffff
+      m_SelectedIDs: 9af9ffff
+      m_LastClickedID: -1638
+      m_ExpandedIDs: 9af9ffff1afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1121,9 +1121,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -17.40443, y: 1.2514029, z: 99.326904}
+    m_Target: {x: -16.919062, y: 22.583237, z: 279.8324}
     speed: 2
-    m_Value: {x: -17.40443, y: 1.2514029, z: 99.326904}
+    m_Value: {x: -16.919062, y: 22.583237, z: 279.8324}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1169,20 +1169,20 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.482
   m_Rotation:
-    m_Target: {x: 0.04065299, y: 0.07367126, z: 0.0032938349, w: -0.99660945}
+    m_Target: {x: 0.13131878, y: -0.02471574, z: 0.0029456685, w: 0.9911935}
     speed: 2
-    m_Value: {x: 0.04065299, y: 0.07367125, z: 0.0032938349, w: -0.99660945}
+    m_Value: {x: 0.12834416, y: -0.015796745, z: 0.0017159927, w: 0.99160236}
   m_Size:
-    m_Target: 0.10599828
+    m_Target: 26.58048
     speed: 2
-    m_Value: 0.10599828
+    m_Value: 25.435867
   m_Ortho:
     m_Target: 0
     speed: 2
     m_Value: 0
   m_CameraSettings:
-    m_Speed: 1.0249
-    m_SpeedNormalized: 0.51
+    m_Speed: 1.4030006
+    m_SpeedNormalized: 0.7000003
     m_SpeedMin: 0.01
     m_SpeedMax: 2
     m_EasingEnabled: 1
