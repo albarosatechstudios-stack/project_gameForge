@@ -1718,9 +1718,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 152433171970431152, guid: 3169a8bf6a6af1847a0c99b8fdba4fc2, type: 3}
+      propertyPath: quadroObject
+      value: 
+      objectReference: {fileID: 1967098602}
     - target: {fileID: 2021640812590763724, guid: 3169a8bf6a6af1847a0c99b8fdba4fc2, type: 3}
       propertyPath: m_Name
       value: CanvasTelaBianca
+      objectReference: {fileID: 0}
+    - target: {fileID: 2681347401779023439, guid: 3169a8bf6a6af1847a0c99b8fdba4fc2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2681347401779023439, guid: 3169a8bf6a6af1847a0c99b8fdba4fc2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2681347401779023439, guid: 3169a8bf6a6af1847a0c99b8fdba4fc2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 8295755475381309526, guid: 3169a8bf6a6af1847a0c99b8fdba4fc2, type: 3}
       propertyPath: m_Pivot.x

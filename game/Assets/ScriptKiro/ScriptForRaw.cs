@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using System.IO;
 
 public class DrawingController : MonoBehaviour
 {
@@ -11,11 +12,7 @@ public class DrawingController : MonoBehaviour
     private int width = 256;
     private int height = 256;
 
-   
-    private float timer = 0f;
-
-    private int currentX = 0;
-    private int currentY = 128;
+    public GameObject quadroObject;
 
     private Vector2Int? lastMousePixel = null;
     private int brushSize = 4; // dimensione pennello
@@ -40,9 +37,6 @@ public class DrawingController : MonoBehaviour
 
     void Update()
     {
-       
-
-        // Disegno con mouse destro e tratto fluido
         if (Mouse.current != null && Mouse.current.rightButton.isPressed)
         {
             Vector2 mousePos = Mouse.current.position.ReadValue();
@@ -79,23 +73,21 @@ public class DrawingController : MonoBehaviour
             lastMousePixel = null;
         }
 
-        // Pulisce la tela con il tasto C
         if (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame)
         {
             ClearCanvas();
         }
 
-        // Nasconde il pannello con ESC
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             drawingCanvas.SetActive(false);
         }
 
-        // Salva immagine con S
         if (Keyboard.current != null && Keyboard.current.sKey.wasPressedThisFrame)
         {
             string path = Application.dataPath + "/saved_drawing.png";
             SaveTextureToFile(path);
+            ApplyTextureToMaterial(path);
         }
     }
 
@@ -165,20 +157,76 @@ public class DrawingController : MonoBehaviour
             whitePixels[i] = Color.white;
 
         texture.SetPixels32(whitePixels);
+
         texture.Apply();
+    }
+
+    Texture2D FlipTextureHorizontally(Texture2D original)
+    {
+        Texture2D flipped = new Texture2D(original.width, original.height, original.format, false);
+
+        for (int y = 0; y < original.height; y++)
+        {
+            for (int x = 0; x < original.width; x++)
+            {
+                flipped.SetPixel(x, y, original.GetPixel(original.width - x - 1, y));
+            }
+        }
+
+        flipped.Apply();
+        return flipped;
     }
 
     public void SaveTextureToFile(string path)
     {
-        byte[] pngData = texture.EncodeToPNG();
+        Texture2D flippedTex = FlipTextureHorizontally(texture);
+
+        byte[] pngData = flippedTex.EncodeToPNG();
         if (pngData != null)
         {
-            System.IO.File.WriteAllBytes(path, pngData);
+            File.WriteAllBytes(path, pngData);
             Debug.Log($"Immagine salvata in: {path}");
         }
         else
         {
             Debug.LogError("Errore nel salvataggio PNG");
+        }
+    }
+
+    public void ApplyTextureToMaterial(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("File non trovato: " + filePath);
+            return;
+        }
+
+        byte[] fileData = File.ReadAllBytes(filePath);
+
+        Texture2D tex = new Texture2D(2, 2);
+        if (tex.LoadImage(fileData))
+        {
+            if (quadroObject != null)
+            {
+                Renderer renderer = quadroObject.GetComponent<Renderer>();
+                if (renderer != null)
+                {
+                    renderer.material.mainTexture = tex;
+                    Debug.Log("Texture applicata al materiale dell'oggetto.");
+                }
+                else
+                {
+                    Debug.LogWarning("Nessun Renderer trovato sull'oggetto assegnato.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("quadroObject non assegnato!");
+            }
+        }
+        else
+        {
+            Debug.LogError("Impossibile caricare l'immagine come texture.");
         }
     }
 }

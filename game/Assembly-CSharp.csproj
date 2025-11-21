@@ -64,6 +64,7 @@
     <Compile Include="Assets\EasyStart Third Person Controller\Scripts\Commenteds\CommentedCameraController.cs" />
     <Compile Include="Assets\ScriptKiro\QuadroInterattivo.cs" />
     <Compile Include="Assets\ScriptKiro\ScriptForRaw.cs" />
+    <Compile Include="Assets\ScriptKiro\CompareDraw.cs" />
     <Compile Include="Assets\EasyStart Third Person Controller\Scripts\CameraController.cs" />
     <Compile Include="Assets\EasyStart Third Person Controller\Scripts\ThirdPersonController.cs" />
     <Compile Include="Assets\ScriptKiro\PannelloQuadro.cs" />
@@ -593,8 +594,16 @@
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@205a02cbcb39\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="OpenCvSharp.Extensions">
+      <HintPath>Assets\Plugins\OpenCvSharp\OpenCvSharp.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@b4d700247d4b\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OpenCvSharp">
+      <HintPath>Assets\Plugins\OpenCvSharp\OpenCvSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="netstandard">

@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|c:\\users\\selen\\documents\\github\\project_gameforge\\game\\assets\\scriptkiro\\opendrawningboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|solutionrelative:assets\\scriptkiro\\opendrawningboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|c:\\users\\selen\\documents\\github\\project_gameforge\\game\\assets\\scriptkiro\\comparedraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|solutionrelative:assets\\scriptkiro\\comparedraw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "OpenDrawningBoard.cs",
-              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\ScriptKiro\\OpenDrawningBoard.cs",
-              "RelativeDocumentMoniker": "Assets\\ScriptKiro\\OpenDrawningBoard.cs",
-              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\ScriptKiro\\OpenDrawningBoard.cs",
-              "RelativeToolTip": "Assets\\ScriptKiro\\OpenDrawningBoard.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "CompareDraw.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\ScriptKiro\\CompareDraw.cs",
+              "RelativeDocumentMoniker": "Assets\\ScriptKiro\\CompareDraw.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\ScriptKiro\\CompareDraw.cs*",
+              "RelativeToolTip": "Assets\\ScriptKiro\\CompareDraw.cs*",
+              "ViewState": "AgIAABMAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T08:58:37.905Z",
+              "WhenOpened": "2025-11-21T10:20:24.665Z",
               "EditorCaption": ""
             }
           ]
