@@ -1,13 +1,15 @@
 using UnityEngine;
+using System.IO;
 
-public class SimpleLineComparer : MonoBehaviour
+public class SimpleLineComparerIgnoreBG : MonoBehaviour
 {
     [Header("Immagini da confrontare")]
     public Texture2D imageReference;  // la Gioconda (contorni)
     public Texture2D imagePlayer;     // disegno Paint (contorni)
 
     [Header("Parametri binarizzazione")]
-    [Range(0, 1)] public float threshold = 0.5f; // valore soglia per binarizzare
+    [Range(0, 1)] public float thresholdLine = 0.5f;  // soglia per linee (pixel scuri)
+    [Range(0, 1)] public float thresholdBG = 0.8f;    // soglia per considerare sfondo (pixel chiari)
 
     void Start()
     {
@@ -17,36 +19,59 @@ public class SimpleLineComparer : MonoBehaviour
             return;
         }
 
-        float similarity = CompareLineDrawings(imageReference, imagePlayer, threshold);
-        Debug.Log($"Similarità (Jaccard Index): {similarity * 100f:F2}%");
+        // Salva immagine modello
+        SaveReferenceImage(imageReference);
+
+        float similarity = CompareLineDrawingsIgnoreBackground(imageReference, imagePlayer, thresholdLine, thresholdBG);
+        Debug.Log($"Similarità (Jaccard Index senza sfondo): {similarity * 100f:F2}%");
     }
 
-    float CompareLineDrawings(Texture2D refTex, Texture2D playerTex, float binThreshold)
+    void SaveReferenceImage(Texture2D texture)
     {
-        // Ridimensiona playerTex alle dimensioni di refTex
+        byte[] pngData = texture.EncodeToPNG();
+        if (pngData != null)
+        {
+            string path = Path.Combine(Application.persistentDataPath, "modello.png");
+            File.WriteAllBytes(path, pngData);
+            Debug.Log($"Immagine modello salvata in: {path}");
+        }
+        else
+        {
+            Debug.LogWarning("Impossibile convertire immagine in PNG.");
+        }
+    }
+
+    float CompareLineDrawingsIgnoreBackground(Texture2D refTex, Texture2D playerTex, float lineThresh, float bgThresh)
+    {
         Texture2D playerResized = ResizeTexture(playerTex, refTex.width, refTex.height);
 
-        // Converte entrambe in array binari (true = linea, false = sfondo)
-        bool[] refBinary = TextureToBinaryArray(refTex, binThreshold);
-        bool[] playerBinary = TextureToBinaryArray(playerResized, binThreshold);
+        bool[] refBinary = TextureToBinaryArray(refTex, lineThresh);
+        bool[] playerBinary = TextureToBinaryArray(playerResized, lineThresh);
+
+        bool[] refMask = TextureToMaskArray(refTex, bgThresh);
+        bool[] playerMask = TextureToMaskArray(playerResized, bgThresh);
 
         int intersection = 0;
         int unionCount = 0;
 
         for (int i = 0; i < refBinary.Length; i++)
         {
-            if (refBinary[i] || playerBinary[i])
+            if (refMask[i] || playerMask[i])
             {
-                unionCount++;
-                if (refBinary[i] && playerBinary[i])
-                    intersection++;
+                bool unionPixel = refBinary[i] || playerBinary[i];
+                if (unionPixel)
+                {
+                    unionCount++;
+                    if (refBinary[i] && playerBinary[i])
+                        intersection++;
+                }
             }
         }
 
         if (unionCount == 0)
             return 0f;
 
-        return (float)intersection / unionCount;  // Jaccard Index
+        return (float)intersection / unionCount;
     }
 
     Texture2D ResizeTexture(Texture2D source, int newWidth, int newHeight)
@@ -69,12 +94,24 @@ public class SimpleLineComparer : MonoBehaviour
 
         for (int i = 0; i < pixels.Length; i++)
         {
-            // Converti a grigio
             float gray = pixels[i].r * 0.299f + pixels[i].g * 0.587f + pixels[i].b * 0.114f;
-            // Binarizza (linea se scuro)
             binary[i] = gray < threshold;
         }
 
         return binary;
+    }
+
+    bool[] TextureToMaskArray(Texture2D tex, float bgThreshold)
+    {
+        Color[] pixels = tex.GetPixels();
+        bool[] mask = new bool[pixels.Length];
+
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            float gray = pixels[i].r * 0.299f + pixels[i].g * 0.587f + pixels[i].b * 0.114f;
+            mask[i] = gray < bgThreshold;
+        }
+
+        return mask;
     }
 }

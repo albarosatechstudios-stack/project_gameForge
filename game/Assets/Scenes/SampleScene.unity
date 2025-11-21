@@ -1316,9 +1316,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a77056bfafba2345b5086dccaab787c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimpleLineComparer
-  imageReference: {fileID: 2800000, guid: 2a408f01be171a64db5a11e4d7c8bcb1, type: 3}
-  imagePlayer: {fileID: 2800000, guid: e54dd07758701a84fa4c026d9d737904, type: 3}
-  threshold: 0.5
+  imageReference: {fileID: 2800000, guid: 7fc3dc88ef08f3d4889eb7c1ef3d1750, type: 3}
+  imagePlayer: {fileID: 2800000, guid: 7fc3dc88ef08f3d4889eb7c1ef3d1750, type: 3}
+  thresholdLine: 0.5
+  thresholdBG: 0.8
 --- !u!1001 &1892876178
 PrefabInstance:
   m_ObjectHideFlags: 0
