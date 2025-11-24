@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
 
     [Header("Look Settings")]
-    [SerializeField] public float mouseSensitivity; // Sensibilità del mouse
+    [SerializeField] public float mouseSensitivity; // Sensibilitï¿½ del mouse
     [SerializeField] private Transform cameraFollowTarget; // Assegna qui il transform che la telecamera deve seguire/guardare
 
     private PlayerControlsimputactions playerControls;
@@ -35,8 +35,8 @@ public class PlayerMovement : MonoBehaviour
         playerControls.Move.look.canceled += OnLookInput;
 
         // Opzionale: Blocca il cursore e nascondilo per un'esperienza FPS/TPS
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
     }
 
     private void OnEnable()
@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         playerControls.Disable();
-        // Ripristina lo stato del cursore quando lo script è disabilitato
+        // Ripristina lo stato del cursore quando lo script ï¿½ disabilitato
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 localMovement = new Vector3(currentMovementInput.x, 0f, currentMovementInput.y);
 
         // Trasforma il movimento dal sistema di coordinate locale a quello globale del player
-        // In questo modo, "avanti" è sempre dove il player sta guardando.
+        // In questo modo, "avanti" ï¿½ sempre dove il player sta guardando.
         Vector3 moveDirection = transform.TransformDirection(localMovement);
 
         // Applica il movimento al CharacterController
@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleRotation()
     {
-        // Leggi l'input del mouse e applica la sensibilità
+        // Leggi l'input del mouse e applica la sensibilitï¿½
         float mouseX = currentLookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = currentLookInput.y * mouseSensitivity * Time.deltaTime;
 
@@ -95,17 +95,17 @@ public class PlayerMovement : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Limita la rotazione verticale a +/- 90 gradi
 
         // Applica la rotazione verticale al `cameraFollowTarget` (se impostato)
-        // Questo permette alla telecamera di guardare su/giù senza ruotare l'intero player.
+        // Questo permette alla telecamera di guardare su/giï¿½ senza ruotare l'intero player.
         if (cameraFollowTarget != null)
         {
             cameraFollowTarget.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         }
         else
         {
-            // Se non c'è un target specifico per la telecamera, applichiamo la rotazione verticale al player stesso
-            // ATTENZIONE: Questo farà inclinare tutto il player su/giù, il che potrebbe non essere desiderato per un movimento FPS/TPS.
-            // È meglio avere un oggetto figlio per la telecamera o la "testa".
-            // transform.localRotation = Quaternion.Euler(xRotation, transform.localEulerAngles.y, 0f); // Non usare per FPS standard
+            // Se non c'ï¿½ un target specifico per la telecamera, applichiamo la rotazione verticale al player stesso
+            // ATTENZIONE: Questo farï¿½ inclinare tutto il player su/giï¿½, il che potrebbe non essere desiderato per un movimento FPS/TPS.
+            // ï¿½ meglio avere un oggetto figlio per la telecamera o la "testa".
+            transform.localRotation = Quaternion.Euler(xRotation, transform.localEulerAngles.y, 0f); // Non usare per FPS standard
         }
 
 
