@@ -80,6 +80,8 @@ public class DrawingController : MonoBehaviour
 
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             drawingCanvas.SetActive(false);
         }
 
