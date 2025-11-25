@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|c:\\users\\selen\\documents\\github\\project_gameforge\\game\\assets\\script\\opendrawningboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\opendrawningboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|c:\\users\\selen\\documents\\github\\project_gameforge\\game\\assets\\script\\nemicoscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\nemicoscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\assets\\script\\quadrointerattivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\quadrointerattivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\assets\\script\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\playermovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|c:\\users\\selen\\documents\\github\\project_gameforge\\game\\assets\\script\\opendrawningboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\opendrawningboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,8 +22,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "NemicoScript.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\NemicoScript.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\NemicoScript.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\NemicoScript.cs",
+              "RelativeToolTip": "Assets\\Script\\NemicoScript.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T10:48:03.591Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -32,13 +45,14 @@
               "RelativeDocumentMoniker": "Assets\\Script\\QuadroInterattivo.cs",
               "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\QuadroInterattivo.cs",
               "RelativeToolTip": "Assets\\Script\\QuadroInterattivo.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA8AAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-22T19:32:14.864Z"
+              "WhenOpened": "2025-11-22T19:32:14.864Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "OpenDrawningBoard.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\OpenDrawningBoard.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\OpenDrawningBoard.cs",
@@ -48,18 +62,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-22T19:30:45.356Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "PlayerMovement.cs",
-              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\PlayerMovement.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\PlayerMovement.cs",
-              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\PlayerMovement.cs",
-              "RelativeToolTip": "Assets\\Script\\PlayerMovement.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-22T19:16:48.059Z"
             }
           ]
         }
