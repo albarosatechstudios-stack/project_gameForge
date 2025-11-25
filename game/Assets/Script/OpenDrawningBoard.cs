@@ -14,13 +14,11 @@ public class OpenDrawingBoard : MonoBehaviour
 
     public void Update()
     {
-        if (inTrigger)
-        {
-            print("davanti tela bianca");
-        }
         if (inTrigger && Mouse.current.leftButton.wasPressedThisFrame)
         {
             print("hai cliccato il quadro bianco");
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             Canvas.SetActive(true);
             drawingBoard.SetActive(true);
         }
