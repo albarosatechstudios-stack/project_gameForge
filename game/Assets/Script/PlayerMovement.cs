@@ -14,10 +14,14 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 currentMovementInput;
     private Vector3 currentMovement;
     private Vector2 currentLookInput;
+    private float gravity = -9.81f;
+    private float verticalVelocity = 0;
+    private float forzaRepulsiva= 0f;
 
     private CharacterController characterController;
 
     private float xRotation = 0f; // Rotazione sull'asse X (verticale) della telecamera/testa
+
 
     private void Awake()
     {
@@ -37,6 +41,10 @@ public class PlayerMovement : MonoBehaviour
         // Opzionale: Blocca il cursore e nascondilo per un'esperienza FPS/TPS
         // Cursor.lockState = CursorLockMode.Locked;
         // Cursor.visible = false;
+        if (forzaRepulsiva == 0f )
+        {
+            forzaRepulsiva = 0.1f;
+        }
     }
 
     private void OnEnable()
@@ -72,14 +80,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMovement()
     {
-        // Converti l'input 2D in un Vector3 locale (avanti/indietro, destra/sinistra)
         Vector3 localMovement = new Vector3(currentMovementInput.x, 0f, currentMovementInput.y);
-
-        // Trasforma il movimento dal sistema di coordinate locale a quello globale del player
-        // In questo modo, "avanti" � sempre dove il player sta guardando.
         Vector3 moveDirection = transform.TransformDirection(localMovement);
 
-        // Applica il movimento al CharacterController
+        // Applica la gravità
+        if (characterController.isGrounded)
+        {
+            verticalVelocity = 0; // Reset quando tocca terra
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime; // Applica la gravità nel tempo
+        }
+
+        moveDirection.y = verticalVelocity;
+
         characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
     }
 
@@ -112,5 +127,18 @@ public class PlayerMovement : MonoBehaviour
         // Rotazione orizzontale (sull'asse Y) per l'intero player
         // Ruota il GameObject del player attorno al suo asse Y globale
         transform.Rotate(Vector3.up * mouseX);
+    }
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("nemico"))
+        {
+            print("SPINTA");
+            Vector3 pushDir = transform.position - hit.gameObject.transform.position;
+            pushDir.y = 0;
+            pushDir.Normalize();
+
+            // Usa Move per spostare il player via dal nemico
+            characterController.Move(pushDir *forzaRepulsiva);
+        }
     }
 }

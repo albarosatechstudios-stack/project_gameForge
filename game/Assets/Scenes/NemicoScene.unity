@@ -238,6 +238,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 336014045124031189, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
+      propertyPath: m_Radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 336014045124031189, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
+      propertyPath: m_Center.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 336014045124031189, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1288922817391086282, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.06
@@ -254,6 +266,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3355325871399740156, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
+      propertyPath: m_Center.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4230905535684141813, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -264,7 +280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7583914941136105969, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.45
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7583914941136105969, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
       propertyPath: m_LocalPosition.z
@@ -488,6 +504,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: eb48559cbbd44ca4d841b851f82b0c8c, type: 2}
+    - target: {fileID: 4763916199318457321, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5571207220945427558, guid: e28c8f263f6b19448bad0e85197b1a73, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1172,7 +1192,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2036396242}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &2036396244
 Camera:
   m_ObjectHideFlags: 0
