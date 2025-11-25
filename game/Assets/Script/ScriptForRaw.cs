@@ -85,9 +85,17 @@ public class DrawingController : MonoBehaviour
 
         if (Keyboard.current != null && Keyboard.current.sKey.wasPressedThisFrame)
         {
-            string path = Application.dataPath + "/saved_drawing.png";
-            SaveTextureToFile(path);
-            ApplyTextureToMaterial(path);
+            // Nuovo percorso in persistentDataPath
+            string folderPath = Path.Combine(Application.persistentDataPath, "Disegni");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            string filePath = Path.Combine(folderPath, "saved_drawing.png");
+
+            SaveTextureToFile(filePath);
+            ApplyTextureToMaterial(filePath);
+
+            Debug.Log($"Disegno salvato in: {filePath}");
         }
     }
 

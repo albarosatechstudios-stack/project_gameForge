@@ -64,6 +64,7 @@
     <Compile Include="Assets\Script\NemicoScript.cs" />
     <Compile Include="Assets\Script\OpenDrawningBoard.cs" />
     <Compile Include="Assets\Script\ScriptForRaw.cs" />
+    <Compile Include="Assets\Script\AvviaComparazione.cs" />
     <Compile Include="Assets\Script\PannelloQuadro.cs" />
     <Compile Include="Assets\Script\confronto.cs" />
     <Compile Include="Assets\Script\QuadroInterattivo.cs" />

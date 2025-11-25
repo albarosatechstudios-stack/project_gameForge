@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 currentLookInput;
     private float gravity = -9.81f;
     private float verticalVelocity = 0;
-    private float forzaRepulsiva= 0f;
+   public float forzaRepulsiva= 0f;
 
     private CharacterController characterController;
 
