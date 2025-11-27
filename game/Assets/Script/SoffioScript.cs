@@ -15,8 +15,14 @@ public class SoffioScript : MonoBehaviour
         // Avvia il microfono
         if (Microphone.devices.Length > 0)
         {
-            
-            deviceName = Microphone.devices[Microphone.devices.Length - 1];
+            // controllo che microfoni ci sono
+            // for (int i=0; i<Microphone.devices.Length; i++)
+            // {
+            //      print("device:"+ Microphone.devices[i]);  
+            // }
+
+            //NOTA su MIRO - le liste dei devices microfono non sono standard applicare soluzione riportata su MIRO
+            deviceName = Microphone.devices[Microphone.devices.Length-1];
             micClip = Microphone.Start(deviceName, true, 1, 44100);
             Debug.Log("Microfono avviato: " + deviceName);
         }
