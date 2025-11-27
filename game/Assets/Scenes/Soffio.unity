@@ -242,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoffioScript
   sensitivity: 40
   minimum: 0.01
+  indexMicrofono: 1
 --- !u!4 &923010381
 Transform:
   m_ObjectHideFlags: 0
