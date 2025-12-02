@@ -7,11 +7,12 @@ TagManager:
   - nemico
   - CinemachineTarget
   - Item
+  - Fumogeno
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - ground
   - Water
   - UI
   - 
