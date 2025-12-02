@@ -70,11 +70,13 @@
     <Compile Include="Assets\Script\ScriptForRaw.cs" />
     <Compile Include="Assets\Script\AvviaComparazione.cs" />
     <Compile Include="Assets\Script\SmokefromBLow.cs" />
+    <Compile Include="Assets\Script\PitchDetector.cs" />
     <Compile Include="Assets\Script\SoffioScript.cs" />
     <Compile Include="Assets\Script\PannelloQuadro.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\UpdateCollectibleCount.cs" />
     <Compile Include="Assets\Script\confronto.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\Pickup.cs" />
+    <Compile Include="Assets\Script\MusicGameManager.cs" />
     <Compile Include="Assets\Script\QuadroInterattivo.cs" />
     <Compile Include="Assets\Script\PlayerMovement.cs" />
     <Compile Include="Assets\Script\PlayerControls.imputactions.cs" />
