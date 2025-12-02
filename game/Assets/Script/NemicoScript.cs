@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-// Aggiunto lo stato DISTRACTED
 public enum STATE { VIGILE, CHASING, SLEEPING, OFF, DISTRACTED }
 
 public class NemicoScript : MonoBehaviour
@@ -19,9 +18,9 @@ public class NemicoScript : MonoBehaviour
     private float patrolTimer;
 
     [Header("Impostazioni Distrazione")]
-    public float distractionTime = 5f; // Quanto tempo rimane distratto sull'oggetto
+    public float distractionTime = 5f;
     private float distractionTimer;
-    private Vector3 distractionPoint; // Dove si trova l'oggetto
+    private Vector3 distractionPoint;
 
     void Start()
     {
@@ -50,6 +49,7 @@ public class NemicoScript : MonoBehaviour
                 break;
 
             case STATE.OFF:
+                agent.isStopped = true; // Assicuriamoci che stia fermo se OFF
                 break;
         }
     }
@@ -84,19 +84,13 @@ public class NemicoScript : MonoBehaviour
     void DistractedLogic()
     {
         agent.isStopped = false;
-
-        // 1. Vai verso l'oggetto
         agent.SetDestination(distractionPoint);
 
-        // 2. Se è arrivato vicino all'oggetto
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            // 3. Aspetta (Esamina l'oggetto)
             distractionTimer += Time.deltaTime;
-
             if (distractionTimer >= distractionTime)
             {
-                // 4. Tempo scaduto: torna a fare la guardia
                 state = STATE.VIGILE;
                 distractionTimer = 0;
             }
@@ -105,47 +99,74 @@ public class NemicoScript : MonoBehaviour
 
     void SleepLogic()
     {
+        // Se sta dormendo, deve stare fermo immobile
         if (!agent.isStopped)
         {
             agent.isStopped = true;
             agent.ResetPath();
+            // Qui potresti far partire l'animazione del sonno:
+            // animator.SetBool("IsSleeping", true);
         }
     }
 
     // --- SENSORI (TRIGGER) ---
+
+    // OnTriggerStay è vitale perché il collider del fumo SI ESPANDE
+    // e investe il nemico che potrebbe essere già dentro l'area ma fermo.
     void OnTriggerStay(Collider other)
     {
-        // Se il player è ANCORA dentro l'area e il nemico è tornato VIGILE
-        if (other.CompareTag("Player") && state == STATE.VIGILE)
+        // Rilevamento Player (Solo se è sveglio!)
+        if (other.CompareTag("Player"))
         {
-            // ...ricomincia subito a inseguirlo!
-            state = STATE.CHASING;
-            player = other.transform;
+            if (state == STATE.VIGILE || state == STATE.DISTRACTED)
+            {
+                state = STATE.CHASING;
+                player = other.transform;
+            }
+        }
+
+        // Rilevamento FUMO (Priorità assoluta)
+        if (other.CompareTag("Fumogeno"))
+        {
+            // Va a dormire indipendentemente da cosa stava facendo
+            if (state != STATE.SLEEPING)
+            {
+                Debug.Log("Nemico investito dal fumo! Zzz...");
+                state = STATE.SLEEPING;
+                agent.ResetPath(); // Dimentica dove stavi andando
+            }
         }
     }
 
-        void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        // LOGICA PLAYER: Se vede il player e non è già distratto o addormentato
-        if (other.CompareTag("Player") && state == STATE.VIGILE)
+        // 1. Rilevamento Player
+        if (other.CompareTag("Player"))
         {
-            state = STATE.CHASING;
-            player = other.transform;
+            // Insegue solo se non sta dormendo
+            if (state != STATE.SLEEPING)
+            {
+                state = STATE.CHASING;
+                player = other.transform;
+            }
         }
 
-        // LOGICA ITEM: Se entra nell'area di un oggetto (es. sasso, cibo)
-        // IMPORTANTE: Assicurati che l'oggetto abbia il Tag "Item"
+        // 2. Rilevamento FUMO
+        if (other.CompareTag("Fumogeno"))
+        {
+            state = STATE.SLEEPING;
+            agent.ResetPath();
+        }
+
+        // 3. Rilevamento ITEM (Distrazione)
         if (other.CompareTag("Item"))
         {
-            // Funziona se è Vigile o se sta Inseguendo (l'oggetto lo distrae dall'inseguimento?)
-            // Se vuoi che l'oggetto lo distragga SOLO se non ti ha visto, aggiungi: && state != STATE.CHASING
-            if (state == STATE.VIGILE || state == STATE.CHASING)
+            // Viene distratto solo se non sta inseguendo e non sta dormendo
+            if (state == STATE.VIGILE)
             {
                 state = STATE.DISTRACTED;
-                distractionPoint = other.transform.position; // Memorizza dove andare
-                distractionTimer = 0; // Resetta il timer
-
-                // Opzionale: Se vuoi che smetta subito di inseguire il player
+                distractionPoint = other.transform.position;
+                distractionTimer = 0;
                 agent.ResetPath();
             }
         }
@@ -153,14 +174,29 @@ public class NemicoScript : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        // Se il player scappa
         if (other.CompareTag("Player") && state == STATE.CHASING)
         {
             state = STATE.VIGILE;
             agent.ResetPath();
         }
 
-        // Nota: Non mettiamo logica per l'uscita dall'Item, 
-        // perché gestiamo la fine della distrazione col timer.
+        // Se il fumo sparisce o il nemico viene spostato fuori
+        if (other.CompareTag("Fumogeno"))
+        {
+            // Si sveglia solo se stava dormendo
+            if (state == STATE.SLEEPING)
+            {
+                Debug.Log("Fumo sparito, nemico sveglio!");
+                state = STATE.VIGILE;
+
+                // Resetta timer pattuglia per farlo muovere subito o aspettare un po'
+                patrolTimer = 0;
+
+                // Qui fermeresti l'animazione del sonno
+                // animator.SetBool("IsSleeping", false);
+            }
+        }
     }
 
     // --- UTILITIES ---
