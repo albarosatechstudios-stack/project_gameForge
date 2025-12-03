@@ -111,11 +111,11 @@ public class NemicoScript : MonoBehaviour
 
     // --- SENSORI (TRIGGER) ---
 
-    // OnTriggerStay è vitale perché il collider del fumo SI ESPANDE
-    // e investe il nemico che potrebbe essere già dentro l'area ma fermo.
+    // OnTriggerStay ï¿½ vitale perchï¿½ il collider del fumo SI ESPANDE
+    // e investe il nemico che potrebbe essere giï¿½ dentro l'area ma fermo.
     void OnTriggerStay(Collider other)
     {
-        // Rilevamento Player (Solo se è sveglio!)
+        // Rilevamento Player (Solo se ï¿½ sveglio!)
         if (other.CompareTag("Player"))
         {
             if (state == STATE.VIGILE || state == STATE.DISTRACTED)
@@ -125,7 +125,7 @@ public class NemicoScript : MonoBehaviour
             }
         }
 
-        // Rilevamento FUMO (Priorità assoluta)
+        // Rilevamento FUMO (Prioritï¿½ assoluta)
         if (other.CompareTag("Fumogeno"))
         {
             // Va a dormire indipendentemente da cosa stava facendo
@@ -134,6 +134,20 @@ public class NemicoScript : MonoBehaviour
                 Debug.Log("Nemico investito dal fumo! Zzz...");
                 state = STATE.SLEEPING;
                 agent.ResetPath(); // Dimentica dove stavi andando
+            }
+        }
+
+        if (other.CompareTag("Item"))
+        {
+            // Viene distratto solo se non sta inseguendo e non sta dormendo
+                Debug.Log("Sento l'odore del buongiornissimo caffÃ¨Ã¨Ã©...");
+
+            if (state == STATE.VIGILE || state == STATE.CHASING)
+            {
+                state = STATE.DISTRACTED;
+                distractionPoint = other.transform.position;
+                distractionTimer = 0;
+                agent.ResetPath();
             }
         }
     }
@@ -162,7 +176,7 @@ public class NemicoScript : MonoBehaviour
         if (other.CompareTag("Item"))
         {
             // Viene distratto solo se non sta inseguendo e non sta dormendo
-            if (state == STATE.VIGILE)
+            if (state == STATE.VIGILE || state == STATE.CHASING)
             {
                 state = STATE.DISTRACTED;
                 distractionPoint = other.transform.position;
