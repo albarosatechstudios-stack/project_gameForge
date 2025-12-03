@@ -10,12 +10,14 @@ public class SpawnCaffettiera : MonoBehaviour
     [Header("Fisica")]
     public float throwForce = 5f;
 
-    // Non usiamo più KeyCode pubblico qui, lo mettiamo nel codice
+    private int numberOfItem = 1;
+
+    // Non usiamo piï¿½ KeyCode pubblico qui, lo mettiamo nel codice
     // oppure si usano gli Input Actions, ma per ora facciamolo semplice:
 
     void Update()
     {
-        // Controlla se la tastiera è collegata E se il tasto E è stato premuto
+        // Controlla se la tastiera Ã¨ collegata E se il tasto E Ã¨ stato premuto
         if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
             SpawnItem();
@@ -24,7 +26,7 @@ public class SpawnCaffettiera : MonoBehaviour
 
     void SpawnItem()
     {
-        if (itemPrefab != null && spawnPoint != null)
+        if (itemPrefab != null && spawnPoint != null  && numberOfItem == 1)
         {
             GameObject newItem = Instantiate(itemPrefab, spawnPoint.position, spawnPoint.rotation);
 
@@ -33,6 +35,15 @@ public class SpawnCaffettiera : MonoBehaviour
             {
                 rb.AddForce(spawnPoint.forward * throwForce, ForceMode.Impulse);
             }
+            
+            numberOfItem--;
+
         }
+    }
+
+    //metodo da richiamare per ripristinare l'item
+        public void  RestoreItem()
+    {
+        numberOfItem = 1; 
     }
 }
