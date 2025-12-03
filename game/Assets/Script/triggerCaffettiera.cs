@@ -8,6 +8,9 @@ public class triggerCaffettiera : MonoBehaviour {
     [Header("Impostazioni")]
     public float activationDelay = 2.0f; // Dopo quanti secondi si attiva il trigger
     public SphereCollider triggerArea;   // Il collider grande che il nemico deve sentire
+    public float lifetime = 5f;    // tempo prima che l’oggetto scompaia
+    private SpawnCaffettiera player;         // riferimento al player
+
 
     void Start()
     {
@@ -23,8 +26,12 @@ public class triggerCaffettiera : MonoBehaviour {
             if (triggerArea != null) triggerArea.enabled = false;
         }
 
+        player = FindFirstObjectByType<SpawnCaffettiera>();
+
         // 2. Avvia il conteggio
         StartCoroutine(ActivateItem());
+        // Avvia il timer per la distruzione
+        StartCoroutine(DestroyAfterTime());
     }
 
     IEnumerator ActivateItem()
@@ -38,5 +45,21 @@ public class triggerCaffettiera : MonoBehaviour {
             triggerArea.enabled = true;
             Debug.Log("Oggetto attivo! I nemici ora possono sentirlo.");
         }
+    }
+
+    IEnumerator DestroyAfterTime()
+    {
+        // aspetta la lifetime
+        yield return new WaitForSeconds(lifetime);
+
+        // Ripristina l'item al player
+        if (player != null)
+        {
+            player.RestoreItem();
+            Debug.Log("Item ripristinato al player!");
+        }
+
+        // Distruggi l'oggetto
+        Destroy(gameObject);
     }
 }
