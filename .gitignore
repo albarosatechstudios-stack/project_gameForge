@@ -98,3 +98,4 @@ game/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Pro
 # Auto-generated scenes by play mode tests
 game/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 game/Assembly-CSharp.csproj
+*.csproj
