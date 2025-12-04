@@ -68,6 +68,7 @@
     <Compile Include="Assets\Script\SpawnCaffettiera.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\ThirdPersonController.cs" />
     <Compile Include="Assets\Script\MusicPatternSystem.cs" />
+    <Compile Include="Assets\Script\CambioScena.cs" />
     <Compile Include="Assets\Script\OpenDrawningBoard.cs" />
     <Compile Include="Assets\Script\ScriptForRaw.cs" />
     <Compile Include="Assets\Script\AvviaComparazione.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Assets\SourceFiles\Scripts\Pickup.cs" />
     <Compile Include="Assets\Script\SpawnFumogeno.cs" />
     <Compile Include="Assets\Script\MusicGameManager.cs" />
-    <Compile Include="Assets\Script\SleepWave.cs" />
     <Compile Include="Assets\Script\QuadroInterattivo.cs" />
     <Compile Include="Assets\Script\PitchDet2.cs" />
     <Compile Include="Assets\Script\PlayerMovement.cs" />
