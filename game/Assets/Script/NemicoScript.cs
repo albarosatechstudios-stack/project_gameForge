@@ -12,13 +12,16 @@ public class NemicoScript : MonoBehaviour
     [Header("Stato Attuale")]
     public STATE state = STATE.VIGILE;
 
+    // --- NUOVA VARIABILE ---
+    // Memorizziamo quale oggetto fumogeno ci sta facendo dormire
+    private GameObject currentSmokeObject;
+
     [Header("Impostazioni Pattuglia")]
     public float patrolRadius = 10f;
     public float patrolWaitTime = 2f;
     private float patrolTimer;
 
     [Header("Impostazioni Inseguimento")]
-    // Distanza di sicurezza: il nemico punterà a una coordinata a questa distanza dal centro del player
     public float stopDistanceFromPlayer = 2.0f;
 
     [Header("Impostazioni Distrazione")]
@@ -30,9 +33,6 @@ public class NemicoScript : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         patrolTimer = patrolWaitTime;
-
-        // Impostiamo una stopping distance piccola di base. 
-        // La distanza vera la calcoliamo noi matematicamente in ChaseLogic.
         if (agent != null) agent.stoppingDistance = 0.5f;
     }
 
@@ -53,7 +53,7 @@ public class NemicoScript : MonoBehaviour
                 break;
 
             case STATE.SLEEPING:
-                SleepLogic();
+                SleepLogic(); // Qui c'è la modifica importante
                 break;
 
             case STATE.OFF:
@@ -85,20 +85,10 @@ public class NemicoScript : MonoBehaviour
         if (player != null)
         {
             agent.isStopped = false;
-
-            // 1. Calcoliamo il vettore direzione: Dal Player VERSO il Nemico
-            // Questo ci serve per trovare il punto sul "bordo" del cerchio attorno al player
             Vector3 directionFromPlayer = (transform.position - player.position).normalized;
-
-            // 2. Calcoliamo la coordinata esatta dove il nemico deve andare.
-            // Formula: PosizionePlayer + (Direzione * DistanzaDesiderata)
             Vector3 safeDestination = player.position + (directionFromPlayer * stopDistanceFromPlayer);
-
-            // 3. Impostiamo quella coordinata come destinazione
             agent.SetDestination(safeDestination);
 
-            // 4. Se il nemico è molto vicino alla sua destinazione sicura, lo facciamo ruotare verso il player
-            // altrimenti guarderebbe il punto vuoto calcolato.
             if (agent.remainingDistance <= agent.stoppingDistance + 0.5f)
             {
                 LookAtTarget(player.position);
@@ -124,22 +114,38 @@ public class NemicoScript : MonoBehaviour
 
     void SleepLogic()
     {
-        // Se sta dormendo, ferma l'agente e cancella il percorso
+        // 1. Assicuriamoci che stia fermo
         if (!agent.isStopped)
         {
             agent.isStopped = true;
             agent.ResetPath();
         }
+
+        // 2. CONTROLLO DI SICUREZZA ("BULLETPROOF")
+        // Se l'oggetto fumo che mi ha addormentato non esiste più (è diventato null perché distrutto)
+        // O se non ho un riferimento al fumo
+        if (currentSmokeObject == null)
+        {
+            Debug.Log("Il fumo è svanito (Destroy), mi sveglio!");
+            WakeUp();
+        }
+    }
+
+    // Funzione helper per svegliarsi (usata sia in SleepLogic che OnTriggerExit)
+    void WakeUp()
+    {
+        state = STATE.VIGILE;
+        patrolTimer = 0;
+        currentSmokeObject = null; // Reset del riferimento
+        // animator.SetBool("IsSleeping", false);
     }
 
     // --- UTILITIES ---
 
-    // Ruota il nemico verso il target (solo asse Y) per evitare che guardi il nulla quando è fermo
     void LookAtTarget(Vector3 targetPos)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
-        direction.y = 0; // Ignora l'altezza
-
+        direction.y = 0;
         if (direction != Vector3.zero)
         {
             Quaternion lookRotation = Quaternion.LookRotation(direction);
@@ -169,8 +175,12 @@ public class NemicoScript : MonoBehaviour
             }
         }
 
+        // Se entro nel fumo o ci sto dentro
         if (other.CompareTag("Fumogeno"))
         {
+            // Salvo il riferimento all'oggetto fumo specifico!
+            currentSmokeObject = other.gameObject;
+
             if (state != STATE.SLEEPING)
             {
                 Debug.Log("Nemico investito dal fumo! Zzz...");
@@ -181,7 +191,6 @@ public class NemicoScript : MonoBehaviour
 
         if (other.CompareTag("Item"))
         {
-            Debug.Log("Sento l'odore del caffè...");
             if (state == STATE.VIGILE || state == STATE.CHASING)
             {
                 state = STATE.DISTRACTED;
@@ -194,30 +203,25 @@ public class NemicoScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && state != STATE.SLEEPING)
         {
-            if (state != STATE.SLEEPING)
-            {
-                state = STATE.CHASING;
-                player = other.transform;
-            }
+            state = STATE.CHASING;
+            player = other.transform;
         }
 
         if (other.CompareTag("Fumogeno"))
         {
+            currentSmokeObject = other.gameObject; // MEMORIZZO IL FUMO
             state = STATE.SLEEPING;
             agent.ResetPath();
         }
 
-        if (other.CompareTag("Item"))
+        if (other.CompareTag("Item") && (state == STATE.VIGILE || state == STATE.CHASING))
         {
-            if (state == STATE.VIGILE || state == STATE.CHASING)
-            {
-                state = STATE.DISTRACTED;
-                distractionPoint = other.transform.position;
-                distractionTimer = 0;
-                agent.ResetPath();
-            }
+            state = STATE.DISTRACTED;
+            distractionPoint = other.transform.position;
+            distractionTimer = 0;
+            agent.ResetPath();
         }
     }
 
@@ -229,13 +233,15 @@ public class NemicoScript : MonoBehaviour
             agent.ResetPath();
         }
 
+        // Manteniamo questo per quando il nemico ESCE dal fumo fisicamente (ad esempio spinto fuori)
+        // Ma non facciamo più affidamento solo su questo per il Destroy
         if (other.CompareTag("Fumogeno"))
         {
-            if (state == STATE.SLEEPING)
+            // Verifichiamo se l'oggetto da cui usciamo è quello che ci faceva dormire
+            if (currentSmokeObject == other.gameObject)
             {
-                Debug.Log("Fumo sparito, nemico sveglio!");
-                state = STATE.VIGILE;
-                patrolTimer = 0;
+                Debug.Log("Sono uscito dall'area del fumo!");
+                WakeUp();
             }
         }
     }
