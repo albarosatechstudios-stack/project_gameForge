@@ -130,15 +130,15 @@ public class PlayerMovement : MonoBehaviour
     }
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //if (hit.gameObject.CompareTag("nemico"))
-        //{
-        //    print("SPINTA");
-        //    Vector3 pushDir = transform.position - hit.gameObject.transform.position;
-        //    pushDir.y = 0;
-        //    pushDir.Normalize();
+        if (hit.gameObject.CompareTag("nemico"))
+        {
+            print("SPINTA");
+           Vector3 pushDir = transform.position - hit.gameObject.transform.position;
+           pushDir.y = 0;
+            pushDir.Normalize();
 
-        //    // Usa Move per spostare il player via dal nemico
-        //    characterController.Move(pushDir *forzaRepulsiva);
-        //}
+            // Usa Move per spostare il player via dal nemico
+            characterController.Move(pushDir *forzaRepulsiva);
+        }
     }
 }
