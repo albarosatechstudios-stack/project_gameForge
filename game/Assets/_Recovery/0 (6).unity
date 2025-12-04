@@ -1000,10 +1000,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 145471969332167393, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
-      propertyPath: forzaRepulsiva
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 9101191638902121775, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.3
