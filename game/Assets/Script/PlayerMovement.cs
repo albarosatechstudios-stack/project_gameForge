@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -128,17 +129,21 @@ public class PlayerMovement : MonoBehaviour
         // Ruota il GameObject del player attorno al suo asse Y globale
         transform.Rotate(Vector3.up * mouseX);
     }
-    void OnControllerColliderHit(ControllerColliderHit hit)
+  void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.CompareTag("nemico"))
         {
-            print("SPINTA");
-           Vector3 pushDir = transform.position - hit.gameObject.transform.position;
-           pushDir.y = 0;
-            pushDir.Normalize();
+            // 1. Sblocca il cursore (altrimenti nel Game Over non vedi il mouse)
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
-            // Usa Move per spostare il player via dal nemico
-            characterController.Move(pushDir *forzaRepulsiva);
+            // 2. Calcola l'indice dell'ultima scena
+            // sceneCountInBuildSettings ci dice quante scene ci sono in tutto.
+            // Togliamo 1 per ottenere l'indice dell'ultima.
+            int indexUltimaScena = SceneManager.sceneCountInBuildSettings - 1;
+
+            // 3. Carica l'ultima scena
+            SceneManager.LoadScene(indexUltimaScena);
         }
     }
 }
