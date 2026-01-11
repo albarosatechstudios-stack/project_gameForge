@@ -39,8 +39,8 @@ public class PlayerMovement : MonoBehaviour
         playerControls.Move.look.canceled += OnLookInput;
 
         // Opzionale: Blocca il cursore e nascondilo per un'esperienza FPS/TPS
-        // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.visible = false;
+         Cursor.lockState = CursorLockMode.Locked;
+         Cursor.visible = false;
         if (forzaRepulsiva == 0f )
         {
             forzaRepulsiva = 0.1f;
@@ -133,8 +133,8 @@ public class PlayerMovement : MonoBehaviour
         if (hit.gameObject.CompareTag("nemico"))
         {
             print("SPINTA");
-            Vector3 pushDir = transform.position - hit.gameObject.transform.position;
-            pushDir.y = 0;
+           Vector3 pushDir = transform.position - hit.gameObject.transform.position;
+           pushDir.y = 0;
             pushDir.Normalize();
 
             // Usa Move per spostare il player via dal nemico

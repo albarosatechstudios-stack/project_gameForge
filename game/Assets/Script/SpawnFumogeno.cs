@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
-
-public class SpawnCaffettiera : MonoBehaviour
+using UnityEngine.InputSystem;
+public class SpawnFumogeno : MonoBehaviour
 {
     [Header("Cosa lanciare")]
     public GameObject itemPrefab;
@@ -12,12 +11,12 @@ public class SpawnCaffettiera : MonoBehaviour
 
     private int numberOfItem = 1;
 
- 
+
 
     void Update()
     {
-       
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+
+        if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
         {
             SpawnItem();
         }
@@ -25,7 +24,7 @@ public class SpawnCaffettiera : MonoBehaviour
 
     void SpawnItem()
     {
-        if (itemPrefab != null && spawnPoint != null  && numberOfItem == 1)
+        if (itemPrefab != null && spawnPoint != null && numberOfItem == 1)
         {
             GameObject newItem = Instantiate(itemPrefab, spawnPoint.position, spawnPoint.rotation);
 
@@ -34,15 +33,15 @@ public class SpawnCaffettiera : MonoBehaviour
             {
                 rb.AddForce(spawnPoint.forward * throwForce, ForceMode.Impulse);
             }
-            
+
             numberOfItem--;
 
         }
     }
 
     //metodo da richiamare per ripristinare l'item
-        public void  RestoreItem()
+    public void RestoreItem()
     {
-        numberOfItem = 1; 
+        numberOfItem = 1;
     }
 }

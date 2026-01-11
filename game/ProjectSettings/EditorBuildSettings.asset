@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/LivelloAlpha.unity
+    guid: a534be78600ab234c921cf7b16ee294e
+  - enabled: 1
+    path: Assets/Scenes/Louvre.unity
+    guid: 0a95ca51596918443911fd32a5c3e496
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 77f3d772e29f28f43ad9755e81e7bd35, type: 3}
   m_UseUCBPForAssetBundles: 0

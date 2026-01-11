@@ -223,6 +223,7 @@ MonoBehaviour:
   state: 0
   patrolRadius: 10
   patrolWaitTime: 2
+  stopDistanceFromPlayer: 0.5
   distractionTime: 5
 --- !u!195 &1390350184340425024
 NavMeshAgent:
