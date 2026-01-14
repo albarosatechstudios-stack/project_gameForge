@@ -1,254 +1,7 @@
-//using UnityEngine;
-//using UnityEngine.AI;
-
-//public enum STATE { VIGILE, CHASING, SLEEPING, OFF, DISTRACTED }
-
-//public class NemicoScript : MonoBehaviour
-//{
-//    [Header("Componenti")]
-//    private NavMeshAgent agent;
-//    public Transform player;
-
-//    [Header("Stato Attuale")]
-//    public STATE state = STATE.VIGILE;
-
-//    // --- NUOVA VARIABILE ---
-//    // Memorizziamo quale oggetto fumogeno ci sta facendo dormire
-//    private GameObject currentSmokeObject;
-
-//    [Header("Impostazioni Pattuglia")]
-//    public float patrolRadius = 10f;
-//    public float patrolWaitTime = 2f;
-//    private float patrolTimer;
-
-//    [Header("Impostazioni Inseguimento")]
-//    public float stopDistanceFromPlayer = 2.0f;
-
-//    [Header("Impostazioni Distrazione")]
-//    public float distractionTime = 5f;
-//    private float distractionTimer;
-//    private Vector3 distractionPoint;
-
-//    void Start()
-//    {
-//        agent = GetComponent<NavMeshAgent>();
-//        patrolTimer = patrolWaitTime;
-//        if (agent != null) agent.stoppingDistance = 0.5f;
-//    }
-
-//    void Update()
-//    {
-//        switch (state)
-//        {
-//            case STATE.VIGILE:
-//                PatrolLogic();
-//                break;
-
-//            case STATE.CHASING:
-//                ChaseLogic();
-//                break;
-
-//            case STATE.DISTRACTED:
-//                DistractedLogic();
-//                break;
-
-//            case STATE.SLEEPING:
-//                SleepLogic(); // Qui c'è la modifica importante
-//                break;
-
-//            case STATE.OFF:
-//                if (!agent.isStopped) agent.isStopped = true;
-//                break;
-//        }
-//    }
-
-//    // --- LOGICHE DI COMPORTAMENTO ---
-
-//    void PatrolLogic()
-//    {
-//        if (agent.isStopped) agent.isStopped = false;
-
-//        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
-//        {
-//            patrolTimer += Time.deltaTime;
-//            if (patrolTimer >= patrolWaitTime)
-//            {
-//                Vector3 newPos = RandomNavSphere(transform.position, patrolRadius, -1);
-//                agent.SetDestination(newPos);
-//                patrolTimer = 0;
-//            }
-//        }
-//    }
-
-//    void ChaseLogic()
-//    {
-//        if (player != null)
-//        {
-//            agent.isStopped = false;
-//            Vector3 directionFromPlayer = (transform.position - player.position).normalized;
-//            Vector3 safeDestination = player.position + (directionFromPlayer * stopDistanceFromPlayer);
-//            agent.SetDestination(safeDestination);
-
-//            if (agent.remainingDistance <= agent.stoppingDistance + 0.5f)
-//            {
-//                LookAtTarget(player.position);
-//            }
-//        }
-//    }
-
-//    void DistractedLogic()
-//    {
-//        agent.isStopped = false;
-//        agent.SetDestination(distractionPoint);
-
-//        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
-//        {
-//            distractionTimer += Time.deltaTime;
-//            if (distractionTimer >= distractionTime)
-//            {
-//                state = STATE.VIGILE;
-//                distractionTimer = 0;
-//            }
-//        }
-//    }
-
-//    void SleepLogic()
-//    {
-//        // 1. Assicuriamoci che stia fermo
-//        if (!agent.isStopped)
-//        {
-//            agent.isStopped = true;
-//            agent.ResetPath();
-//        }
-
-//        // 2. CONTROLLO DI SICUREZZA ("BULLETPROOF")
-//        // Se l'oggetto fumo che mi ha addormentato non esiste più (è diventato null perché distrutto)
-//        // O se non ho un riferimento al fumo
-//        if (currentSmokeObject == null)
-//        {
-//            Debug.Log("Il fumo è svanito (Destroy), mi sveglio!");
-//            WakeUp();
-//        }
-//    }
-
-//    // Funzione helper per svegliarsi (usata sia in SleepLogic che OnTriggerExit)
-//    void WakeUp()
-//    {
-//        state = STATE.VIGILE;
-//        patrolTimer = 0;
-//        currentSmokeObject = null; // Reset del riferimento
-//        // animator.SetBool("IsSleeping", false);
-//    }
-
-//    // --- UTILITIES ---
-
-//    void LookAtTarget(Vector3 targetPos)
-//    {
-//        Vector3 direction = (targetPos - transform.position).normalized;
-//        direction.y = 0;
-//        if (direction != Vector3.zero)
-//        {
-//            Quaternion lookRotation = Quaternion.LookRotation(direction);
-//            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-//        }
-//    }
-
-//    public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
-//    {
-//        Vector3 randDirection = Random.insideUnitSphere * dist;
-//        randDirection += origin;
-//        NavMeshHit navHit;
-//        NavMesh.SamplePosition(randDirection, out navHit, dist, layermask);
-//        return navHit.position;
-//    }
-
-//    // --- SENSORI (TRIGGER) ---
-
-//    void OnTriggerStay(Collider other)
-//    {
-//        if (other.CompareTag("Player"))
-//        {
-//            if (state == STATE.VIGILE || state == STATE.DISTRACTED)
-//            {
-//                state = STATE.CHASING;
-//                player = other.transform;
-//            }
-//        }
-
-//        // Se entro nel fumo o ci sto dentro
-//        if (other.CompareTag("Fumogeno"))
-//        {
-//            // Salvo il riferimento all'oggetto fumo specifico!
-//            currentSmokeObject = other.gameObject;
-
-//            if (state != STATE.SLEEPING)
-//            {
-//                Debug.Log("Nemico investito dal fumo! Zzz...");
-//                state = STATE.SLEEPING;
-//                agent.ResetPath();
-//            }
-//        }
-
-//        if (other.CompareTag("Item"))
-//        {
-//            if (state == STATE.VIGILE || state == STATE.CHASING)
-//            {
-//                state = STATE.DISTRACTED;
-//                distractionPoint = other.transform.position;
-//                distractionTimer = 0;
-//                agent.ResetPath();
-//            }
-//        }
-//    }
-
-//    void OnTriggerEnter(Collider other)
-//    {
-//        if (other.CompareTag("Player") && state != STATE.SLEEPING)
-//        {
-//            state = STATE.CHASING;
-//            player = other.transform;
-//        }
-
-//        if (other.CompareTag("Fumogeno"))
-//        {
-//            currentSmokeObject = other.gameObject; // MEMORIZZO IL FUMO
-//            state = STATE.SLEEPING;
-//            agent.ResetPath();
-//        }
-
-//        if (other.CompareTag("Item") && (state == STATE.VIGILE || state == STATE.CHASING))
-//        {
-//            state = STATE.DISTRACTED;
-//            distractionPoint = other.transform.position;
-//            distractionTimer = 0;
-//            agent.ResetPath();
-//        }
-//    }
-
-//    void OnTriggerExit(Collider other)
-//    {
-//        if (other.CompareTag("Player") && state == STATE.CHASING)
-//        {
-//            state = STATE.VIGILE;
-//            agent.ResetPath();
-//        }
-
-//        // Manteniamo questo per quando il nemico ESCE dal fumo fisicamente (ad esempio spinto fuori)
-//        // Ma non facciamo più affidamento solo su questo per il Destroy
-//        if (other.CompareTag("Fumogeno"))
-//        {
-//            // Verifichiamo se l'oggetto da cui usciamo è quello che ci faceva dormire
-//            if (currentSmokeObject == other.gameObject)
-//            {
-//                Debug.Log("Sono uscito dall'area del fumo!");
-//                WakeUp();
-//            }
-//        }
-//    }
-//}
 using UnityEngine;
 using UnityEngine.AI;
 
+// Manteniamo il tuo enum originale per gli stati interni della guardia
 public enum STATE { VIGILE, CHASING, SLEEPING, OFF, DISTRACTED }
 
 public class NemicoScript : MonoBehaviour
@@ -257,7 +10,7 @@ public class NemicoScript : MonoBehaviour
     private NavMeshAgent agent;
     public Transform player;
 
-    [Header("Stato Attuale")]
+    [Header("Stato Interno")]
     public STATE state = STATE.VIGILE;
 
     // Riferimento al collider specifico che ci sta facendo dormire
@@ -276,12 +29,63 @@ public class NemicoScript : MonoBehaviour
     private float distractionTimer;
     private Vector3 distractionPoint;
 
-    void Start()
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    void Start()
+    {
         patrolTimer = patrolWaitTime;
         if (agent != null) agent.stoppingDistance = 0.5f;
     }
+
+    // --- NUOVA PARTE: INTEGRAZIONE CON GAMEMANAGER ---
+
+    private void OnEnable()
+    {
+        // Ci iscriviamo all'evento: Se il GameManager cambia stato, avvisami!
+        if (GameManager.Instance != null)
+        {
+            GameManager.OnStateChanged += HandleGameStateChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Ci disiscriviamo per evitare errori quando l'oggetto viene distrutto
+        if (GameManager.Instance != null)
+        {
+            GameManager.OnStateChanged -= HandleGameStateChanged;
+        }
+    }
+
+    // Questa funzione viene chiamata automaticamente dal GameManager
+    private void HandleGameStateChanged(GameState newGlobalState)
+    {
+        // Se il gioco torna in modalità VISITATORE (es. reset o debug)
+        if (newGlobalState == GameState.Visitor)
+        {
+            // Se stavo inseguendo, smetto subito e torno a pattugliare
+            if (state == STATE.CHASING || state == STATE.DISTRACTED)
+            {
+                Debug.Log("Torno in modalità pacifica (Visitatore).");
+                state = STATE.VIGILE;
+                agent.ResetPath();
+                player = null; // Dimentico il player
+            }
+        }
+        
+        // Se il gioco passa a LADRO
+        else if (newGlobalState == GameState.Thief)
+        {
+            // Opzionale: Se vuoi che le guardie diventino subito aggressive se vedono il player
+            // Potresti forzare un controllo qui, ma OnTriggerStay lo farà al prossimo frame.
+            Debug.Log("Allerta massima! Cerco ladri.");
+        }
+    }
+
+    // --------------------------------------------------
 
     void Update()
     {
@@ -309,10 +113,11 @@ public class NemicoScript : MonoBehaviour
         }
     }
 
-    // --- LOGICHE DI COMPORTAMENTO ---
+    // --- LOGICHE DI COMPORTAMENTO (Invariate) ---
 
     void PatrolLogic()
     {
+        if (!agent.isActiveAndEnabled) return;
         if (agent.isStopped) agent.isStopped = false;
 
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
@@ -329,12 +134,21 @@ public class NemicoScript : MonoBehaviour
 
     void ChaseLogic()
     {
+        // SICUREZZA EXTRA: Se per caso siamo tornati Visitor mentre inseguivo
+        if (GameManager.Instance.CurrentState == GameState.Visitor)
+        {
+            state = STATE.VIGILE;
+            return;
+        }
+
         if (player != null)
         {
-            agent.isStopped = false;
+            if (agent.isActiveAndEnabled) agent.isStopped = false;
+            
             Vector3 directionFromPlayer = (transform.position - player.position).normalized;
             Vector3 safeDestination = player.position + (directionFromPlayer * stopDistanceFromPlayer);
-            agent.SetDestination(safeDestination);
+            
+            if(agent.isActiveAndEnabled) agent.SetDestination(safeDestination);
 
             if (agent.remainingDistance <= agent.stoppingDistance + 0.5f)
             {
@@ -345,6 +159,8 @@ public class NemicoScript : MonoBehaviour
 
     void DistractedLogic()
     {
+        if (!agent.isActiveAndEnabled) return;
+        
         agent.isStopped = false;
         agent.SetDestination(distractionPoint);
 
@@ -361,29 +177,21 @@ public class NemicoScript : MonoBehaviour
 
     void SleepLogic()
     {
-        // 1. Ferma il nemico
-        if (!agent.isStopped)
+        if (agent.isActiveAndEnabled && !agent.isStopped)
         {
             agent.isStopped = true;
             agent.ResetPath();
         }
 
-        // 2. CONTROLLO SICUREZZA:
-        // Se il collider del fumo è stato disattivato (perché il giocatore ha smesso di soffiare)
-        // oppure l'oggetto è stato distrutto, il nemico deve svegliarsi.
         if (currentSmokeCollider == null || !currentSmokeCollider.enabled || !currentSmokeCollider.gameObject.activeInHierarchy)
         {
-            // Nota: Se il collider viene disabilitato via script (es. SmokeFromBlow),
-            // Unity NON chiama OnTriggerExit, quindi dobbiamo controllare qui "manualmente".
-            Debug.Log("Il fumo si è diradato (Collider disabilitato), mi sveglio!");
+            Debug.Log("Il fumo si è diradato, mi sveglio!");
             WakeUp();
         }
     }
 
-    // Metodo pubblico per essere chiamati dallo script SmokeFromBlow
     public void ForzaSonno(GameObject oggettoFumo)
     {
-        // Cerchiamo un collider sull'oggetto fumo per tenerlo d'occhio
         Collider col = oggettoFumo.GetComponent<Collider>();
         if (col != null)
         {
@@ -427,31 +235,43 @@ public class NemicoScript : MonoBehaviour
         Vector3 randDirection = Random.insideUnitSphere * dist;
         randDirection += origin;
         NavMeshHit navHit;
-        NavMesh.SamplePosition(randDirection, out navHit, dist, layermask);
-        return navHit.position;
+        if (NavMesh.SamplePosition(randDirection, out navHit, dist, layermask))
+        {
+            return navHit.position;
+        }
+        return origin;
     }
 
-    // --- GESTIONE COLLISIONI ---
+    // --- GESTIONE COLLISIONI (AGGIORNATA CON GAMEMANAGER) ---
 
-    // Usiamo OnTriggerStay per gestire sia l'entrata che la permanenza nel fumo
     void OnTriggerStay(Collider other)
     {
+        // Se sto dormendo, ignoro tutto finché non mi sveglio
+        if (state == STATE.SLEEPING) return;
+
         // Gestione PLAYER
         if (other.CompareTag("Player"))
         {
-            if (state == STATE.VIGILE || state == STATE.DISTRACTED)
+            // MODIFICA: Reagisco al player SOLO se siamo nella fase THIEF (Ladro)
+            if (GameManager.Instance.CurrentState == GameState.Thief)
             {
-                state = STATE.CHASING;
-                player = other.transform;
+                if (state == STATE.VIGILE || state == STATE.DISTRACTED)
+                {
+                    Debug.Log("Ti ho visto! AL LADRO!");
+                    state = STATE.CHASING;
+                    player = other.transform;
+                }
+            }
+            else
+            {
+                // Se sono in fase VISITOR, ignoro il player (o potrei salutarlo)
+                // Debug.Log("Buongiorno visitatore, buona permanenza.");
             }
         }
 
-        // Gestione FUMO
+        // Gestione FUMO (Funziona sempre, anche se sono visitatore, il fumo mi addormenta)
         if (other.CompareTag("Fumogeno"))
         {
-            // CONTROLLO FONDAMENTALE RICHIESTO:
-            // 1. Se il collider è disabilitato, Unity non chiamerebbe questo metodo, ma per sicurezza controlliamo enabled.
-            // 2. isTrigger == true: Assicura che stiamo toccando la "nuvola" (Trigger) e non la lattina fisica (Solid).
             if (other.enabled && other.isTrigger)
             {
                 currentSmokeCollider = other;
@@ -459,15 +279,20 @@ public class NemicoScript : MonoBehaviour
             }
         }
 
-        // Gestione ITEM
+        // Gestione ITEM (Distrazione)
         if (other.CompareTag("Item"))
         {
-            if (state == STATE.VIGILE || state == STATE.CHASING)
+            // MODIFICA: Mi distraggo solo se sono in fase THIEF (o se decidi che anche da visitatore ti distrai)
+            // Di solito in fase Visitatore il player non può lanciare item.
+            if (GameManager.Instance.CurrentState == GameState.Thief)
             {
-                state = STATE.DISTRACTED;
-                distractionPoint = other.transform.position;
-                distractionTimer = 0;
-                agent.ResetPath();
+                if (state == STATE.VIGILE || state == STATE.CHASING)
+                {
+                    state = STATE.DISTRACTED;
+                    distractionPoint = other.transform.position;
+                    distractionTimer = 0;
+                    if(agent.isActiveAndEnabled) agent.ResetPath();
+                }
             }
         }
     }
@@ -476,17 +301,16 @@ public class NemicoScript : MonoBehaviour
     {
         if (other.CompareTag("Player") && state == STATE.CHASING)
         {
+            // Se il player scappa, torno vigile (o potrei andare all'ultima posizione nota)
             state = STATE.VIGILE;
-            agent.ResetPath();
+            if(agent.isActiveAndEnabled) agent.ResetPath();
+            player = null;
         }
 
-        // Se esco fisicamente dall'area del fumo
         if (other.CompareTag("Fumogeno"))
         {
-            // Controllo se è proprio quello che mi faceva dormire
             if (currentSmokeCollider == other)
             {
-                Debug.Log("Uscito dall'area del fumo.");
                 WakeUp();
             }
         }

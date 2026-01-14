@@ -131,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
     }
   void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.CompareTag("nemico"))
+        if (hit.gameObject.CompareTag("nemico") && GameManager.Instance.CurrentState == GameState.Thief)
         {
             // 1. Sblocca il cursore (altrimenti nel Game Over non vedi il mouse)
             Cursor.lockState = CursorLockMode.None;

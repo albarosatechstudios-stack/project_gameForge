@@ -17,7 +17,7 @@ public class SpawnCaffettiera : MonoBehaviour
     void Update()
     {
        
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame && GameManager.Instance.CurrentState == GameState.Thief)
         {
             SpawnItem();
         }
