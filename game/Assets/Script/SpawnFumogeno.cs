@@ -16,7 +16,7 @@ public class SpawnFumogeno : MonoBehaviour
     void Update()
     {
 
-        if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame && GameManager.Instance.CurrentState == GameState.Thief)
         {
             SpawnItem();
         }
