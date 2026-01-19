@@ -9,6 +9,6 @@ public class DatiQuadro : ScriptableObject
     public string info;
 
     [Header("Asset Grafici")]
-    public Texture2D immaginePrincipale;
-    public Texture2D immagineConfronto; // L'immagine per il confronto
+    public Sprite immaginePrincipale;
+    public Sprite immagineConfronto; // L'immagine per il confronto
 }

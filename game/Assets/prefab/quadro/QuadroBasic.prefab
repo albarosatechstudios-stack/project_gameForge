@@ -107,12 +107,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 1.2, z: 1.5}
-  m_Center: {x: -0.6941376, y: 0.0044641495, z: 0.0036716461}
+  m_Size: {x: 4, y: 1.2, z: 1.2}
+  m_Center: {x: -2, y: 0, z: 0}
 --- !u!114 &2457866171522299810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuadroController
   dati: {fileID: 0}
   telaRenderer: {fileID: 672310419789957718}
+  pannello: {fileID: 0}
 --- !u!1 &5137904480436843562
 GameObject:
   m_ObjectHideFlags: 0
