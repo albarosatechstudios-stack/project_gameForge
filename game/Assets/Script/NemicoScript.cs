@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
-// Manteniamo il tuo enum originale per gli stati interni della guardia
-public enum STATE { VIGILE, CHASING, SLEEPING, OFF, DISTRACTED }
+public enum STATE { VIGILE, CHASING, SEARCHING, SLEEPING, OFF, DISTRACTED }
 
 public class NemicoScript : MonoBehaviour
 {
     [Header("Componenti")]
     private NavMeshAgent agent;
     public Transform player;
+    public FieldOfView fov;
+
+    [Header("Grafica UI (Balloon)")]
+    public EnemyStatusVisuals statusVisuals; // <--- TRASCINA QUI IL CANVAS FIGLIO
+    private STATE lastState; // Serve per capire quando lo stato cambia
 
     [Header("Stato Interno")]
     public STATE state = STATE.VIGILE;
-
-    // Riferimento al collider specifico che ci sta facendo dormire
     private Collider currentSmokeCollider;
 
     [Header("Impostazioni Pattuglia")]
@@ -21,8 +24,14 @@ public class NemicoScript : MonoBehaviour
     public float patrolWaitTime = 2f;
     private float patrolTimer;
 
-    [Header("Impostazioni Inseguimento")]
+    [Header("Impostazioni Inseguimento Avanzato")]
     public float stopDistanceFromPlayer = 2.0f;
+    public float searchTime = 4f;
+    private float searchTimer;
+
+    // Logica "Last Known Position"
+    private Vector3 lastKnownPosition;
+    private bool hasLastKnownPosition = false;
 
     [Header("Impostazioni Distrazione")]
     public float distractionTime = 5f;
@@ -32,63 +41,65 @@ public class NemicoScript : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+
+        // Cerca lo script FieldOfView
+        if (fov == null) fov = GetComponentInChildren<FieldOfView>();
+        if (fov == null) fov = GetComponent<FieldOfView>();
+
+        // Cerca lo script EnemyStatusVisuals se non assegnato
+        if (statusVisuals == null) statusVisuals = GetComponentInChildren<EnemyStatusVisuals>();
     }
 
     void Start()
     {
         patrolTimer = patrolWaitTime;
         if (agent != null) agent.stoppingDistance = 0.5f;
-    }
 
-    // --- NUOVA PARTE: INTEGRAZIONE CON GAMEMANAGER ---
+        // Inizializza l'icona corretta allo start
+        if (statusVisuals != null) statusVisuals.UpdateStatus(state);
+        lastState = state;
+    }
 
     private void OnEnable()
     {
-        // Ci iscriviamo all'evento: Se il GameManager cambia stato, avvisami!
-        if (GameManager.Instance != null)
-        {
-            GameManager.OnStateChanged += HandleGameStateChanged;
-        }
+        if (GameManager.Instance != null) GameManager.OnStateChanged += HandleGameStateChanged;
     }
 
     private void OnDisable()
     {
-        // Ci disiscriviamo per evitare errori quando l'oggetto viene distrutto
-        if (GameManager.Instance != null)
-        {
-            GameManager.OnStateChanged -= HandleGameStateChanged;
-        }
+        if (GameManager.Instance != null) GameManager.OnStateChanged -= HandleGameStateChanged;
     }
 
-    // Questa funzione viene chiamata automaticamente dal GameManager
     private void HandleGameStateChanged(GameState newGlobalState)
     {
-        // Se il gioco torna in modalità VISITATORE (es. reset o debug)
         if (newGlobalState == GameState.Visitor)
         {
-            // Se stavo inseguendo, smetto subito e torno a pattugliare
-            if (state == STATE.CHASING || state == STATE.DISTRACTED)
+            if (state == STATE.CHASING || state == STATE.SEARCHING || state == STATE.DISTRACTED)
             {
-                Debug.Log("Torno in modalità pacifica (Visitatore).");
                 state = STATE.VIGILE;
-                agent.ResetPath();
-                player = null; // Dimentico il player
+                if (agent.isActiveAndEnabled) agent.ResetPath();
+                player = null;
+                hasLastKnownPosition = false;
             }
         }
-        
-        // Se il gioco passa a LADRO
-        else if (newGlobalState == GameState.Thief)
-        {
-            // Opzionale: Se vuoi che le guardie diventino subito aggressive se vedono il player
-            // Potresti forzare un controllo qui, ma OnTriggerStay lo farà al prossimo frame.
-            Debug.Log("Allerta massima! Cerco ladri.");
-        }
     }
-
-    // --------------------------------------------------
 
     void Update()
     {
+        // --- GESTIONE CAMBIO ICONE (NUOVO) ---
+        // Se lo stato è cambiato rispetto al frame precedente, aggiorno la grafica
+        if (state != lastState)
+        {
+            if (statusVisuals != null)
+            {
+                statusVisuals.UpdateStatus(state);
+            }
+            lastState = state; // Ricordo il nuovo stato
+        }
+        // -------------------------------------
+
+        CheckVision();
+
         switch (state)
         {
             case STATE.VIGILE:
@@ -97,6 +108,10 @@ public class NemicoScript : MonoBehaviour
 
             case STATE.CHASING:
                 ChaseLogic();
+                break;
+
+            case STATE.SEARCHING:
+                SearchLogic();
                 break;
 
             case STATE.DISTRACTED:
@@ -113,7 +128,72 @@ public class NemicoScript : MonoBehaviour
         }
     }
 
-    // --- LOGICHE DI COMPORTAMENTO (Invariate) ---
+    // --- LOGICA DI VISIONE ---
+    void CheckVision()
+    {
+        if (state == STATE.SLEEPING || state == STATE.OFF) return;
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Visitor) return;
+
+        if (fov != null && fov.visibleTargets.Count > 0)
+        {
+            Transform targetVisto = fov.visibleTargets[0];
+            lastKnownPosition = targetVisto.position;
+            hasLastKnownPosition = true;
+
+            if (state != STATE.CHASING && state != STATE.SLEEPING)
+            {
+                state = STATE.CHASING;
+                player = targetVisto;
+            }
+        }
+    }
+
+    // --- LOGICHE DI COMPORTAMENTO ---
+
+    void ChaseLogic()
+    {
+        if (!agent.isActiveAndEnabled) return;
+        agent.isStopped = false;
+
+        if (fov.visibleTargets.Count > 0 && player != null)
+        {
+            agent.SetDestination(player.position);
+            if (agent.remainingDistance <= agent.stoppingDistance + 1f) LookAtTarget(player.position);
+        }
+        else
+        {
+            if (hasLastKnownPosition)
+            {
+                agent.SetDestination(lastKnownPosition);
+                if (!agent.pathPending && agent.remainingDistance <= 1.5f)
+                {
+                    state = STATE.SEARCHING;
+                    searchTimer = 0;
+                }
+            }
+            else
+            {
+                state = STATE.VIGILE;
+            }
+        }
+    }
+
+    void SearchLogic()
+    {
+        if (!agent.isActiveAndEnabled) return;
+        agent.isStopped = true;
+
+        searchTimer += Time.deltaTime;
+        float rotationAmount = Mathf.Sin(Time.time * 2) * 60f;
+        transform.Rotate(Vector3.up * rotationAmount * Time.deltaTime);
+
+        if (searchTimer >= searchTime)
+        {
+            hasLastKnownPosition = false;
+            state = STATE.VIGILE;
+            agent.isStopped = false;
+        }
+    }
 
     void PatrolLogic()
     {
@@ -132,35 +212,9 @@ public class NemicoScript : MonoBehaviour
         }
     }
 
-    void ChaseLogic()
-    {
-        // SICUREZZA EXTRA: Se per caso siamo tornati Visitor mentre inseguivo
-        if (GameManager.Instance.CurrentState == GameState.Visitor)
-        {
-            state = STATE.VIGILE;
-            return;
-        }
-
-        if (player != null)
-        {
-            if (agent.isActiveAndEnabled) agent.isStopped = false;
-            
-            Vector3 directionFromPlayer = (transform.position - player.position).normalized;
-            Vector3 safeDestination = player.position + (directionFromPlayer * stopDistanceFromPlayer);
-            
-            if(agent.isActiveAndEnabled) agent.SetDestination(safeDestination);
-
-            if (agent.remainingDistance <= agent.stoppingDistance + 0.5f)
-            {
-                LookAtTarget(player.position);
-            }
-        }
-    }
-
     void DistractedLogic()
     {
         if (!agent.isActiveAndEnabled) return;
-        
         agent.isStopped = false;
         agent.SetDestination(distractionPoint);
 
@@ -182,29 +236,24 @@ public class NemicoScript : MonoBehaviour
             agent.isStopped = true;
             agent.ResetPath();
         }
-
         if (currentSmokeCollider == null || !currentSmokeCollider.enabled || !currentSmokeCollider.gameObject.activeInHierarchy)
         {
-            Debug.Log("Il fumo si è diradato, mi sveglio!");
             WakeUp();
         }
     }
 
+    // --- UTILS ---
+
     public void ForzaSonno(GameObject oggettoFumo)
     {
         Collider col = oggettoFumo.GetComponent<Collider>();
-        if (col != null)
-        {
-            currentSmokeCollider = col;
-            EntraInStatoSonno();
-        }
+        if (col != null) { currentSmokeCollider = col; EntraInStatoSonno(); }
     }
 
     void EntraInStatoSonno()
     {
         if (state != STATE.SLEEPING)
         {
-            Debug.Log("Zzz... addormentato dal fumo.");
             state = STATE.SLEEPING;
             if (agent.isActiveAndEnabled) agent.ResetPath();
         }
@@ -216,8 +265,6 @@ public class NemicoScript : MonoBehaviour
         patrolTimer = 0;
         currentSmokeCollider = null;
     }
-
-    // --- UTILITIES ---
 
     void LookAtTarget(Vector3 targetPos)
     {
@@ -235,63 +282,31 @@ public class NemicoScript : MonoBehaviour
         Vector3 randDirection = Random.insideUnitSphere * dist;
         randDirection += origin;
         NavMeshHit navHit;
-        if (NavMesh.SamplePosition(randDirection, out navHit, dist, layermask))
-        {
-            return navHit.position;
-        }
+        if (NavMesh.SamplePosition(randDirection, out navHit, dist, layermask)) return navHit.position;
         return origin;
     }
 
-    // --- GESTIONE COLLISIONI (AGGIORNATA CON GAMEMANAGER) ---
+    // --- TRIGGER ---
 
     void OnTriggerStay(Collider other)
     {
-        // Se sto dormendo, ignoro tutto finché non mi sveglio
         if (state == STATE.SLEEPING) return;
 
-        // Gestione PLAYER
-        if (other.CompareTag("Player"))
-        {
-            // MODIFICA: Reagisco al player SOLO se siamo nella fase THIEF (Ladro)
-            if (GameManager.Instance.CurrentState == GameState.Thief)
-            {
-                if (state == STATE.VIGILE || state == STATE.DISTRACTED)
-                {
-                    Debug.Log("Ti ho visto! AL LADRO!");
-                    state = STATE.CHASING;
-                    player = other.transform;
-                }
-            }
-            else
-            {
-                // Se sono in fase VISITOR, ignoro il player (o potrei salutarlo)
-                // Debug.Log("Buongiorno visitatore, buona permanenza.");
-            }
-        }
-
-        // Gestione FUMO (Funziona sempre, anche se sono visitatore, il fumo mi addormenta)
         if (other.CompareTag("Fumogeno"))
         {
-            if (other.enabled && other.isTrigger)
-            {
-                currentSmokeCollider = other;
-                EntraInStatoSonno();
-            }
+            if (other.enabled && other.isTrigger) { currentSmokeCollider = other; EntraInStatoSonno(); }
         }
 
-        // Gestione ITEM (Distrazione)
         if (other.CompareTag("Item"))
         {
-            // MODIFICA: Mi distraggo solo se sono in fase THIEF (o se decidi che anche da visitatore ti distrai)
-            // Di solito in fase Visitatore il player non può lanciare item.
-            if (GameManager.Instance.CurrentState == GameState.Thief)
+            if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Thief)
             {
-                if (state == STATE.VIGILE || state == STATE.CHASING)
+                if (state == STATE.VIGILE || state == STATE.CHASING || state == STATE.SEARCHING)
                 {
                     state = STATE.DISTRACTED;
                     distractionPoint = other.transform.position;
                     distractionTimer = 0;
-                    if(agent.isActiveAndEnabled) agent.ResetPath();
+                    if (agent.isActiveAndEnabled) agent.ResetPath();
                 }
             }
         }
@@ -299,20 +314,6 @@ public class NemicoScript : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && state == STATE.CHASING)
-        {
-            // Se il player scappa, torno vigile (o potrei andare all'ultima posizione nota)
-            state = STATE.VIGILE;
-            if(agent.isActiveAndEnabled) agent.ResetPath();
-            player = null;
-        }
-
-        if (other.CompareTag("Fumogeno"))
-        {
-            if (currentSmokeCollider == other)
-            {
-                WakeUp();
-            }
-        }
+        if (other.CompareTag("Fumogeno") && currentSmokeCollider == other) WakeUp();
     }
 }

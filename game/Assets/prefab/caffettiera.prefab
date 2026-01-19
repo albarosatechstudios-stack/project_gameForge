@@ -98,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::triggerCaffettiera
   activationDelay: 2
   triggerArea: {fileID: 6756669722852272678}
+  lifetime: 5
 --- !u!135 &6756669722852272678
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -117,5 +118,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.009
+  m_Radius: 0.03
   m_Center: {x: 0, y: 0, z: 0}
