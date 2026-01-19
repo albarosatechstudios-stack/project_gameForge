@@ -14,6 +14,7 @@ public class OpenDrawingBoard : MonoBehaviour
 
     public void Update()
     {
+        if (PauseMenu.GameIsPaused) return;
         if (inTrigger && Mouse.current.leftButton.wasPressedThisFrame)
         {
             print("hai cliccato il quadro bianco");

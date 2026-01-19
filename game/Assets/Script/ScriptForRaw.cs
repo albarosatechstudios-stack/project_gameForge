@@ -16,10 +16,12 @@ public class DrawingController : MonoBehaviour
 
     private Vector2Int? lastMousePixel = null;
     private int brushSize = 4; // dimensione pennello
+    private bool isSaved = false;
 
     void Start()
     {
         InitTexture();
+        isSaved = false;
     }
 
     void InitTexture()
@@ -37,6 +39,10 @@ public class DrawingController : MonoBehaviour
 
     void Update()
     {
+        // pezza
+        if(GameManager.Instance.CurrentState != GameState.NoPause) {
+            GameManager.Instance.ChangeState(GameState.NoPause);
+        }
         if (Mouse.current != null && Mouse.current.rightButton.isPressed)
         {
             Vector2 mousePos = Mouse.current.position.ReadValue();
@@ -83,6 +89,8 @@ public class DrawingController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             drawingCanvas.SetActive(false);
+            Destroy();
+
         }
 
         if (Keyboard.current != null && Keyboard.current.sKey.wasPressedThisFrame)
@@ -98,6 +106,7 @@ public class DrawingController : MonoBehaviour
             ApplyTextureToMaterial(filePath);
 
             Debug.Log($"Disegno salvato in: {filePath}");
+            isSaved = true;
         }
     }
 
@@ -237,6 +246,18 @@ public class DrawingController : MonoBehaviour
         else
         {
             Debug.LogError("Impossibile caricare l'immagine come texture.");
+        }
+    }
+
+    void Destroy()
+    {
+        if (isSaved)
+        {
+            GameManager.Instance.ChangeState(GameState.Thief);
+        }
+        else
+        {
+            GameManager.Instance.ChangeState(GameState.Visitor);
         }
     }
 }

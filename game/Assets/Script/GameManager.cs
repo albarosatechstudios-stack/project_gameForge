@@ -8,7 +8,8 @@ using UnityEngine.SceneManagement;
 public enum GameState
 {
     Visitor, // Fase 1: Visitatore (guardie passive, niente oggetti)
-    Thief    // Fase 2: Ladro (guardie attive, oggetti utilizzabili)
+    Thief,    // Fase 2: Ladro (guardie attive, oggetti utilizzabili)
+    NoPause //Fase apertura pannelli (non è possibile mettere pausa poichè esc collide nelle due azioni - [menu pausa, uscire])
 }
 
 public class GameManager : MonoBehaviour

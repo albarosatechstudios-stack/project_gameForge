@@ -10,6 +10,9 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        
+        if (GameManager.Instance.CurrentState == GameState.NoPause) return;
+        
         // Se premo ESC
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {

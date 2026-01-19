@@ -15,14 +15,17 @@ public class PannelloQuadro : MonoBehaviour
 
     public void MostraQuadro(Sprite img, string desc)
     {
+        if(GameManager.Instance.CurrentState!=GameState.Thief){
+        GameManager.Instance.ChangeState(GameState.NoPause);
         immagine.sprite = img;
         testo.text = desc;
         gameObject.SetActive(true);
+        }
     }
 
     public void ChiudiPannello()
     {
-       
+        GameManager.Instance.ChangeState(GameState.Visitor);
         gameObject.SetActive(false);
     }
 
