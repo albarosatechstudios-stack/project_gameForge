@@ -237,9 +237,9 @@ MonoBehaviour:
   worldCanvas: {fileID: 64896952}
   iconImage: {fileID: 921046684}
   textLabel: {fileID: 647856110}
-  alertSprite: {fileID: 21300000, guid: e8d58e39e8bd0f8489bda327366695c9, type: 3}
-  searchSprite: {fileID: 21300000, guid: 836578c3df60c764f8e2761291e478c3, type: 3}
-  coffeeSprite: {fileID: 21300000, guid: ec137b95aff011748b4fdd4ebd677c15, type: 3}
+  alertSprite: {fileID: 21300000, guid: 75759931b388b594684518967142547c, type: 3}
+  searchSprite: {fileID: 21300000, guid: 4ec84918bd537884fb95816f8d9d4946, type: 3}
+  coffeeSprite: {fileID: 21300000, guid: d498badbe7ed991439372de9067ac2ea, type: 3}
 --- !u!1 &647856108
 GameObject:
   m_ObjectHideFlags: 0
