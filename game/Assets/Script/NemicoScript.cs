@@ -11,9 +11,9 @@ public class NemicoScript : MonoBehaviour
     public Transform player;
     public FieldOfView fov;
 
-    [Header("Grafica UI (Balloon)")]
-    public EnemyStatusVisuals statusVisuals; // <--- TRASCINA QUI IL CANVAS FIGLIO
-    private STATE lastState; // Serve per capire quando lo stato cambia
+    [Header("Grafica UI")]
+    public EnemyStatusVisuals statusVisuals;
+    private STATE lastState;
 
     [Header("Stato Interno")]
     public STATE state = STATE.VIGILE;
@@ -24,14 +24,23 @@ public class NemicoScript : MonoBehaviour
     public float patrolWaitTime = 2f;
     private float patrolTimer;
 
-    [Header("Impostazioni Inseguimento Avanzato")]
+    [Header("Impostazioni Inseguimento & Predizione")]
     public float stopDistanceFromPlayer = 2.0f;
     public float searchTime = 4f;
     private float searchTimer;
 
+    [Tooltip("Tempo in secondi per predire il movimento (Dead Reckoning)")]
+    public float predictionTime = 2.0f;
+    private Vector3 previousPlayerPos;
+    private Vector3 playerVelocity;
+
     // Logica "Last Known Position"
     private Vector3 lastKnownPosition;
     private bool hasLastKnownPosition = false;
+
+    [Header("Impostazioni Sensi (Udito/Prossimità)")]
+    [Tooltip("Distanza entro la quale il nemico ti sente anche se sei alle spalle")]
+    public float hearingRadius = 2.5f; // <--- NUOVO: Raggio udito
 
     [Header("Impostazioni Distrazione")]
     public float distractionTime = 5f;
@@ -42,11 +51,9 @@ public class NemicoScript : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
-        // Cerca lo script FieldOfView
         if (fov == null) fov = GetComponentInChildren<FieldOfView>();
         if (fov == null) fov = GetComponent<FieldOfView>();
 
-        // Cerca lo script EnemyStatusVisuals se non assegnato
         if (statusVisuals == null) statusVisuals = GetComponentInChildren<EnemyStatusVisuals>();
     }
 
@@ -55,7 +62,6 @@ public class NemicoScript : MonoBehaviour
         patrolTimer = patrolWaitTime;
         if (agent != null) agent.stoppingDistance = 0.5f;
 
-        // Inizializza l'icona corretta allo start
         if (statusVisuals != null) statusVisuals.UpdateStatus(state);
         lastState = state;
     }
@@ -86,19 +92,14 @@ public class NemicoScript : MonoBehaviour
 
     void Update()
     {
-        // --- GESTIONE CAMBIO ICONE (NUOVO) ---
-        // Se lo stato è cambiato rispetto al frame precedente, aggiorno la grafica
         if (state != lastState)
         {
-            if (statusVisuals != null)
-            {
-                statusVisuals.UpdateStatus(state);
-            }
-            lastState = state; // Ricordo il nuovo stato
+            if (statusVisuals != null) statusVisuals.UpdateStatus(state);
+            lastState = state;
         }
-        // -------------------------------------
 
-        CheckVision();
+        CalculateTargetVelocity();
+        CheckSensors(); // <--- Nome cambiato da CheckVision a CheckSensors
 
         switch (state)
         {
@@ -128,22 +129,75 @@ public class NemicoScript : MonoBehaviour
         }
     }
 
-    // --- LOGICA DI VISIONE ---
-    void CheckVision()
+    void CalculateTargetVelocity()
+    {
+        if (player != null)
+        {
+            Vector3 currentMove = (player.position - previousPlayerPos) / Time.deltaTime;
+            playerVelocity = Vector3.Lerp(playerVelocity, currentMove, Time.deltaTime * 5f);
+            previousPlayerPos = player.position;
+        }
+    }
+
+    // --- NUOVA GESTIONE SENSORI (VISTA + UDITO) ---
+    void CheckSensors()
     {
         if (state == STATE.SLEEPING || state == STATE.OFF) return;
         if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Visitor) return;
 
+        bool foundTarget = false;
+        Transform targetTransform = null;
+
+        // 1. CONTROLLO VISIVO (CONO)
         if (fov != null && fov.visibleTargets.Count > 0)
         {
-            Transform targetVisto = fov.visibleTargets[0];
-            lastKnownPosition = targetVisto.position;
-            hasLastKnownPosition = true;
+            targetTransform = fov.visibleTargets[0];
+            foundTarget = true;
+        }
 
-            if (state != STATE.CHASING && state != STATE.SLEEPING)
+        // 2. CONTROLLO UDITIVO (SFERA DI PROSSIMITÀ)
+        // Se non l'ho visto, controllo se è abbastanza vicino da "sentirlo" (anche alle spalle)
+        if (!foundTarget && fov != null)
+        {
+            Collider[] hearers = Physics.OverlapSphere(transform.position, hearingRadius, fov.targetMask);
+            if (hearers.Length > 0)
             {
-                state = STATE.CHASING;
-                player = targetVisto;
+                // Controllo che non ci siano muri tra me e il rumore (opzionale, ma realistico)
+                // Se vuoi che ti senta anche attraverso un muro sottile, togli questo if del Raycast
+                Vector3 dirToTarget = (hearers[0].transform.position - transform.position).normalized;
+                float dstToTarget = Vector3.Distance(transform.position, hearers[0].transform.position);
+
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, fov.obstacleMask))
+                {
+                    targetTransform = hearers[0].transform;
+                    foundTarget = true;
+                }
+            }
+        }
+
+        // --- GESTIONE LOGICA TROVATO / PERSO ---
+        if (foundTarget)
+        {
+            if (player != targetTransform) previousPlayerPos = targetTransform.position;
+
+            player = targetTransform;
+            state = STATE.CHASING;
+            lastKnownPosition = player.position;
+            hasLastKnownPosition = true;
+        }
+        else
+        {
+            // Se stavo inseguendo e l'ho perso (niente vista, niente udito)
+            if (state == STATE.CHASING && player != null)
+            {
+                // Predizione movimento (Dead Reckoning)
+                Vector3 predictedPos = lastKnownPosition + (playerVelocity * predictionTime);
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(predictedPos, out hit, 5.0f, NavMesh.AllAreas))
+                {
+                    lastKnownPosition = hit.position;
+                }
+                player = null; // Smetto di "lockare" il player, vado in predizione
             }
         }
     }
@@ -155,20 +209,29 @@ public class NemicoScript : MonoBehaviour
         if (!agent.isActiveAndEnabled) return;
         agent.isStopped = false;
 
-        if (fov.visibleTargets.Count > 0 && player != null)
+        if (player != null)
         {
+            // Inseguimento diretto
             agent.SetDestination(player.position);
-            if (agent.remainingDistance <= agent.stoppingDistance + 1f) LookAtTarget(player.position);
+            // Se sono molto vicino, mi giro verso di lui aggressivamente
+            if (agent.remainingDistance <= agent.stoppingDistance + 1.5f) LookAtTarget(player.position);
         }
         else
         {
+            // Inseguimento predittivo (Target perso)
             if (hasLastKnownPosition)
             {
                 agent.SetDestination(lastKnownPosition);
+
+                // Se arrivo alla posizione predetta
                 if (!agent.pathPending && agent.remainingDistance <= 1.5f)
                 {
                     state = STATE.SEARCHING;
                     searchTimer = 0;
+
+                    // Appena arrivo dove ti ho perso, mi giro verso dove stavi andando o indietro
+                    // (Opzionale: piccolo trick per renderlo più vivo)
+                    agent.updateRotation = false; // Disabilito rotazione automatica per ruotare a mano in Search
                 }
             }
             else
@@ -184,7 +247,10 @@ public class NemicoScript : MonoBehaviour
         agent.isStopped = true;
 
         searchTimer += Time.deltaTime;
-        float rotationAmount = Mathf.Sin(Time.time * 2) * 60f;
+
+        // Ruota destra/sinistra + controllo spalle
+        // Una rotazione più ampia per coprire le spalle
+        float rotationAmount = Mathf.Sin(Time.time * 3) * 120f;
         transform.Rotate(Vector3.up * rotationAmount * Time.deltaTime);
 
         if (searchTimer >= searchTime)
@@ -192,6 +258,7 @@ public class NemicoScript : MonoBehaviour
             hasLastKnownPosition = false;
             state = STATE.VIGILE;
             agent.isStopped = false;
+            agent.updateRotation = true; // Riabilito la rotazione automatica del NavMesh
         }
     }
 
@@ -273,7 +340,7 @@ public class NemicoScript : MonoBehaviour
         if (direction != Vector3.zero)
         {
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
         }
     }
 
@@ -284,6 +351,13 @@ public class NemicoScript : MonoBehaviour
         NavMeshHit navHit;
         if (NavMesh.SamplePosition(randDirection, out navHit, dist, layermask)) return navHit.position;
         return origin;
+    }
+
+    // Disegna il raggio udito nell'editor per debug
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, hearingRadius);
     }
 
     // --- TRIGGER ---

@@ -19,18 +19,16 @@ public class FieldOfView : MonoBehaviour
     public float edgeDstThreshold = 0.5f;
 
     public MeshFilter viewMeshFilter;
-    private MeshRenderer viewMeshRenderer; // Riferimento al renderer per nasconderlo
+    private MeshRenderer viewMeshRenderer;
     Mesh viewMesh;
 
     [HideInInspector]
     public List<Transform> visibleTargets = new List<Transform>();
 
-    // Variabile per sapere se dobbiamo calcolare la vista
     private bool isVisionActive = false;
 
     void Awake()
     {
-        // Cerchiamo il MeshRenderer sullo stesso oggetto del MeshFilter
         if (viewMeshFilter != null)
         {
             viewMeshRenderer = viewMeshFilter.GetComponent<MeshRenderer>();
@@ -46,14 +44,12 @@ public class FieldOfView : MonoBehaviour
 
         StartCoroutine("FindTargetsWithDelay", 0.2f);
 
-        // Controllo iniziale dello stato
         if (GameManager.Instance != null)
         {
             UpdateVisionState(GameManager.Instance.CurrentState);
         }
     }
 
-    // --- GESTIONE EVENTI GAMEMANAGER ---
     private void OnEnable()
     {
         if (GameManager.Instance != null)
@@ -66,40 +62,40 @@ public class FieldOfView : MonoBehaviour
             GameManager.OnStateChanged -= UpdateVisionState;
     }
 
-    // Questa funzione decide se accendere o spegnere il cono
     void UpdateVisionState(GameState newState)
     {
         if (newState == GameState.Thief)
         {
             isVisionActive = true;
-            if (viewMeshRenderer != null) viewMeshRenderer.enabled = true; // Mostra il cono
+            if (viewMeshRenderer != null) viewMeshRenderer.enabled = true;
         }
         else
         {
             isVisionActive = false;
-            if (viewMeshRenderer != null) viewMeshRenderer.enabled = false; // Nascondi il cono
-            visibleTargets.Clear(); // Dimentica i bersagli
-            viewMesh.Clear(); // Pulisci la mesh residua
+            if (viewMeshRenderer != null) viewMeshRenderer.enabled = false;
+            visibleTargets.Clear();
+            viewMesh.Clear();
         }
     }
-    // ------------------------------------
 
     IEnumerator FindTargetsWithDelay(float delay)
     {
         while (true)
         {
             yield return new WaitForSeconds(delay);
-            // Cerca bersagli solo se la visione è attiva
             if (isVisionActive)
             {
                 FindVisibleTargets();
+            }
+            else
+            {
+                visibleTargets.Clear(); // Assicura che la lista sia vuota se visione disattivata
             }
         }
     }
 
     void LateUpdate()
     {
-        // Disegna il cono solo se la visione è attiva
         if (isVisionActive)
         {
             DrawFieldOfView();
