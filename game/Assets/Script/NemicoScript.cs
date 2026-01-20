@@ -94,12 +94,19 @@ public class NemicoScript : MonoBehaviour
     {
         if (state != lastState)
         {
-            if (statusVisuals != null) statusVisuals.UpdateStatus(state);
+            // Aggiorno lo stato generico, MA ESCLUDO IL CHASING
+            // perché il Chasing è gestito specificamente da CheckSensors con TriggerDetection
+            if (statusVisuals != null && state != STATE.CHASING)
+            {
+                statusVisuals.UpdateStatus(state);
+            }
+
+            
             lastState = state;
         }
 
         CalculateTargetVelocity();
-        CheckSensors(); // <--- Nome cambiato da CheckVision a CheckSensors
+        CheckSensors();
 
         switch (state)
         {
@@ -142,28 +149,27 @@ public class NemicoScript : MonoBehaviour
     // --- NUOVA GESTIONE SENSORI (VISTA + UDITO) ---
     void CheckSensors()
     {
-        if (state == STATE.SLEEPING || state == STATE.OFF) return;
+        if (state == STATE.SLEEPING || state == STATE.OFF || state == STATE.DISTRACTED) return;
         if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Visitor) return;
 
         bool foundTarget = false;
+        bool detectedBySound = false; // Variabile per tracciare il tipo di rilevamento
         Transform targetTransform = null;
 
-        // 1. CONTROLLO VISIVO (CONO)
+        // 1. VISTA (Priorità alta)
         if (fov != null && fov.visibleTargets.Count > 0)
         {
             targetTransform = fov.visibleTargets[0];
             foundTarget = true;
+            detectedBySound = false; // È vista!
         }
 
-        // 2. CONTROLLO UDITIVO (SFERA DI PROSSIMITÀ)
-        // Se non l'ho visto, controllo se è abbastanza vicino da "sentirlo" (anche alle spalle)
+        // 2. UDITO (Solo se non visto)
         if (!foundTarget && fov != null)
         {
             Collider[] hearers = Physics.OverlapSphere(transform.position, hearingRadius, fov.targetMask);
             if (hearers.Length > 0)
             {
-                // Controllo che non ci siano muri tra me e il rumore (opzionale, ma realistico)
-                // Se vuoi che ti senta anche attraverso un muro sottile, togli questo if del Raycast
                 Vector3 dirToTarget = (hearers[0].transform.position - transform.position).normalized;
                 float dstToTarget = Vector3.Distance(transform.position, hearers[0].transform.position);
 
@@ -171,33 +177,47 @@ public class NemicoScript : MonoBehaviour
                 {
                     targetTransform = hearers[0].transform;
                     foundTarget = true;
+                    detectedBySound = true; // È udito!
+
+                    // Se ti sente, si gira verso di te
+                    LookAtTarget(targetTransform.position);
                 }
             }
         }
 
-        // --- GESTIONE LOGICA TROVATO / PERSO ---
         if (foundTarget)
         {
             if (player != targetTransform) previousPlayerPos = targetTransform.position;
 
             player = targetTransform;
-            state = STATE.CHASING;
+
+            // Se cambio stato ora in CHASING
+            if (state != STATE.CHASING)
+            {
+                state = STATE.CHASING;
+
+                // --- CHIAMATA ALLA GRAFICA NUOVA ---
+                if (statusVisuals != null)
+                {
+                    statusVisuals.TriggerDetection(detectedBySound);
+                }
+            }
+
             lastKnownPosition = player.position;
             hasLastKnownPosition = true;
         }
         else
         {
-            // Se stavo inseguendo e l'ho perso (niente vista, niente udito)
             if (state == STATE.CHASING && player != null)
             {
-                // Predizione movimento (Dead Reckoning)
+                // Predizione...
                 Vector3 predictedPos = lastKnownPosition + (playerVelocity * predictionTime);
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(predictedPos, out hit, 5.0f, NavMesh.AllAreas))
                 {
                     lastKnownPosition = hit.position;
                 }
-                player = null; // Smetto di "lockare" il player, vado in predizione
+                player = null;
             }
         }
     }
