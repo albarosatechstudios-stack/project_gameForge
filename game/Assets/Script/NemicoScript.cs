@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement; // FONDAMENTALE per ricaricare la scena
 using System.Collections.Generic;
 
 public enum STATE { VIGILE, CHASING, SEARCHING, SLEEPING, OFF, DISTRACTED }
@@ -8,41 +9,39 @@ public class NemicoScript : MonoBehaviour
 {
     [Header("Componenti")]
     private NavMeshAgent agent;
-    public Transform player;
+    public Transform player; // Assicurati che questo venga riempito dai sensori
     public FieldOfView fov;
-
-    [Header("Grafica UI")]
     public EnemyStatusVisuals statusVisuals;
-    private STATE lastState;
 
-    [Header("Stato Interno")]
+    [Header("Stato")]
     public STATE state = STATE.VIGILE;
+    private STATE lastState;
     private Collider currentSmokeCollider;
 
-    [Header("Impostazioni Pattuglia")]
+    [Header("Pattuglia")]
     public float patrolRadius = 10f;
     public float patrolWaitTime = 2f;
     private float patrolTimer;
 
-    [Header("Impostazioni Inseguimento & Predizione")]
+    [Header("Inseguimento & Cattura")]
     public float stopDistanceFromPlayer = 2.0f;
+    public float arrestDistance = 1.3f; // Distanza di cattura
     public float searchTime = 4f;
     private float searchTimer;
 
-    [Tooltip("Tempo in secondi per predire il movimento (Dead Reckoning)")]
+    [Tooltip("Predizione movimento")]
     public float predictionTime = 2.0f;
     private Vector3 previousPlayerPos;
     private Vector3 playerVelocity;
 
-    // Logica "Last Known Position"
+    // Logica "Ultima posizione nota"
     private Vector3 lastKnownPosition;
     private bool hasLastKnownPosition = false;
 
-    [Header("Impostazioni Sensi (Udito/Prossimità)")]
-    [Tooltip("Distanza entro la quale il nemico ti sente anche se sei alle spalle")]
-    public float hearingRadius = 2.5f; // <--- NUOVO: Raggio udito
+    [Header("Sensi")]
+    public float hearingRadius = 2.5f;
 
-    [Header("Impostazioni Distrazione")]
+    [Header("Distrazione")]
     public float distractionTime = 5f;
     private float distractionTimer;
     private Vector3 distractionPoint;
@@ -50,10 +49,8 @@ public class NemicoScript : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-
         if (fov == null) fov = GetComponentInChildren<FieldOfView>();
         if (fov == null) fov = GetComponent<FieldOfView>();
-
         if (statusVisuals == null) statusVisuals = GetComponentInChildren<EnemyStatusVisuals>();
     }
 
@@ -61,7 +58,6 @@ public class NemicoScript : MonoBehaviour
     {
         patrolTimer = patrolWaitTime;
         if (agent != null) agent.stoppingDistance = 0.5f;
-
         if (statusVisuals != null) statusVisuals.UpdateStatus(state);
         lastState = state;
     }
@@ -94,14 +90,8 @@ public class NemicoScript : MonoBehaviour
     {
         if (state != lastState)
         {
-            // Aggiorno lo stato generico, MA ESCLUDO IL CHASING
-            // perché il Chasing è gestito specificamente da CheckSensors con TriggerDetection
             if (statusVisuals != null && state != STATE.CHASING)
-            {
                 statusVisuals.UpdateStatus(state);
-            }
-
-            
             lastState = state;
         }
 
@@ -110,31 +100,43 @@ public class NemicoScript : MonoBehaviour
 
         switch (state)
         {
-            case STATE.VIGILE:
-                PatrolLogic();
-                break;
-
-            case STATE.CHASING:
-                ChaseLogic();
-                break;
-
-            case STATE.SEARCHING:
-                SearchLogic();
-                break;
-
-            case STATE.DISTRACTED:
-                DistractedLogic();
-                break;
-
-            case STATE.SLEEPING:
-                SleepLogic();
-                break;
-
-            case STATE.OFF:
-                if (agent.isActiveAndEnabled && !agent.isStopped) agent.isStopped = true;
-                break;
+            case STATE.VIGILE: PatrolLogic(); break;
+            case STATE.CHASING: ChaseLogic(); break;
+            case STATE.SEARCHING: SearchLogic(); break;
+            case STATE.DISTRACTED: DistractedLogic(); break;
+            case STATE.SLEEPING: SleepLogic(); break;
+            case STATE.OFF: if (agent.isActiveAndEnabled) agent.isStopped = true; break;
         }
     }
+
+    // --- LOGICA CATTURA ---
+    private void ArrestaGiocatore()
+    {
+        // Controlla se siamo in modalità ladro
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Thief)
+        {
+            Debug.Log("GIOCATORE ARRESTATO!");
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            int indexUltimaScena = SceneManager.sceneCountInBuildSettings - 1;
+            SceneManager.LoadScene(indexUltimaScena);
+
+            // Disabilita lo script per evitare chiamate multiple mentre carica
+            this.enabled = false;
+        }
+    }
+
+    // Fallback collisione fisica (se il player sbatte contro il nemico)
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            ArrestaGiocatore();
+        }
+    }
+    // -----------------------
 
     void CalculateTargetVelocity()
     {
@@ -146,25 +148,24 @@ public class NemicoScript : MonoBehaviour
         }
     }
 
-    // --- NUOVA GESTIONE SENSORI (VISTA + UDITO) ---
     void CheckSensors()
     {
         if (state == STATE.SLEEPING || state == STATE.OFF || state == STATE.DISTRACTED) return;
         if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Visitor) return;
 
         bool foundTarget = false;
-        bool detectedBySound = false; // Variabile per tracciare il tipo di rilevamento
+        bool detectedBySound = false;
         Transform targetTransform = null;
 
-        // 1. VISTA (Priorità alta)
+        // 1. Vista
         if (fov != null && fov.visibleTargets.Count > 0)
         {
             targetTransform = fov.visibleTargets[0];
             foundTarget = true;
-            detectedBySound = false; // È vista!
+            detectedBySound = false;
         }
 
-        // 2. UDITO (Solo se non visto)
+        // 2. Udito
         if (!foundTarget && fov != null)
         {
             Collider[] hearers = Physics.OverlapSphere(transform.position, hearingRadius, fov.targetMask);
@@ -177,9 +178,7 @@ public class NemicoScript : MonoBehaviour
                 {
                     targetTransform = hearers[0].transform;
                     foundTarget = true;
-                    detectedBySound = true; // È udito!
-
-                    // Se ti sente, si gira verso di te
+                    detectedBySound = true;
                     LookAtTarget(targetTransform.position);
                 }
             }
@@ -188,19 +187,12 @@ public class NemicoScript : MonoBehaviour
         if (foundTarget)
         {
             if (player != targetTransform) previousPlayerPos = targetTransform.position;
-
             player = targetTransform;
 
-            // Se cambio stato ora in CHASING
             if (state != STATE.CHASING)
             {
                 state = STATE.CHASING;
-
-                // --- CHIAMATA ALLA GRAFICA NUOVA ---
-                if (statusVisuals != null)
-                {
-                    statusVisuals.TriggerDetection(detectedBySound);
-                }
+                if (statusVisuals != null) statusVisuals.TriggerDetection(detectedBySound);
             }
 
             lastKnownPosition = player.position;
@@ -210,7 +202,6 @@ public class NemicoScript : MonoBehaviour
         {
             if (state == STATE.CHASING && player != null)
             {
-                // Predizione...
                 Vector3 predictedPos = lastKnownPosition + (playerVelocity * predictionTime);
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(predictedPos, out hit, 5.0f, NavMesh.AllAreas))
@@ -222,8 +213,6 @@ public class NemicoScript : MonoBehaviour
         }
     }
 
-    // --- LOGICHE DI COMPORTAMENTO ---
-
     void ChaseLogic()
     {
         if (!agent.isActiveAndEnabled) return;
@@ -231,27 +220,28 @@ public class NemicoScript : MonoBehaviour
 
         if (player != null)
         {
-            // Inseguimento diretto
             agent.SetDestination(player.position);
-            // Se sono molto vicino, mi giro verso di lui aggressivamente
+
+            // --- CONTROLLO DISTANZA DI CATTURA ---
+            float dist = Vector3.Distance(transform.position, player.position);
+            if (dist <= arrestDistance)
+            {
+                ArrestaGiocatore();
+            }
+            // -------------------------------------
+
             if (agent.remainingDistance <= agent.stoppingDistance + 1.5f) LookAtTarget(player.position);
         }
         else
         {
-            // Inseguimento predittivo (Target perso)
             if (hasLastKnownPosition)
             {
                 agent.SetDestination(lastKnownPosition);
-
-                // Se arrivo alla posizione predetta
                 if (!agent.pathPending && agent.remainingDistance <= 1.5f)
                 {
                     state = STATE.SEARCHING;
                     searchTimer = 0;
-
-                    // Appena arrivo dove ti ho perso, mi giro verso dove stavi andando o indietro
-                    // (Opzionale: piccolo trick per renderlo più vivo)
-                    agent.updateRotation = false; // Disabilito rotazione automatica per ruotare a mano in Search
+                    agent.updateRotation = false;
                 }
             }
             else
@@ -265,11 +255,8 @@ public class NemicoScript : MonoBehaviour
     {
         if (!agent.isActiveAndEnabled) return;
         agent.isStopped = true;
-
         searchTimer += Time.deltaTime;
 
-        // Ruota destra/sinistra + controllo spalle
-        // Una rotazione più ampia per coprire le spalle
         float rotationAmount = Mathf.Sin(Time.time * 3) * 120f;
         transform.Rotate(Vector3.up * rotationAmount * Time.deltaTime);
 
@@ -278,7 +265,7 @@ public class NemicoScript : MonoBehaviour
             hasLastKnownPosition = false;
             state = STATE.VIGILE;
             agent.isStopped = false;
-            agent.updateRotation = true; // Riabilito la rotazione automatica del NavMesh
+            agent.updateRotation = true;
         }
     }
 
@@ -329,8 +316,6 @@ public class NemicoScript : MonoBehaviour
         }
     }
 
-    // --- UTILS ---
-
     public void ForzaSonno(GameObject oggettoFumo)
     {
         Collider col = oggettoFumo.GetComponent<Collider>();
@@ -373,14 +358,13 @@ public class NemicoScript : MonoBehaviour
         return origin;
     }
 
-    // Disegna il raggio udito nell'editor per debug
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, hearingRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, arrestDistance);
     }
-
-    // --- TRIGGER ---
 
     void OnTriggerStay(Collider other)
     {

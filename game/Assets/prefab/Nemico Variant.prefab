@@ -284,6 +284,7 @@ MonoBehaviour:
   iconImage: {fileID: 4353075260854083534}
   textLabel: {fileID: 7594523963859239866}
   alertSprite: {fileID: 21300000, guid: 75759931b388b594684518967142547c, type: 3}
+  hearingSprite: {fileID: 21300000, guid: 798ab9391ce88a24ba5595881991f365, type: 3}
   searchSprite: {fileID: 21300000, guid: 4ec84918bd537884fb95816f8d9d4946, type: 3}
   coffeeSprite: {fileID: 21300000, guid: d498badbe7ed991439372de9067ac2ea, type: 3}
 --- !u!1 &6789797379357927668
@@ -321,7 +322,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.03, y: 0}
-  m_SizeDelta: {x: 20, y: 10}
+  m_SizeDelta: {x: 3, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4628730904622667904
 CanvasRenderer:
@@ -378,8 +379,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8
-  m_fontSizeBase: 8
+  m_fontSize: 1
+  m_fontSizeBase: 1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -444,15 +445,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5529595806287431897, guid: 7db858205cb69c34eb28a3ed4e62b2ea, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.681464
+      value: -7.55
       objectReference: {fileID: 0}
     - target: {fileID: 5529595806287431897, guid: 7db858205cb69c34eb28a3ed4e62b2ea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.50000024
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 5529595806287431897, guid: 7db858205cb69c34eb28a3ed4e62b2ea, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 81.00101
+      value: 82.32
       objectReference: {fileID: 0}
     - target: {fileID: 5529595806287431897, guid: 7db858205cb69c34eb28a3ed4e62b2ea, type: 3}
       propertyPath: m_LocalRotation.w
