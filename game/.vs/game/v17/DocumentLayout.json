@@ -3,8 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\SettingsMenuNewMonoBehaviourScript1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\SettingsMenuNewMonoBehaviourScript1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\NemicoScript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\NemicoScript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\PlayerMovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\PlayerMovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\SoffioScript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\SoffioScript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\EnemyStatusVisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\EnemyStatusVisuals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\FieldOfView.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\FieldOfView.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,12 +39,73 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "SettingsMenuNewMonoBehaviourScript1.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\SettingsMenuNewMonoBehaviourScript1.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\SettingsMenuNewMonoBehaviourScript1.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\SettingsMenuNewMonoBehaviourScript1.cs",
+              "RelativeToolTip": "Assets\\Script\\SettingsMenuNewMonoBehaviourScript1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-21T16:42:59.044Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PlayerMovement.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\PlayerMovement.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\PlayerMovement.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\PlayerMovement.cs",
+              "RelativeToolTip": "Assets\\Script\\PlayerMovement.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAAAGQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T22:50:43.699Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SoffioScript.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\SoffioScript.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\SoffioScript.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\SoffioScript.cs",
+              "RelativeToolTip": "Assets\\Script\\SoffioScript.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T22:43:40.876Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EnemyStatusVisuals.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\EnemyStatusVisuals.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\EnemyStatusVisuals.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\EnemyStatusVisuals.cs",
+              "RelativeToolTip": "Assets\\Script\\EnemyStatusVisuals.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T22:04:58.08Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FieldOfView.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\FieldOfView.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\FieldOfView.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\FieldOfView.cs",
+              "RelativeToolTip": "Assets\\Script\\FieldOfView.cs",
+              "ViewState": "AgIAANgAAAAAAAAAAAAwwPkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T21:34:25.119Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "NemicoScript.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\NemicoScript.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\NemicoScript.cs",
               "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\NemicoScript.cs",
               "RelativeToolTip": "Assets\\Script\\NemicoScript.cs",
-              "ViewState": "AgIAAB4BAAAAAAAAAAAAAD4BAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAGUBAAAAAAAAAADwv4wBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-19T17:57:47.976Z",
               "EditorCaption": ""
