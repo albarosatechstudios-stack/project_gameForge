@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
 
     [Header("Look Settings")]
-    public float mouseSensitivity = 10f;
+   public float mouseSensitivity = 10f;
     [SerializeField] private Transform cameraFollowTarget; // La telecamera o la "testa"
 
     private PlayerControlsimputactions playerControls;
@@ -20,6 +20,18 @@ public class PlayerMovement : MonoBehaviour
     private float xRotation = 0f;
 
     public float forzaRepulsiva = 0f; // Mantenuta come da tuo script originale
+
+    void Start()
+    {
+        // 1. Inizializzazione: Leggiamo il valore attuale all'avvio
+        if (MenuController.instance != null)
+        {
+            mouseSensitivity = MenuController.instance.mouseSensitivity;
+
+            // 2. Sottoscrizione: "Se cambia mentre gioco, avvisami"
+            MenuController.instance.OnSensitivityChanged += UpdateSens;
+        }
+    }
 
     private void Awake()
     {
@@ -40,8 +52,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (forzaRepulsiva == 0f) forzaRepulsiva = 0.1f;
     }
+    void UpdateSens(float newVal)
+    {
+        mouseSensitivity = newVal;
+         Debug.Log("Player: Ricevuta nuova sensibilità " + newVal);
+    }
 
-    private void OnEnable() => playerControls.Enable();
+    private void OnEnable() { 
+        playerControls.Enable();
+       
+    }
     private void OnDisable()
     {
         playerControls.Disable();

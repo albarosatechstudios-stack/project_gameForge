@@ -10,7 +10,7 @@ public class SettingsMenu : MonoBehaviour
     public Slider sensitivitySlider;
     public TMP_Text sensitivityValueText;
 
-    void Start()
+    void OnEnable()
     {
         // 1. Inizializza Grafica
         SetupMicrophoneList();

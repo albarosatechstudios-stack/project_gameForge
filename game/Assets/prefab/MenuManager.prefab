@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c54434d878bca74ba8c6e0fe22c80dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
+  mainMenuPanel: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  mouseSensitivity: 1
+  microphoneIndex: 0

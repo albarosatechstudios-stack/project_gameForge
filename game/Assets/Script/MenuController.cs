@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MenuController : MonoBehaviour
 {
@@ -14,20 +15,24 @@ public class MenuController : MonoBehaviour
     public float mouseSensitivity  = 1.0f;
     public int microphoneIndex  = 0;
 
+    public event Action<float> OnSensitivityChanged; // NUOVO
+    public event Action<int> OnMicrophoneChanged;
+
     private void Awake()
     {
-        if (instance == null)
+        // Se esiste già un'altra istanza (quella che arriva dal gioco)...
+        if (instance != null)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            // ... DISTRUGGILA! (Distruggiamo la vecchia versione che ha i link UI rotti)
+            Destroy(instance.gameObject);
+        }
 
-            // Appena nato, carica i dati salvati
-            LoadSettings();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        // Ora IO (la nuova versione nata in questa scena) divento il capo
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Carico i dati (così recupero sensibilità e mic salvati)
+        LoadSettings();
     }
 
     private void Start()
@@ -43,6 +48,7 @@ public class MenuController : MonoBehaviour
         mouseSensitivity = val;
         PlayerPrefs.SetFloat("MouseSens", val); // Salva su disco
         PlayerPrefs.Save();
+        OnSensitivityChanged?.Invoke(val);
         Debug.Log("MenuController: Sensibilità aggiornata a " + val);
     }
 
