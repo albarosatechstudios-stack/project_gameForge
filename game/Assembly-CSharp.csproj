@@ -97,6 +97,7 @@
     <Compile Include="Assets\Script\PitchDet2.cs" />
     <Compile Include="Assets\Script\PlayerMovement.cs" />
     <Compile Include="Assets\Script\PlayerControls.imputactions.cs" />
+    <Compile Include="Assets\Script\SettingsMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

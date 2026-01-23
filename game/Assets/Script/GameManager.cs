@@ -1,38 +1,43 @@
 using UnityEngine;
 using System;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-
-// Definiamo gli stati del gioco tramite Enum
 public enum GameState
 {
-    Visitor, // Fase 1: Visitatore (guardie passive, niente oggetti)
-    Thief,    // Fase 2: Ladro (guardie attive, oggetti utilizzabili)
-    NoPause //Fase apertura pannelli (non è possibile mettere pausa poichè esc collide nelle due azioni - [menu pausa, uscire])
+    Visitor,
+    Thief,
+    NoPause
 }
 
 public class GameManager : MonoBehaviour
 {
-     [Header("Impostazioni")]
+    [Header("Impostazioni Generali")]
     [SerializeField] private string endSceneName = "EndGame";
 
-    // Pattern Singleton per accedere al GameManager da qualsiasi script
+    // --- NUOVO: Variabili Settings ---
+    [Header("Settings Utente")]
+    public float MouseSensitivity { get; private set; } = 1.0f; // Default
+    public int HeadphoneProfileIndex { get; private set; } = 0; // Default
+
+    // Pattern Singleton
     public static GameManager Instance { get; private set; }
 
-    // Stato attuale del gioco
     public GameState CurrentState { get; private set; }
-
-    // Evento che viene lanciato quando lo stato cambia
     public static event Action<GameState> OnStateChanged;
+
+    // --- NUOVO: Evento per notificare il cambio impostazioni (utile per il PlayerController) ---
+    public static event Action OnSettingsChanged;
 
     private void Awake()
     {
-        // Setup del Singleton
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Non distruggere al cambio scena
+            DontDestroyOnLoad(gameObject);
+
+            // --- NUOVO: Carica i dati appena il gioco si avvia ---
+            LoadSettings();
         }
         else
         {
@@ -42,62 +47,67 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Inizia il gioco come Visitatore
         Debug.Log($"Stato è: {this.CurrentState}");
         ChangeState(GameState.Visitor);
-
-        
     }
 
-    // Metodo pubblico per cambiare lo stato del gioco
+    // ... (Il tuo codice ChangeState e Update rimane uguale) ...
     public void ChangeState(GameState newState)
     {
-        // Evita di ri-chiamare lo stesso stato se ci siamo già
         if (CurrentState == newState) return;
-
         CurrentState = newState;
         Debug.Log($"Stato del gioco cambiato in: {newState}");
-
-        // Notifica tutti gli script iscritti all'evento
         OnStateChanged?.Invoke(newState);
     }
 
-        // ESEMPIO: Tasto per testare il cambio di stato durante il gameplay
     private void Update()
     {
         if (Keyboard.current.tKey.wasPressedThisFrame)
         {
-            // Simula il passaggio alla fase Ladro premendo 'T'
-            ChangeState(GameState.Thief); 
+            ChangeState(GameState.Thief);
         }
     }
 
-     private void OnEnable()
+    // --- NUOVO: Gestione Dati Settings ---
+
+    public void UpdateSensitivity(float value)
     {
-        // Mi iscrivo all'evento di Unity che avvisa quando una scena è caricata
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        MouseSensitivity = value;
+        SaveSettings(); // Salvataggio automatico ad ogni modifica
+        OnSettingsChanged?.Invoke(); // Avvisa chi è in ascolto (es. PlayerController)
     }
 
-    private void OnDisable()
+    public void UpdateHeadphoneProfile(int index)
     {
-        // Mi disiscrivo per evitare errori
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        HeadphoneProfileIndex = index;
+        SaveSettings();
+        // Qui potresti chiamare un AudioManager per cambiare mix
+        Debug.Log("Profilo cuffie cambiato a indice: " + index);
     }
 
-    // Questa funzione parte in automatico ogni volta che una scena finisce di caricare
+    private void SaveSettings()
+    {
+        PlayerPrefs.SetFloat("MouseSens", MouseSensitivity);
+        PlayerPrefs.SetInt("AudioProfile", HeadphoneProfileIndex);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadSettings()
+    {
+        MouseSensitivity = PlayerPrefs.GetFloat("MouseSens", 1.0f); // 1.0f è il default se non trova nulla
+        HeadphoneProfileIndex = PlayerPrefs.GetInt("AudioProfile", 0);
+    }
+
+    // ... (Il resto del tuo codice OnEnable/OnDisable/OnSceneLoaded rimane uguale) ...
+    private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Controllo se la scena appena caricata è quella finale
         if (scene.name == endSceneName)
         {
-            Debug.Log("Siamo nell'ultima scena! Il GameManager ha finito il suo lavoro. Addio.");
-            
-            // Rimuovo il riferimento statico
             if (Instance == this) Instance = null;
-
-            // Distruggo l'oggetto (così al prossimo riavvio si riparte da zero)
             Destroy(gameObject);
         }
     }
-
 }

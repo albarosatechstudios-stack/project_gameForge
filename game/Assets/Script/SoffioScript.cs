@@ -5,7 +5,7 @@ public class SoffioScript : MonoBehaviour
 
     public float sensitivity = 40f;   // quanto amplificare la voce
     public float minimum = 0.01f;     // soglia molto bassa per riconoscere anche la voce
-    public int indexMicrofono = 1;
+    public int indexMicrofono = 5;
     private AudioClip micClip;
     private string deviceName;
     private float[] samples = new float[256];
@@ -22,6 +22,10 @@ public class SoffioScript : MonoBehaviour
             // }
 
             //NOTA su MIRO - le liste dei devices microfono non sono standard applicare soluzione riportata su MIRO
+            if (MenuController.instance != null)
+            {
+                indexMicrofono = MenuController.instance.microphoneIndex;
+            }
             deviceName = Microphone.devices[indexMicrofono];
             micClip = Microphone.Start(deviceName, true, 1, 44100);
             Debug.Log("Microfono avviato: " + deviceName);

@@ -2,24 +2,34 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
-
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
-    public GameObject pauseMenuUI; // Riferimento al pannello UI di pausa
+
+    [Header("UI Panels")]
+    public GameObject pauseMenuUI;    // Il pannello con i bottoni Resume, Options, Quit
+    public GameObject settingsPanel;  // Il pannello che contiene slider e dropdown
 
     void Update()
     {
-        
-        if (GameManager.Instance.CurrentState == GameState.NoPause) return;
-        
-        // Se premo ESC
+        // Controllo generico (opzionale)
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.NoPause) return;
+
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (GameIsPaused)
+            // LOGICA INTELLIGENTE DEL TASTO ESC:
+
+            // 1. Se le impostazioni sono aperte, ESC le chiude e torna al menu pausa
+            if (settingsPanel.activeSelf)
+            {
+                CloseSettings();
+            }
+            // 2. Se il gioco è in pausa (ma settings chiuso), ESC riprende il gioco
+            else if (GameIsPaused)
             {
                 Resume();
             }
+            // 3. Altrimenti, metti in pausa
             else
             {
                 Pause();
@@ -27,38 +37,55 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-     public void Resume()
+    public void Resume()
     {
         pauseMenuUI.SetActive(false);
+        settingsPanel.SetActive(false); // Chiudiamo tutto per sicurezza
+
         Time.timeScale = 1f;
         GameIsPaused = false;
 
-        // Blocca di nuovo il cursore al centro (se è un FPS)
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-void Pause()
+    void Pause()
     {
         pauseMenuUI.SetActive(true);
+        // Assicuriamoci che quando apri la pausa, le settings siano chiuse
+        settingsPanel.SetActive(false);
+
         Time.timeScale = 0f;
         GameIsPaused = true;
-        
-        // Sblocca il cursore e rendilo visibile
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
+    // --- FUNZIONI PER I BOTTONI UI ---
+
+    // Collegalo al bottone "Options" nel pannello PauseMenuUI
+    public void OpenSettings()
+    {
+        pauseMenuUI.SetActive(false); // Nascondi i bottoni principali
+        settingsPanel.SetActive(true); // Mostra le opzioni
+    }
+
+    // Collegalo al bottone "Back" nel pannello SettingsPanel
+    public void CloseSettings()
+    {
+        settingsPanel.SetActive(false);
+        pauseMenuUI.SetActive(true); // Riporta i bottoni principali
+    }
+
     public void LoadMenu()
     {
-        Time.timeScale = 1f; // Importante: ripristina il tempo prima di cambiare scena
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
-
     }
 
     public void QuitGame()
     {
-        Debug.Log("Quitting game...");
         Application.Quit();
     }
 }

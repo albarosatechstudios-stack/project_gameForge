@@ -1,51 +1,88 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MenuController : MonoBehaviour
 {
-    // Creiamo una variabile statica per poter accedere a questo script da ovunque
     public static MenuController instance;
+
+    [Header("Gestione UI Menu")]
+    public GameObject mainMenuPanel;
+    public GameObject settingsPanel;
+
+    // --- NUOVO: DATI SETTINGS ---
+    // Queste variabili saranno accessibili da TUTTI gli script del gioco
+    public float mouseSensitivity  = 1.0f;
+    public int microphoneIndex  = 0;
+
+    public event Action<float> OnSensitivityChanged; // NUOVO
+    public event Action<int> OnMicrophoneChanged;
 
     private void Awake()
     {
-        // SINGLETON PATTERN
-        // Controlliamo se esiste già un'istanza di questo Game Manager
-        if (instance == null)
+        // Se esiste già un'altra istanza (quella che arriva dal gioco)...
+        if (instance != null)
         {
-            // Se non esiste, sono io l'istanza principale
-            instance = this;
-            // Questo comando impedisce a Unity di distruggere l'oggetto al cambio scena
-            DontDestroyOnLoad(gameObject);
+            // ... DISTRUGGILA! (Distruggiamo la vecchia versione che ha i link UI rotti)
+            Destroy(instance.gameObject);
         }
-        else
-        {
-            // Se esiste già un altro GameManager (es. tornando al menu principale),
-            // distruggo questo duplicato per averne sempre e solo uno.
-            Destroy(gameObject);
-        }
+
+        // Ora IO (la nuova versione nata in questa scena) divento il capo
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Carico i dati (così recupero sensibilità e mic salvati)
+        LoadSettings();
     }
 
-    // --- LE TUE FUNZIONI PER I PULSANTI ---
-
-    public void PlayGame()
+    private void Start()
     {
-        SceneManager.LoadScene(1); // Assumendo che 1 sia la scena di gioco
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+        if (settingsPanel != null) settingsPanel.SetActive(false);
     }
 
-    public void LoadMenu()
+    // --- LOGICA GESTIONE DATI ---
+
+    public void UpdateSensitivity(float val)
     {
-        SceneManager.LoadScene(0);
-        Time.timeScale = 1f;
-    }
-    
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        Time.timeScale = 1f; 
+        mouseSensitivity = val;
+        PlayerPrefs.SetFloat("MouseSens", val); // Salva su disco
+        PlayerPrefs.Save();
+        OnSensitivityChanged?.Invoke(val);
+        Debug.Log("MenuController: Sensibilità aggiornata a " + val);
     }
 
-    public void QuitGame()
+    public void UpdateMicrophoneIndex(int index)
     {
-        Application.Quit();
+        microphoneIndex = index;
+        PlayerPrefs.SetInt("MicIndex", index); // Salva su disco
+        PlayerPrefs.Save();
+        Debug.Log("MenuController: Microfono index aggiornato a " + index);
     }
+
+    private void LoadSettings()
+    {
+        // Carica i dati (oppure usa i default 1.0f e 0)
+        mouseSensitivity = PlayerPrefs.GetFloat("MouseSens", 1.0f);
+        microphoneIndex = PlayerPrefs.GetInt("MicIndex", 0);
+    }
+
+    // --- GESTIONE UI ---
+
+    public void OpenSettings()
+    {
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
+        if (settingsPanel != null) settingsPanel.SetActive(true);
+    }
+
+    public void CloseSettings()
+    {
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+    }
+
+    // --- GESTIONE SCENE ---
+
+    public void PlayGame() { SceneManager.LoadScene(1); }
+    public void QuitGame() { Application.Quit(); }
 }
