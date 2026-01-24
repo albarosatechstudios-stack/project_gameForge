@@ -12,14 +12,21 @@ public class PannelloQuadro : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+   
+    public void attiva(bool b)
+    {
+        gameObject.SetActive(b); 
+        
+    }
 
     public void MostraQuadro(Sprite img, string desc)
     {
         if(GameManager.Instance.CurrentState!=GameState.Thief){
-        GameManager.Instance.ChangeState(GameState.NoPause);
+           
+            GameManager.Instance.ChangeState(GameState.NoPause);
         immagine.sprite = img;
         testo.text = desc;
-        gameObject.SetActive(true);
+       
         }
     }
 

@@ -61,6 +61,7 @@
     <Analyzer Include="C:\Users\Selen\Desktop\6000.2.11f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\TutorialManager.cs" />
     <Compile Include="Assets\SourceFiles\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\RespawnPlayer.cs" />
     <Compile Include="Assets\Script\NemicoScript.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Assets\Script\QuadroInteraction.cs" />
     <Compile Include="Assets\Script\FeedBackManager.cs" />
     <Compile Include="Assets\Script\PannelloQuadro.cs" />
+    <Compile Include="Assets\Script\TutorialTrigger.cs" />
     <Compile Include="Assets\Script\FieldOfView.cs" />
     <Compile Include="Assets\Script\GenerateRoom.cs" />
     <Compile Include="Assets\Script\PauseScript.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Assets\Script\SpawnFumogeno.cs" />
     <Compile Include="Assets\Script\MusicGameManager.cs" />
     <Compile Include="Assets\Script\SleepWave.cs" />
+    <Compile Include="Assets\Script\tutorialdDisabler.cs" />
     <Compile Include="Assets\Script\QuadroInterattivo.cs" />
     <Compile Include="Assets\Script\PitchDet2.cs" />
     <Compile Include="Assets\Script\PlayerMovement.cs" />
