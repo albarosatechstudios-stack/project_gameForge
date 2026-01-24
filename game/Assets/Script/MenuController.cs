@@ -57,6 +57,7 @@ public class MenuController : MonoBehaviour
         microphoneIndex = index;
         PlayerPrefs.SetInt("MicIndex", index); // Salva su disco
         PlayerPrefs.Save();
+        OnMicrophoneChanged?.Invoke(index);
         Debug.Log("MenuController: Microfono index aggiornato a " + index);
     }
 

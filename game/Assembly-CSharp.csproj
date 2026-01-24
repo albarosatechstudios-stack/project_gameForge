@@ -79,9 +79,9 @@
     <Compile Include="Assets\Script\triggerCaffettiera.cs" />
     <Compile Include="Assets\Script\MenuController.cs" />
     <Compile Include="Assets\Script\SoffioScript.cs" />
-    <Compile Include="Assets\Script\NewMonoBehaviourScript.cs" />
     <Compile Include="Assets\Script\quadri_script\QuadroController.cs" />
     <Compile Include="Assets\Script\QuadroInteraction.cs" />
+    <Compile Include="Assets\Script\FeedBackManager.cs" />
     <Compile Include="Assets\Script\PannelloQuadro.cs" />
     <Compile Include="Assets\Script\FieldOfView.cs" />
     <Compile Include="Assets\Script\GenerateRoom.cs" />
@@ -93,6 +93,7 @@
     <Compile Include="Assets\SourceFiles\Scripts\Pickup.cs" />
     <Compile Include="Assets\Script\SpawnFumogeno.cs" />
     <Compile Include="Assets\Script\MusicGameManager.cs" />
+    <Compile Include="Assets\Script\SleepWave.cs" />
     <Compile Include="Assets\Script\QuadroInterattivo.cs" />
     <Compile Include="Assets\Script\PitchDet2.cs" />
     <Compile Include="Assets\Script\PlayerMovement.cs" />
