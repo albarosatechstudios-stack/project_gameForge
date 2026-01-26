@@ -60,6 +60,11 @@ public class GameManager : MonoBehaviour
         OnStateChanged?.Invoke(newState);
     }
 
+    public void SetVisitor()
+    {
+        CurrentState=GameState.Visitor;
+    }
+
     private void Update()
     {
         if (Keyboard.current.tKey.wasPressedThisFrame)

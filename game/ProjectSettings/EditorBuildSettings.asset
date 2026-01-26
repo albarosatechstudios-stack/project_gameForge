@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Louvre.unity
     guid: 0a95ca51596918443911fd32a5c3e496
   - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: 0b52855dde5cae343a6168b613996708
+  - enabled: 1
     path: Assets/Scenes/EndGame.unity
     guid: b596d648d77c15f45879f7edbada2e2e
   m_configObjects:

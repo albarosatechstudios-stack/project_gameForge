@@ -21,12 +21,20 @@ public class PannelloQuadro : MonoBehaviour
 
     public void MostraQuadro(Sprite img, string desc)
     {
-        if(GameManager.Instance.CurrentState!=GameState.Thief){
-           
+        // Questo ti dirà esattamente cosa sta succedendo in Console
+        Debug.Log("Stato attuale: " + GameManager.Instance.CurrentState);
+
+        if (GameManager.Instance.CurrentState != GameState.Thief)
+        {
+            Debug.Log("L'IF è passato! stato:" );
             GameManager.Instance.ChangeState(GameState.NoPause);
-        immagine.sprite = img;
-        testo.text = desc;
-       
+            immagine.sprite = img;
+            testo.text = desc;
+            gameObject.SetActive(true); // Assicurati che sia attivo!
+        }
+        else
+        {
+            Debug.Log("L'IF è fallito: lo stato era Thief.");
         }
     }
 
