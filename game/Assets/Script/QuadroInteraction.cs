@@ -23,7 +23,7 @@ public class LoadDrawingOnQuadro : MonoBehaviour
         // Debug temporaneo: premi Z anche se non sei vicino per testare se carica l'immagine
         // if (Keyboard.current.zKey.wasPressedThisFrame) ApplyTextureFromFile(); 
 
-        if (isPlayerNear && !hasChanged && Keyboard.current != null && Keyboard.current.zKey.wasPressedThisFrame)
+        if (isPlayerNear && !hasChanged && Keyboard.current != null && Keyboard.current.zKey.wasPressedThisFrame && GameManager.Instance.CurrentState == GameState.Thief)
         {
             ApplyTextureFromFile();
         }
