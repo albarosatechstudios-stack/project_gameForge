@@ -122,6 +122,7 @@ public class NemicoScript : MonoBehaviour
 
             int indexUltimaScena = SceneManager.sceneCountInBuildSettings - 1;
             GameManager.Instance.SetVisitor();
+            GameManager.lastScena = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(indexUltimaScena);
 
             // Disabilita lo script per evitare chiamate multiple mentre carica

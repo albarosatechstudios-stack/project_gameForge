@@ -631,9 +631,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7009367654376087711, guid: df53d34413ab6f044ad9dc430e62c492, type: 3}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: PlayGame
+      - m_Target: {fileID: 988024110058354411, guid: ccebc6d679ff5a34e9664f85decbf3b9, type: 3}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: LoadLastScena
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

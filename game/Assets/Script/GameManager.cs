@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     // --- NUOVO: Evento per notificare il cambio impostazioni (utile per il PlayerController) ---
     public static event Action OnSettingsChanged;
 
+    public static string lastScena = "MainMenu";
+
     private void Awake()
     {
         if (Instance == null)
@@ -114,5 +116,10 @@ public class GameManager : MonoBehaviour
             if (Instance == this) Instance = null;
             Destroy(gameObject);
         }
+    }
+
+    public void LoadLastScena()
+    {
+        SceneManager.LoadScene(lastScena);
     }
 }

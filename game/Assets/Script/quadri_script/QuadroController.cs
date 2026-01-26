@@ -24,9 +24,10 @@ public class QuadroController : MonoBehaviour
     void Update()
     {
         if (PauseMenu.GameIsPaused) return;
-        if (inTrigger && Mouse.current.leftButton.wasPressedThisFrame)
+        if (inTrigger && Mouse.current.leftButton.wasPressedThisFrame && GameManager.Instance.CurrentState != GameState.Thief)
         {
             Debug.Log(dati.titolo);
+            pannello.attiva(true);
             pannello.MostraQuadro(dati.immaginePrincipale, dati.info);
         }
     }

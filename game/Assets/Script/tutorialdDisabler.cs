@@ -8,8 +8,8 @@ public class TutorialdDisabler : MonoBehaviour
     public GameObject oggettoDaDisattivare;
     private bool inTrigger = false;
 
-    // Unity chiamerà OnMouseDown su TUTTI gli script attaccati a questo oggetto
-    // Quindi verrà eseguito sia questo, sia il tuo che apre la UI.
+    // Unity chiamerï¿½ OnMouseDown su TUTTI gli script attaccati a questo oggetto
+    // Quindi verrï¿½ eseguito sia questo, sia il tuo che apre la UI.
 
 
     void Update()
@@ -23,8 +23,8 @@ public class TutorialdDisabler : MonoBehaviour
             Destroy(this);
         }
 
-        // 2. Opzionale: Distruggiamo questo script così non occupa più memoria
-        // dato che il tutorial per questo step è finito.
+        // 2. Opzionale: Distruggiamo questo script cosï¿½ non occupa piï¿½ memoria
+        // dato che il tutorial per questo step ï¿½ finito.
         
     }
     private void OnTriggerEnter(Collider other)

@@ -1,33 +1,28 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Per il tasto Z
-using System.IO; // Necessario per leggere i file dal computer
+using UnityEngine.InputSystem;
+using System.IO;
 
 public class LoadDrawingOnQuadro : MonoBehaviour
 {
-    // --- IMPOSTAZIONI PATH ---
-    // Usiamo Path.Combine per costruire il percorso in modo sicuro
     private string folderName = "Disegni";
     private string fileName = "saved_drawing.png";
 
-    // --- VARIABILI INTERNE ---
     private bool isPlayerNear = false;
-    private bool hasChanged = false; // Non reversibile
+    private bool hasChanged = false;
     private Renderer myRenderer;
 
     void Start()
     {
         myRenderer = GetComponent<Renderer>();
-
-        // Controllo tag
-        if (!gameObject.CompareTag("Quadro"))
-        {
-            Debug.LogWarning($"L'oggetto '{gameObject.name}' non ha il tag 'Quadro'!");
-        }
+        // Forza il tag se ti sei dimenticato di settarlo, utile per debug
+        if (!gameObject.CompareTag("Quadro")) Debug.LogWarning("Attenzione: Tag 'Quadro' mancante su " + gameObject.name);
     }
 
     void Update()
     {
-        // Se il player è vicino, non è ancora cambiato e preme Z
+        // Debug temporaneo: premi Z anche se non sei vicino per testare se carica l'immagine
+        // if (Keyboard.current.zKey.wasPressedThisFrame) ApplyTextureFromFile(); 
+
         if (isPlayerNear && !hasChanged && Keyboard.current != null && Keyboard.current.zKey.wasPressedThisFrame)
         {
             ApplyTextureFromFile();
@@ -36,51 +31,48 @@ public class LoadDrawingOnQuadro : MonoBehaviour
 
     void ApplyTextureFromFile()
     {
-        // 1. Costruiamo il percorso dinamico
-        // Application.persistentDataPath punta automaticamente a:
-        // C:/Users/TuoNomeUtente/AppData/LocalLow/DefaultCompany/GameForge25
         string fullPath = Path.Combine(Application.persistentDataPath, folderName, fileName);
+        Debug.Log("Cerco file in: " + fullPath);
 
-        Debug.Log("Tentativo di caricamento da: " + fullPath);
-
-        // 2. Controlliamo se il file esiste
         if (File.Exists(fullPath))
         {
-            // 3. Leggiamo i byte del file PNG
             byte[] fileData = File.ReadAllBytes(fullPath);
-
-            // 4. Creiamo una Texture vuota (le dimensioni verranno sovrascritte automaticamente)
             Texture2D newTexture = new Texture2D(2, 2);
 
-            // 5. Carichiamo l'immagine nella texture
             if (newTexture.LoadImage(fileData))
             {
-                // 6. Applichiamo la texture al materiale del quadro
-                // Nota: Se usi URP/HDRP potrebbe servire myRenderer.material.SetTexture("_BaseMap", newTexture);
+                // Assegnazione standard
                 myRenderer.material.mainTexture = newTexture;
+                
+                // Se usi URP/HDRP e l'immagine non si vede, togli il commento qui sotto:
+                // myRenderer.material.SetTexture("_BaseMap", newTexture);
 
-                hasChanged = true; // Blocca ulteriori modifiche
-                Debug.Log("Immagine applicata con successo!");
-            }
-            else
-            {
-                Debug.LogError("Impossibile convertire il file in Texture.");
+                hasChanged = true;
+                Debug.Log("Immagine applicata!");
             }
         }
         else
         {
-            Debug.LogError($"File non trovato! Assicurati che il disegno esista qui: {fullPath}");
+            Debug.LogError("File non trovato! Hai salvato il disegno prima?");
         }
     }
 
-    // --- RILEVAMENTO PLAYER ---
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) isPlayerNear = true;
+        // Assicurati che il Player abbia il tag "Player"
+        if (other.CompareTag("Player")) 
+        {
+            isPlayerNear = true;
+            Debug.Log("Il Player Ã¨ vicino al quadro! Premi Z.");
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player")) isPlayerNear = false;
+        if (other.CompareTag("Player")) 
+        {
+            isPlayerNear = false;
+            Debug.Log("Il Player si Ã¨ allontanato.");
+        }
     }
 }
