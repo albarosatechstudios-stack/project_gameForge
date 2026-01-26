@@ -19,7 +19,9 @@ public class QuadroController : MonoBehaviour
     {
         if (dati != null)
             ConfiguraQuadro();
+        pannello.attiva(false);
     }
+
 
     void Update()
     {
