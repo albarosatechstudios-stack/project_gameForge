@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4060243047281439765}
   - component: {fileID: 8907227718562144934}
   - component: {fileID: 2108559631355560305}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4615385068663850302}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnCaffettiera
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 4348692649580414569}
   - component: {fileID: 4401119456604151421}
   - component: {fileID: 1269052229959134355}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -278,6 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 7
+  gravity: -9.81
   mouseSensitivity: 75
   cameraFollowTarget: {fileID: 6236245123777873980}
   forzaRepulsiva: 0.1
@@ -362,7 +363,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2699803905804977232}
   - component: {fileID: 4485283183398357689}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CameraMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -447,7 +448,7 @@ GameObject:
   - component: {fileID: 1377105395941453709}
   - component: {fileID: 6227875321313381150}
   - component: {fileID: 6346411996445774302}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -557,7 +558,7 @@ GameObject:
   - component: {fileID: 8930540073726106248}
   - component: {fileID: 5519734967177836231}
   - component: {fileID: 3652848200052902737}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -647,7 +648,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6236245123777873980}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CameraFollow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,17 +11,17 @@ public class QuadroInterattivo : MonoBehaviour
 
     void Update()
     {
-        if (inTrigger)
-        {
-            print("triggerato");
-        }
+       
         // Interagisci solo se sei nel trigger e premi il tasto sinistro del mouse
-        if (inTrigger && Mouse.current.leftButton.wasPressedThisFrame)
+        if (inTrigger && Mouse.current.leftButton.wasPressedThisFrame && GameManager.Instance.CurrentState != GameState.Thief) 
         {
             Debug.Log(immagineQuadro.name);
+            pannello.attiva(true);
             pannello.MostraQuadro(immagineQuadro, descrizioneQuadro);
         }
     }
+
+    
 
     private void OnTriggerEnter(Collider other)
     {

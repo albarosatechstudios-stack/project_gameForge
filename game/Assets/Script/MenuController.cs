@@ -84,6 +84,7 @@ public class MenuController : MonoBehaviour
 
     // --- GESTIONE SCENE ---
 
-    public void PlayGame() { SceneManager.LoadScene(1); }
+    public void PlayGame() { SceneManager.LoadScene("Louvre"); }
+    public void TutorialGame() { SceneManager.LoadScene("Tutorial"); }
     public void QuitGame() { Application.Quit(); }
 }
