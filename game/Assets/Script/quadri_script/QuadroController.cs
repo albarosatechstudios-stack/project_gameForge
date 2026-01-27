@@ -13,6 +13,8 @@ public class QuadroController : MonoBehaviour
     public PannelloQuadro pannello;
     private bool inTrigger = false;
 
+    private Texture2D texturePrincipaleCache;
+
 
 
     void Start()
@@ -36,11 +38,46 @@ public class QuadroController : MonoBehaviour
 
     public void ConfiguraQuadro()
     {
-        // Applica la texture principale al materiale
-        // Nota: Assicurati che il materiale della tela usi uno shader che accetti texture (es. Standard o Unlit)
-        // telaRenderer.material.mainTexture = dati.immaginePrincipale;
-        
-        Debug.Log($"Quadro caricato: {dati.titolo}");
+        if (dati.immaginePrincipale != null)
+        {
+            // Crea e cache la texture principale
+            texturePrincipaleCache = SpriteToTexture2D(dati.immaginePrincipale);
+            texturePrincipaleCache.filterMode = FilterMode.Bilinear;
+            texturePrincipaleCache.wrapMode = TextureWrapMode.Clamp;
+            
+            // Applica la texture al materiale
+            telaRenderer.material.mainTexture = texturePrincipaleCache;
+            
+            Debug.Log($"Quadro caricato: {dati.titolo}");
+        }
+        else
+        {
+            Debug.LogWarning($"Immagine principale mancante per: {dati.titolo}");
+        }
+    }
+    
+    // Funzione per convertire Sprite in Texture2D
+    private Texture2D SpriteToTexture2D(Sprite sprite)
+    {
+        if (sprite.rect.width != sprite.texture.width)
+        {
+            // Lo sprite è parte di un atlas, dobbiamo estrarre la porzione corretta
+            Texture2D newTexture = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height);
+            Color[] pixels = sprite.texture.GetPixels(
+                (int)sprite.rect.x,
+                (int)sprite.rect.y,
+                (int)sprite.rect.width,
+                (int)sprite.rect.height
+            );
+            newTexture.SetPixels(pixels);
+            newTexture.Apply();
+            return newTexture;
+        }
+        else
+        {
+            // Lo sprite usa l'intera texture
+            return sprite.texture;
+        }
     }
 
     // Esempio di funzione per scambiare le immagini (confronto)
