@@ -3,11 +3,6 @@ using TMPro;
 using System.Collections;
 using UnityEngine.InputSystem; // Fondamentale
 
-using UnityEngine;
-using TMPro;
-using System.Collections;
-using UnityEngine.InputSystem;
-
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance;
@@ -55,7 +50,7 @@ public class DialogueManager : MonoBehaviour
         if (GameManager.Instance != null)
         {
             // --- SALVATAGGIO STATO (Safety Check) ---
-            // Salviamo lo stato SOLO se non siamo già in pausa/dialogo.
+            // Salviamo lo stato SOLO se non siamo giï¿½ in pausa/dialogo.
             // Questo evita il bug dove salvi "NoPause" come stato precedente e rimani bloccato.
             if (GameManager.Instance.CurrentState != GameState.NoPause)
             {

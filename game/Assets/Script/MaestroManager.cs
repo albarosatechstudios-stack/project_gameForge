@@ -1,7 +1,5 @@
 using UnityEngine;
 
-using UnityEngine;
-
 public class MaestroManager : MonoBehaviour
 {
     public static MaestroManager Instance;
@@ -11,7 +9,7 @@ public class MaestroManager : MonoBehaviour
     public bool segretoQuadroSbloccato = false;
 
     [Header("Stato Interazione")]
-    public bool iconaDaMostrare = true; // Parte true perché all'inizio deve salutarti
+    public bool iconaDaMostrare = true; // Parte true perchï¿½ all'inizio deve salutarti
 
     [Header("Stato Percepito")]
     public GameState statoMentaleMaestro;
@@ -33,7 +31,7 @@ public class MaestroManager : MonoBehaviour
         {
             statoMentaleMaestro = nuovoStato;
 
-            // RIACCENDI L'ICONA (perché ora ho una reazione diversa, es. paura o indifferenza)
+            // RIACCENDI L'ICONA (perchï¿½ ora ho una reazione diversa, es. paura o indifferenza)
             iconaDaMostrare = true;
         }
     }
@@ -46,7 +44,7 @@ public class MaestroManager : MonoBehaviour
             segretoQuadroSbloccato = true;
             Debug.Log("[MaestroManager] Evento Quadro Sbloccato!");
 
-            // RIACCENDI L'ICONA (perché ho un commento sul quadro da fare)
+            // RIACCENDI L'ICONA (perchï¿½ ho un commento sul quadro da fare)
             iconaDaMostrare = true;
         }
     }
