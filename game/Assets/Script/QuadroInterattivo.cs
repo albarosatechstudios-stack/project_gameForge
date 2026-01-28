@@ -9,6 +9,8 @@ public class QuadroInterattivo : MonoBehaviour
 
     private bool inTrigger = false;
 
+    private bool giaInteragito = false;
+
     void Update()
     {
        
@@ -18,6 +20,12 @@ public class QuadroInterattivo : MonoBehaviour
             Debug.Log(immagineQuadro.name);
             pannello.attiva(true);
             pannello.MostraQuadro(immagineQuadro, descrizioneQuadro);
+            if (!giaInteragito)
+            {
+                giaInteragito = true;
+               // Diciamo al manager che il quadro è stato visto
+                //MaestroManager.Instance.SegnalaQuadroVisto();
+            }
         }
     }
 

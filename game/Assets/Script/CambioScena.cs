@@ -9,7 +9,8 @@ public class CambioScena : MonoBehaviour
     // Metodo 1: Se entri in un Trigger (es. una porta)
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (this.enabled == false) return;
+        if (other.CompareTag("Player") )
         {
             Debug.Log("Cambio scena in corso...");
             SceneManager.LoadScene(nomeScenaDaCaricare);
