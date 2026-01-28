@@ -772,6 +772,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FeedBackPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 50048338401098369, guid: e1ee5e9cbfe7bbe4fbb3c3636f93fc4b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6869717851034085100, guid: e1ee5e9cbfe7bbe4fbb3c3636f93fc4b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2

@@ -116,6 +116,7 @@ public class GameManager : MonoBehaviour
             if (Instance == this) Instance = null;
             Destroy(gameObject);
         }
+        if(scene.name == "MainMenu") this.ChangeState(GameState.Visitor);
     }
 
     public void LoadLastScena()

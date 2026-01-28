@@ -78,6 +78,7 @@
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\AvviaComparazione.cs" />
     <Compile Include="Assets\Script\SmokefromBLow.cs" />
+    <Compile Include="Assets\Script\GestoreVisibilitaPerStato.cs" />
     <Compile Include="Assets\Script\PitchDetector.cs" />
     <Compile Include="Assets\Script\triggerCaffettiera.cs" />
     <Compile Include="Assets\Script\MenuController.cs" />
