@@ -618,6 +618,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 877e705f776f2a040ac252a7b76cdb6c, type: 2}
+    - target: {fileID: 1159668711241508379, guid: 622c70292b7aadd4db974e0584296869, type: 3}
+      propertyPath: m_Size.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159668711241508379, guid: 622c70292b7aadd4db974e0584296869, type: 3}
+      propertyPath: m_Center.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 1475031517833434669, guid: 622c70292b7aadd4db974e0584296869, type: 3}
       propertyPath: m_Name
       value: ragazza_con_perle
@@ -656,7 +664,7 @@ PrefabInstance:
       objectReference: {fileID: 374031999}
     - target: {fileID: 2457866171522299810, guid: 622c70292b7aadd4db974e0584296869, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6136570507685769454, guid: 622c70292b7aadd4db974e0584296869, type: 3}
       propertyPath: m_LocalScale.y
@@ -672,7 +680,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6136570507685769454, guid: 622c70292b7aadd4db974e0584296869, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.92
+      value: 1.464
       objectReference: {fileID: 0}
     - target: {fileID: 6136570507685769454, guid: 622c70292b7aadd4db974e0584296869, type: 3}
       propertyPath: m_LocalPosition.z

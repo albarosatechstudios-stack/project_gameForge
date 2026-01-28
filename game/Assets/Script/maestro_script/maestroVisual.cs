@@ -8,9 +8,9 @@ public class MaestroVisuals : MonoBehaviour
     public Image iconImage;
 
     [Header("Icone")]
-    public Sprite visitorSprite; // "..." o Smile
-    public Sprite thiefSprite;   // "!"
-    public Sprite questSprite;   // "?" (Per il quadro)
+    public Sprite visitorSprite; // "..." (Default/Primo incontro)
+    public Sprite thiefSprite;   // "!" (Sei un ladro)
+    public Sprite questSprite;   // "?" (Hai completato un obiettivo e devi parlare con lui)
 
     private Camera mainCamera;
 
@@ -28,18 +28,18 @@ public class MaestroVisuals : MonoBehaviour
 
         if (deveMostrare)
         {
-            // Se devo mostrarla, calcolo QUALE mostrare e la attivo
             AggiornaGrafica();
         }
         else
         {
-            // Se non devo mostrarla, spengo tutto
+            // Se non devo mostrarla, spengo l'immagine
             if (iconImage.enabled) iconImage.enabled = false;
         }
     }
 
     void LateUpdate()
     {
+        // Billboard effect: l'icona guarda sempre la telecamera
         if (worldCanvas != null && mainCamera != null)
         {
             worldCanvas.transform.rotation = Quaternion.LookRotation(worldCanvas.transform.position - mainCamera.transform.position);
@@ -48,29 +48,33 @@ public class MaestroVisuals : MonoBehaviour
 
     void AggiornaGrafica()
     {
-        GameState stato = MaestroManager.Instance.statoMentaleMaestro;
+        GameState statoMentale = MaestroManager.Instance.statoMentaleMaestro;
+        QuestMaestro faseQuest = MaestroManager.Instance.faseAttuale;
         Sprite spriteFinale = null;
 
-        // PRIORITÀ GRAFICA
-        // 1. Se è Ladro -> Esclamativo
-        if (stato == GameState.Thief)
+        // --- PRIORITÃ€ GRAFICA ---
+
+        // 1. Se il Maestro ti percepisce come LADRO (Massima prioritÃ )
+        if (statoMentale == GameState.Thief)
         {
             spriteFinale = thiefSprite;
         }
-        // 2. Se ho visto il quadro (e non sono ladro) -> Interrogativo
-        else if (MaestroManager.Instance.segretoQuadroSbloccato)
+        // 2. Se hai completato uno step della quest e devi "consegnare" l'info (Punto Interrogativo)
+        // Mostriamo il "?" quando:
+        // - Hai visto il quadro e devi tornare da lui (QuadroVisto)
+        // - Hai finito il falso e devi farglielo vedere (FalsoPronto)
+        else if (faseQuest == QuestMaestro.QuadroVisto || faseQuest == QuestMaestro.FalsoPronto)
         {
-            // Nota: qui potresti voler mostrare il "?" solo se non ne abbiamo ancora parlato.
-            // Ma per semplicità, se l'icona è accesa e il quadro è sbloccato, mostriamo "?"
             spriteFinale = questSprite;
         }
-        // 3. Default -> Nuvoletta
+        // 3. Default: Nuvoletta "..."
+        // Si usa per il primo incontro o per i dialoghi intermedi (Inizio, DeveVedereQuadro, CreazioneFalso)
         else
         {
             spriteFinale = visitorSprite;
         }
 
-        // Applico lo sprite
+        // Applico lo sprite solo se Ã¨ cambiato o se l'icona era spenta
         if (iconImage.sprite != spriteFinale || iconImage.enabled == false)
         {
             iconImage.sprite = spriteFinale;

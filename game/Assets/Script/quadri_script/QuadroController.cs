@@ -15,6 +15,10 @@ public class QuadroController : MonoBehaviour
 
     private Texture2D texturePrincipaleCache;
 
+    private bool isSee = false;
+
+
+
 
 
     void Start()
@@ -33,6 +37,11 @@ public class QuadroController : MonoBehaviour
             Debug.Log(dati.titolo);
             pannello.attiva(true);
             pannello.MostraQuadro(dati.immaginePrincipale, dati.info);
+            if (!isSee)
+            {
+                isSee=true;
+                MaestroManager.Instance.SegnalaQuadroVisto(dati.titolo);
+            }
         }
     }
 
