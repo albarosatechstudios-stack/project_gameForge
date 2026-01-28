@@ -2,51 +2,74 @@
 
 public class SoffioScript : MonoBehaviour
 {
-
-    public float sensitivity = 40f;   // quanto amplificare la voce
-    public float minimum = 0.01f;     // soglia molto bassa per riconoscere anche la voce
-    public int indexMicrofono = 5;
+    public float sensitivity = 40f;
+    public float minimum = 0.01f;
+    public int indexMicrofono = 0; // FIX: Meglio partire da 0 invece che 5
     private AudioClip micClip;
     private string deviceName;
     private float[] samples = new float[256];
 
     void Start()
     {
-        // Avvia il microfono
+        // Controllo preliminare se ci sono microfoni
         if (Microphone.devices.Length > 0)
         {
-            // controllo che microfoni ci sono
-            // for (int i=0; i<Microphone.devices.Length; i++)
-            // {
-            //      print("device:"+ Microphone.devices[i]);  
-            // }
             MenuController.instance.OnMicrophoneChanged += UpdateSens;
-            //NOTA su MIRO - le liste dei devices microfono non sono standard applicare soluzione riportata su MIRO
+
             if (MenuController.instance != null)
             {
                 indexMicrofono = MenuController.instance.microphoneIndex;
             }
+
+            // --- FIX CRITICO: CONTROLLO INDICE ---
+            // Se l'indice salvato è maggiore dei microfoni disponibili, resettalo a 0 (il primo disponibile)
+            if (indexMicrofono >= Microphone.devices.Length)
+            {
+                Debug.LogWarning($"Indice microfono salvato ({indexMicrofono}) non valido. Reset a 0.");
+                indexMicrofono = 0;
+
+                // Opzionale: aggiorna anche il MenuController per correggere il dato salvato
+                if (MenuController.instance != null)
+                    MenuController.instance.UpdateMicrophoneIndex(0);
+            }
+            // -------------------------------------
+
             deviceName = Microphone.devices[indexMicrofono];
-            micClip = Microphone.Start(deviceName, true, 1, 44100);
-            Debug.Log("Microfono avviato: " + deviceName);
+
+            try
+            {
+                micClip = Microphone.Start(deviceName, true, 1, 44100);
+                Debug.Log("Microfono avviato: " + deviceName);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Errore avvio microfono: " + e.Message);
+            }
         }
         else
         {
-            Debug.LogError("Nessun microfono rilevato.");
+            Debug.LogError("Nessun microfono rilevato. Disattivo funzionalità soffio.");
         }
     }
 
     void Update()
     {
-        float power = GetSoundStrength();
-        Debug.Log("Intensità voce/soffio: " + power);
+        // Esegui solo se il microfono sta effettivamente registrando
+        if (Microphone.IsRecording(deviceName))
+        {
+            float power = GetSoundStrength();
+            Debug.Log("Intensità voce/soffio : " + power + " | "+ deviceName); // Commentato per pulizia console
+        }
     }
+
     void UpdateSens(int newVal)
     {
         // 1. Controllo di sicurezza: l'indice esiste?
         if (newVal < 0 || newVal >= Microphone.devices.Length)
         {
             Debug.LogError($"Indice microfono {newVal} non valido. Dispositivi disponibili: {Microphone.devices.Length}");
+            // Se l'indice è sbagliato, prova a forzare il default
+            if (Microphone.devices.Length > 0) UpdateSens(0);
             return;
         }
 
@@ -63,19 +86,22 @@ public class SoffioScript : MonoBehaviour
         // Riavvia il microfono
         micClip = Microphone.Start(deviceName, true, 1, 44100);
 
-        // Aspettiamo che il microfono sia pronto (opzionale ma consigliato per evitare lag)
-        while (!(Microphone.GetPosition(deviceName) > 0)) { }
+        // Aspettiamo che il microfono sia pronto (loop di sicurezza con timeout per evitare freeze)
+        int timeout = 0;
+        while (!(Microphone.GetPosition(deviceName) > 0) && timeout < 1000)
+        {
+            timeout++;
+        }
 
         Debug.Log("Microfono cambiato e riavviato: " + deviceName);
     }
 
-
-    // ----- FUNZIONE COMPLETA ---
     public float GetSoundStrength()
     {
         if (micClip == null)
             return 0f;
 
+        // Sicurezza aggiuntiva per evitare errori di lettura buffer
         int micPos = Microphone.GetPosition(deviceName) - samples.Length;
         if (micPos < 0)
             return 0f;
@@ -88,18 +114,23 @@ public class SoffioScript : MonoBehaviour
 
         float loud = Mathf.Sqrt(sum / samples.Length);
 
-        // soglia molto bassa → registra anche la voce debole
         if (loud < minimum)
             return 0f;
 
-        // amplificazione per ottenere un valore utile
         return (loud - minimum) * sensitivity;
     }
+
     private void OnDestroy()
     {
         if (MenuController.instance != null)
         {
             MenuController.instance.OnMicrophoneChanged -= UpdateSens;
+        }
+
+        // Buona norma: fermare il microfono quando l'oggetto viene distrutto
+        if (Microphone.IsRecording(deviceName))
+        {
+            Microphone.End(deviceName);
         }
     }
 }
