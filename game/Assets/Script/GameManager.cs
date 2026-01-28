@@ -15,18 +15,25 @@ public class GameManager : MonoBehaviour
     [Header("Impostazioni Generali")]
     [SerializeField] private string endSceneName = "EndGame";
 
-    // --- NUOVO: Variabili Settings ---
     [Header("Settings Utente")]
-    public float MouseSensitivity { get; private set; } = 1.0f; // Default
-    public int HeadphoneProfileIndex { get; private set; } = 0; // Default
+    public float MouseSensitivity { get; private set; } = 1.0f;
+    public int HeadphoneProfileIndex { get; private set; } = 0;
 
-    // Pattern Singleton
     public static GameManager Instance { get; private set; }
 
-    public GameState CurrentState { get; private set; }
-    public static event Action<GameState> OnStateChanged;
+    // --- VISIBILITÀ INSPECTOR ---
+    // Questo serve solo per vederlo nell'editor. 
+    // La logica usa la proprietà pubblica 'CurrentState'.
+    [SerializeField] private GameState _debugCurrentState;
 
-    // --- NUOVO: Evento per notificare il cambio impostazioni (utile per il PlayerController) ---
+    public GameState CurrentState
+    {
+        get { return _debugCurrentState; }
+        private set { _debugCurrentState = value; }
+    }
+    // ---------------------------
+
+    public static event Action<GameState> OnStateChanged;
     public static event Action OnSettingsChanged;
 
     public static string lastScena = "MainMenu";
@@ -37,8 +44,6 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            // --- NUOVO: Carica i dati appena il gioco si avvia ---
             LoadSettings();
         }
         else
@@ -49,47 +54,47 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log($"Stato è: {this.CurrentState}");
+        // Questo succede SOLO la primissima volta che avvii il gioco.
+        Debug.Log($"GameManager Avviato. Stato iniziale: {this.CurrentState}");
         ChangeState(GameState.Visitor);
-    }
-
-    // ... (Il tuo codice ChangeState e Update rimane uguale) ...
-    public void ChangeState(GameState newState)
-    {
-        if (CurrentState == newState) return;
-        CurrentState = newState;
-        Debug.Log($"Stato del gioco cambiato in: {newState}");
-        OnStateChanged?.Invoke(newState);
-    }
-
-    public void SetVisitor()
-    {
-        CurrentState=GameState.Visitor;
     }
 
     private void Update()
     {
+        // Debug rapido per cambiare stato con T
         if (Keyboard.current.tKey.wasPressedThisFrame)
         {
             ChangeState(GameState.Thief);
         }
     }
 
-    // --- NUOVO: Gestione Dati Settings ---
+    public void ChangeState(GameState newState)
+    {
+        if (CurrentState == newState) return;
 
+        CurrentState = newState; // Aggiorna la variabile visibile nell'Inspector
+
+        Debug.Log($"Stato del gioco cambiato in: {newState}");
+        OnStateChanged?.Invoke(newState);
+    }
+
+    public void SetVisitor()
+    {
+        ChangeState(GameState.Visitor);
+    }
+
+    // --- SALVATAGGIO & CARICAMENTO SETTINGS ---
     public void UpdateSensitivity(float value)
     {
         MouseSensitivity = value;
-        SaveSettings(); // Salvataggio automatico ad ogni modifica
-        OnSettingsChanged?.Invoke(); // Avvisa chi è in ascolto (es. PlayerController)
+        SaveSettings();
+        OnSettingsChanged?.Invoke();
     }
 
     public void UpdateHeadphoneProfile(int index)
     {
         HeadphoneProfileIndex = index;
         SaveSettings();
-        // Qui potresti chiamare un AudioManager per cambiare mix
-        Debug.Log("Profilo cuffie cambiato a indice: " + index);
     }
 
     private void SaveSettings()
@@ -101,26 +106,45 @@ public class GameManager : MonoBehaviour
 
     private void LoadSettings()
     {
-        MouseSensitivity = PlayerPrefs.GetFloat("MouseSens", 1.0f); // 1.0f è il default se non trova nulla
+        MouseSensitivity = PlayerPrefs.GetFloat("MouseSens", 1.0f);
         HeadphoneProfileIndex = PlayerPrefs.GetInt("AudioProfile", 0);
     }
 
-    // ... (Il resto del tuo codice OnEnable/OnDisable/OnSceneLoaded rimane uguale) ...
+    // --- GESTIONE SCENE ---
     private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
     private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == endSceneName)
+        // 1. Se torniamo al Menu Principale -> Reset totale (diventa Visitor)
+        if (scene.name == "MainMenu")
         {
-            if (Instance == this) Instance = null;
-            Destroy(gameObject);
+            ResetGameParameters();
         }
-        if(scene.name == "MainMenu") this.ChangeState(GameState.Visitor);
+
+        // 2. Se siamo nella schermata di Game Over -> Sblocca mouse, ma MANTIENI LO STATO
+        else if (scene.name == endSceneName)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            // Qui NON cambiamo stato. Se eri Thief, resti Thief.
+        }
+
+        // 3. Se ricarichiamo il livello (Restart) -> NON facciamo nulla.
+        // Il GameManager mantiene lo stato che aveva prima di morire.
     }
 
+    // Funzione chiamata dal tasto "Restart"
     public void LoadLastScena()
     {
         SceneManager.LoadScene(lastScena);
+    }
+
+    // Funzione chiamata dal tasto "Menu Principale"
+    public void ResetGameParameters()
+    {
+        ChangeState(GameState.Visitor);
+        lastScena = "MainMenu";
+        Debug.Log("Reset parametri gioco eseguito.");
     }
 }

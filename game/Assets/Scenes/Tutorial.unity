@@ -660,8 +660,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7929311970044582874, guid: 6fda8aeb5fece414cba90923ce3c9fb7, type: 3}
       propertyPath: instructionText
-      value: Clicca per disegnare.Usa il mouse , premi s per salvare e c per cancellare.Dovrai
-        riprodurre una copia del quadro che hai visto.
+      value: 'Clicca sulla tela.
+
+        Usa il tasto dx del mouse per disegnare
+        , premi s per salvare e c per cancellare.Dovrai riprodurre una copia del
+        quadro che hai visto.'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2100,7 +2103,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7929311970044582874, guid: 6fda8aeb5fece414cba90923ce3c9fb7, type: 3}
       propertyPath: instructionText
-      value: Clicca sul Quadro per interagire.
+      value: 'Clicca sul Quadro per interagire.
+
+        Premi Esc per uscire.'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3105,7 +3110,7 @@ PrefabInstance:
       value: 'Ora che hai saltato le guardie avvicinati al quadro.
 
         Premi
-        tasto Z per  sostituirli.'
+        tasto Z per  scambiarli.'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3179,7 +3184,7 @@ PrefabInstance:
     - target: {fileID: 7929311970044582874, guid: 6fda8aeb5fece414cba90923ce3c9fb7, type: 3}
       propertyPath: instructionText
       value: "Ora che hai creato un falso , le guardie saranno in allerta . \nUsa
-        Q per preparare un caff\xE8 le guardie ne vanno matte.\nUsa E per lanciare
+        E per preparare un caff\xE8 le guardie ne vanno matte.\nUsa Q per lanciare
         un fumogeno.Attenzione! per attivarlo dovrai soffiare nel microfono."
       objectReference: {fileID: 0}
     m_RemovedComponents: []

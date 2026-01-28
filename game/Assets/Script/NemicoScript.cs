@@ -121,7 +121,7 @@ public class NemicoScript : MonoBehaviour
             Cursor.visible = true;
 
             int indexUltimaScena = SceneManager.sceneCountInBuildSettings - 1;
-            GameManager.Instance.SetVisitor();
+            
             GameManager.lastScena = SceneManager.GetActiveScene().name;
             SceneManager.LoadScene(indexUltimaScena);
 
