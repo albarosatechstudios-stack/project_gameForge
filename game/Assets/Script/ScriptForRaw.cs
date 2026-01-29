@@ -15,7 +15,7 @@ public class DrawingController : MonoBehaviour
     public GameObject quadroObject;
 
     private Vector2Int? lastMousePixel = null;
-    private int brushSize = 4; // dimensione pennello
+    public int brushSize = 4; // dimensione pennello
     private bool isSaved = false;
 
     void Start()

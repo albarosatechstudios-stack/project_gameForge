@@ -1154,6 +1154,10 @@ PrefabInstance:
       value: CanvasTelaBianca 1
       objectReference: {fileID: 0}
     - target: {fileID: 8109186359413306799, guid: 55ada106938d64f40b353dea56c972d7, type: 3}
+      propertyPath: brushSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8109186359413306799, guid: 55ada106938d64f40b353dea56c972d7, type: 3}
       propertyPath: quadroObject
       value: 
       objectReference: {fileID: 221983354}
