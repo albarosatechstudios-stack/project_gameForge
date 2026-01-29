@@ -33,7 +33,7 @@ public class CambioScena : MonoBehaviour
         if (MaestroManager.Instance != null)
         {
             Debug.Log($"[CambioScena] Stato attuale Maestro: {MaestroManager.Instance.faseAttuale}");
-
+            GameManager.lastScena = SceneManager.GetActiveScene().name;
             // 2. Controllo Stato: È finito il gioco?
             if (MaestroManager.Instance.faseAttuale == QuestMaestro.FineGioco)
             {
