@@ -139,6 +139,15 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(lastScena);
     }
+    public void LoadMenuScena()
+    {
+        if (MaestroManager.Instance != null)
+        {
+            MaestroManager.Instance.DistruggiManager();
+        }
+        SceneManager.LoadScene("MainMenu");
+
+    }
 
     // Funzione chiamata dal tasto "Menu Principale"
     public void ResetGameParameters()

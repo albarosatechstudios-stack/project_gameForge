@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Nozze di cana
   m_EditorClassIdentifier: Assembly-CSharp::DatiQuadro
   titolo: nozze di cana
-  info: 
+  info: Le nozze di cana
   immaginePrincipale: {fileID: 21300000, guid: 01f4dc8ced833cf4abcbf0157b55bfb3, type: 3}
   immagineConfronto: {fileID: 0}

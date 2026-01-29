@@ -29,7 +29,11 @@ public class LoadDrawingOnQuadro : MonoBehaviour
         {
             isRepleced = true;
             ApplyTextureFromFile();
-            MaestroManager.Instance.AvanzaFase();
+            if (MaestroManager.Instance != null)
+            {
+                MaestroManager.Instance.AvanzaFase();
+            }
+          
         }
     }
 

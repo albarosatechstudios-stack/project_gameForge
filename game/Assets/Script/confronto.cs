@@ -12,6 +12,7 @@ public class SimpleLineComparerIgnoreBG : MonoBehaviour
 
     [Tooltip("Raggio di tolleranza in pixel. Aumentalo per essere più buono con il giocatore.")]
     [Range(0, 10)] public int toleranceRadius = 4;
+    [HideInInspector] public Texture2D textureRisultato;
 
     /// <summary>
     /// Funzione principale da chiamare per avviare il confronto.
@@ -166,6 +167,7 @@ public class SimpleLineComparerIgnoreBG : MonoBehaviour
 
         debugTex.SetPixels(pixels);
         debugTex.Apply();
+        textureRisultato = debugTex;
 
         byte[] pngData = debugTex.EncodeToPNG();
         string path = Path.Combine(Application.persistentDataPath, "confronto_debug.png");

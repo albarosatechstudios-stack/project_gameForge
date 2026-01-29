@@ -23,10 +23,7 @@ public class MaestroVisuals : MonoBehaviour
     {
         if (MaestroManager.Instance == null) return;
 
-        // 1. Controllo se devo mostrare l'icona (Leggo dal Manager)
-        bool deveMostrare = MaestroManager.Instance.iconaDaMostrare;
-
-        if (deveMostrare)
+        if (MaestroManager.Instance.isShowComic())
         {
             AggiornaGrafica();
         }

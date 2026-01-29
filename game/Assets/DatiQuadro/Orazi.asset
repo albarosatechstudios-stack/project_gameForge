@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Orazi
   m_EditorClassIdentifier: Assembly-CSharp::DatiQuadro
   titolo: Il-giuramento-degli-orazi
-  info: Un padre e i suoi figli
+  info: Il giuramento degli Orazi
   immaginePrincipale: {fileID: 21300000, guid: a587c0ee6d1af7041a2d93026c78c9a6, type: 3}
   immagineConfronto: {fileID: 0}
