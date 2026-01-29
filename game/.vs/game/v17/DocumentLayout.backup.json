@@ -7,16 +7,16 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\QuadroInteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\NpcMaestro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\maestro_script\\NpcMaestro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DestroyManagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\DestroyManagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\MaestroManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\maestro_script\\MaestroManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DestroyManagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\DestroyManagers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\NpcMaestro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\maestro_script\\NpcMaestro.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -36,22 +36,23 @@
               "RelativeDocumentMoniker": "Assets\\Script\\QuadroInteraction.cs",
               "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\QuadroInteraction.cs",
               "RelativeToolTip": "Assets\\Script\\QuadroInteraction.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAIwB8AAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAIwCMAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-29T16:04:40.561Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "DestroyManagers.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DestroyManagers.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\DestroyManagers.cs",
               "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DestroyManagers.cs",
               "RelativeToolTip": "Assets\\Script\\DestroyManagers.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-29T15:48:47.79Z"
+              "WhenOpened": "2026-01-29T15:48:47.79Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -61,13 +62,14 @@
               "RelativeDocumentMoniker": "Assets\\Script\\maestro_script\\MaestroManager.cs",
               "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\MaestroManager.cs",
               "RelativeToolTip": "Assets\\Script\\maestro_script\\MaestroManager.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAAAIkAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAAIkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-29T15:40:25.138Z"
+              "WhenOpened": "2026-01-29T15:40:25.138Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "NpcMaestro.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\NpcMaestro.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\maestro_script\\NpcMaestro.cs",

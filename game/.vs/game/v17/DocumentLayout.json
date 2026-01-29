@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptForRaw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\ScriptForRaw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\QuadroInteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\QuadroInteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -31,6 +35,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ScriptForRaw.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptForRaw.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\ScriptForRaw.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptForRaw.cs",
+              "RelativeToolTip": "Assets\\Script\\ScriptForRaw.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAIwCoAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-29T16:11:38.072Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "QuadroInteraction.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\QuadroInteraction.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\QuadroInteraction.cs",
@@ -43,7 +60,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "DestroyManagers.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DestroyManagers.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\DestroyManagers.cs",
@@ -51,12 +68,11 @@
               "RelativeToolTip": "Assets\\Script\\DestroyManagers.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-29T15:48:47.79Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-29T15:48:47.79Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MaestroManager.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\MaestroManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\maestro_script\\MaestroManager.cs",
@@ -64,12 +80,11 @@
               "RelativeToolTip": "Assets\\Script\\maestro_script\\MaestroManager.cs",
               "ViewState": "AgIAAGkAAAAAAAAAAAAAAIkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-29T15:40:25.138Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-29T15:40:25.138Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "NpcMaestro.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\NpcMaestro.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\maestro_script\\NpcMaestro.cs",

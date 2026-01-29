@@ -1255,7 +1255,7 @@ MonoBehaviour:
   visuals: {fileID: 0}
   objectiveName: Ragazza con Perle
   comparatore: {fileID: 606224836}
-  immagineReference: {fileID: 2800000, guid: c3d68bcaf8825504fa4fe559b9e342ab, type: 3}
+  immagineReference: {fileID: 2800000, guid: 4e0377541e9239347a3f18b37db8321c, type: 3}
   sogliaVittoria: 9.7
   oggettoDaColorare: {fileID: 404044971}
 --- !u!114 &606224834
