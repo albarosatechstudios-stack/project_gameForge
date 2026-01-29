@@ -1230,10 +1230,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCMaestro
   visuals: {fileID: 0}
-  dialogoThief: thief!
-  dialogoPrimaVolta: primo incontro
-  dialogoDopoQuadro: secondo incontro
-  dialogoStandard: Bella giornata, vero?
+  objectiveName: Ragazza con Perle
+  comparatore: {fileID: 606224836}
+  immagineReference: {fileID: 2800000, guid: c3d68bcaf8825504fa4fe559b9e342ab, type: 3}
+  sogliaVittoria: 30.6
 --- !u!114 &606224834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,6 +1251,35 @@ MonoBehaviour:
   visitorSprite: {fileID: 21300000, guid: 91bdc13a4638d834ab9319baec61a12a, type: 3}
   thiefSprite: {fileID: 21300000, guid: 91bdc13a4638d834ab9319baec61a12a, type: 3}
   questSprite: {fileID: 21300000, guid: 91bdc13a4638d834ab9319baec61a12a, type: 3}
+--- !u!114 &606224835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606224817}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a950a6543e3184698188252e7c0da7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AvviaComparazione
+  confronto: {fileID: 606224836}
+  modelloReference: {fileID: 2800000, guid: c3d68bcaf8825504fa4fe559b9e342ab, type: 3}
+--- !u!114 &606224836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606224817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a77056bfafba2345b5086dccaab787c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleLineComparerIgnoreBG
+  thresholdLine: 0.5
+  thresholdBG: 0.9
+  toleranceRadius: 4
 --- !u!1 &712445746
 GameObject:
   m_ObjectHideFlags: 0
@@ -1927,6 +1956,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2644754090091767847, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 606224834}
+    - targetCorrespondingSourceObject: {fileID: 2644754090091767847, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 606224836}
+    - targetCorrespondingSourceObject: {fileID: 2644754090091767847, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 606224835}
   m_SourcePrefab: {fileID: 100100000, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
 --- !u!1 &1287170074
 GameObject:
@@ -2176,9 +2211,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ab21f7857990324ab6133756ba4082e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaestroManager
+  faseAttuale: 0
+  falsoDiAltaQualita: 0
   primoIncontroAvvenuto: 0
-  segretoQuadroSbloccato: 0
-  iconaDaMostrare: 1
   statoMentaleMaestro: 0
 --- !u!4 &1526632976
 Transform:

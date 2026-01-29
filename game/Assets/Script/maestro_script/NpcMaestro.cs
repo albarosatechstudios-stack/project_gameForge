@@ -9,17 +9,21 @@ public class NPCMaestro : MonoBehaviour
     [Header("Obiettivo Attuale")]
     public string objectiveName = "Ragazza con Perle"; // qui inserire il nome del quadro da vedere
 
-    [Header("Dialoghi")]
-    [TextArea] public string dialogoThief = "AL LADRO! GUARDIE!";
-    [TextArea] public string dialogoPrimaVolta = "Benvenuto viaggiatore! Piacere di conoscerti.";
-    [TextArea] public string dialogoDopoQuadro = "Quel quadro nasconde un terribile segreto...";
-    [TextArea] public string dialogoStandard = "Bella giornata, vero?";
-
+    //[Header("Dialoghi")]
+    //[TextArea] public string dialogoThief = "AL LADRO! GUARDIE!";
+    //[TextArea] public string dialogoPrimaVolta = "Benvenuto viaggiatore! Piacere di conoscerti.";
+    //[TextArea] public string dialogoDopoQuadro = "Quel quadro nasconde un terribile segreto...";
+    //[TextArea] public string dialogoStandard = "Bella giornata, vero?";
+    [Header("Valutazione Disegno")]
+    public SimpleLineComparerIgnoreBG comparatore; // Trascina qui il componente SimpleLineComparer
+    public Texture2D immagineReference;            // Trascina qui l'immagine da copiare (es. saveImageDOnna)
+    [Range(0, 100)] public float sogliaVittoria = 70f; // Percentuale minima per vincere
     // Variabile privata per sapere se il giocatore � vicino
     private bool giocatoreInZona = false;
 
 
-    void Start(){
+    void Start()
+    {
         MaestroManager.Instance.setNameObjective(objectiveName);
     }
 
@@ -64,47 +68,78 @@ public class NPCMaestro : MonoBehaviour
     // --- LOGICA INTERAZIONE (IDENTICA A PRIMA) ---
 
     public void Interagisci()
-{
-    MaestroManager manager = MaestroManager.Instance;
-    manager.ConfermaInterazioneAvvenuta(); // Spegne l'icona "!"
-    manager.disableComic();
-    switch (manager.faseAttuale)
     {
-        case QuestMaestro.Inizio:
-            DialogueManager.Instance.MostraMessaggio("Benvenuto! Vai a guardare il Quadro " + objectiveName + " nel corridoio.");
-            manager.AvanzaFase(); // Passa a 'DeveVedereQuadro'
-            break;
+        MaestroManager manager = MaestroManager.Instance;
+        manager.ConfermaInterazioneAvvenuta(); // Spegne l'icona "!"
+        manager.disableComic();
+        switch (manager.faseAttuale)
+        {
+            case QuestMaestro.Inizio:
+                DialogueManager.Instance.MostraMessaggio("Benvenuto! Vai a guardare il Quadro " + objectiveName + " nel corridoio.");
+                manager.AvanzaFase(); // Passa a 'DeveVedereQuadro'
+                break;
 
-        case QuestMaestro.DeveVedereQuadro:
-            DialogueManager.Instance.MostraMessaggio("Ancora qui? Vai a vedere quel quadro!");
-            break;
+            case QuestMaestro.DeveVedereQuadro:
+                DialogueManager.Instance.MostraMessaggio("Ancora qui? Vai a vedere quel quadro!");
+                break;
 
-        case QuestMaestro.QuadroVisto:
-            DialogueManager.Instance.MostraMessaggio("Bello, vero? Ora crea un falso e sostituiscilo all'originale.");
-            manager.AvanzaFase(); // Passa a 'CreazioneFalso'
-            break;
+            case QuestMaestro.QuadroVisto:
+                DialogueManager.Instance.MostraMessaggio("Bello, vero? Ora crea un falso e sostituiscilo all'originale.");
+                manager.AvanzaFase(); // Passa a 'CreazioneFalso'
+                break;
 
-        case QuestMaestro.CreazioneFalso:
+            case QuestMaestro.CreazioneFalso:
                 // controllo se il quadro falso è stato realizzato per avere due dialoghi
                 // falso pronto -> ora vai e sostituisci i quadri, non farti arrestare!
                 // falso non pronto -> quanto ci vuole a realizzare questo falso? non cincischiare!
-                if (MaestroManager.Instance.isRealised){
-                    DialogueManager.Instance.MostraMessaggio("Vai e sostituisci i quadri, non farti <b>ARRESTARE</b>!\nRicordati di tornare qui dopo lo scambio.");                }
-                else{
+                if (MaestroManager.Instance.isRealised)
+                {
+                    DialogueManager.Instance.MostraMessaggio("Vai e sostituisci i quadri, non farti <b>ARRESTARE</b>!\nRicordati di tornare qui dopo lo scambio.");
+                }
+                else
+                {
                     DialogueManager.Instance.MostraMessaggio("quanto ci vuole a realizzare questo falso? non cincischiare!");
                 }
-            // Qui potresti controllare se il giocatore ha finito il lavoro
-            break;
+                // Qui potresti controllare se il giocatore ha finito il lavoro
+                break;
 
-        case QuestMaestro.FalsoPronto:
-            // FINALE
-            if (manager.falsoDiAltaQualita) {
-                DialogueManager.Instance.MostraMessaggio("Ottimo lavoro, non si accorgeranno di nulla. Fine gioco.");
-            } else {
-                DialogueManager.Instance.MostraMessaggio("Che schifo di falso! Ci scopriranno tutti! Fine gioco.");
-            }
-            GameManager.Instance.LoadLastScena();
-            break;
+            case QuestMaestro.FalsoPronto:
+                // -----------------------------------------------------------
+                // 1. ESEGUI IL CONFRONTO (Calcolo LIVE)
+                // -----------------------------------------------------------
+                if (comparatore == null || immagineReference == null)
+                {
+                    Debug.LogError("ERRORE: Manca il comparatore o l'immagine reference nello script Maestro!");
+                    return;
+                }
+
+                // Chiediamo al comparatore la percentuale di somiglianza
+                float percentuale = comparatore.CompareWithSavedDrawing(immagineReference);
+                Debug.Log($"Il Maestro valuta il disegno... Punteggio: {percentuale}%");
+
+                // -----------------------------------------------------------
+                // 2. VALUTA LA CONDIZIONE
+                // -----------------------------------------------------------
+                // Qui decidiamo se il 'falsoDiAltaQualita' è vero o falso in base al numero
+                bool isAltaQualita = percentuale >= sogliaVittoria;
+
+                // -----------------------------------------------------------
+                // 3. IL TUO IF / ELSE ORIGINALE
+                // -----------------------------------------------------------
+                if (isAltaQualita)
+                {
+                    // VITTORIA
+                    DialogueManager.Instance.MostraMessaggio($"Ottimo lavoro (Score: {percentuale:F0}%), non si accorgeranno di nulla. Fine gioco.");
+                }
+                else
+                {
+                    // SCONFITTA
+                    DialogueManager.Instance.MostraMessaggio($"Che schifo di falso! (Score: {percentuale:F0}%) Ci scopriranno tutti! Fine gioco.");
+                }
+
+                // Caricamento scena o fine logica
+                //GameManager.Instance.LoadLastScena();
+                break;
+        }
     }
-}
 }
