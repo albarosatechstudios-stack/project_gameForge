@@ -53,4 +53,18 @@ public class TutorialManager : MonoBehaviour
          Cursor.lockState = CursorLockMode.Locked;
          Cursor.visible = false;
     }
+    public void DistruggiManager()
+    {
+        Debug.Log("[MaestroManager] Reset e autodistruzione in corso...");
+
+        // 1. Rimuoviamo il riferimento statico per evitare errori "MissingReference"
+        if (instance == this)
+        {
+            instance = null;
+        }
+
+        // 2. Distruggiamo il GameObject che tiene lo script
+        // Nota: Unity chiamerà automaticamente OnDisable(), quindi l'evento si scollegherà da solo.
+        Destroy(gameObject);
+    }
 }

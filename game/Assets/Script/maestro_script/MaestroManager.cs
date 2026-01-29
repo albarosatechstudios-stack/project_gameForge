@@ -56,6 +56,12 @@ public class MaestroManager : MonoBehaviour
         }
     }
 
+    public void goToBackPhase()
+    {
+        if(faseAttuale == QuestMaestro.FalsoPronto)
+            faseAttuale--;
+    }
+
     /// Chiamata specifica per quando il giocatore finisce il falso.
     public void SetFalsoPronto(bool isBuonaQualita)
     {

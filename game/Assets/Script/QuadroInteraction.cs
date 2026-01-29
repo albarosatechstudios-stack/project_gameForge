@@ -31,7 +31,7 @@ public class LoadDrawingOnQuadro : MonoBehaviour
             ApplyTextureFromFile();
             if (MaestroManager.Instance != null)
             {
-                MaestroManager.Instance.AvanzaFase();
+             MaestroManager.Instance.AvanzaFase();
             }
           
         }
