@@ -594,6 +594,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 339988068}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &368695355 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7884878613114926518, guid: 6fda8aeb5fece414cba90923ce3c9fb7, type: 3}
+  m_PrefabInstance: {fileID: 1266724866}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &368695357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368695355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e390035523fdb4ba09df5ef6d01545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RecallGameMan
 --- !u!1001 &388622409
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1756,7 +1773,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7884878613114926518, guid: 6fda8aeb5fece414cba90923ce3c9fb7, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 368695357}
   m_SourcePrefab: {fileID: 100100000, guid: 6fda8aeb5fece414cba90923ce3c9fb7, type: 3}
 --- !u!1 &1322040149
 GameObject:

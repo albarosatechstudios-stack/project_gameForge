@@ -84,6 +84,7 @@
     <Compile Include="Assets\Script\triggerCaffettiera.cs" />
     <Compile Include="Assets\Script\MenuController.cs" />
     <Compile Include="Assets\Script\SoffioScript.cs" />
+    <Compile Include="Assets\Script\RecallGameMan.cs" />
     <Compile Include="Assets\Script\ScriptDominator.cs" />
     <Compile Include="Assets\Script\quadri_script\QuadroController.cs" />
     <Compile Include="Assets\Script\QuadroInteraction.cs" />

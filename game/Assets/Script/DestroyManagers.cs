@@ -9,6 +9,10 @@ public class DestroyManagers : MonoBehaviour
         {
             MaestroManager.Instance.DistruggiManager();
         }
+        if(TutorialManager.instance != null)
+        {
+            TutorialManager.instance.DistruggiManager();
+        }
     }
 
     // Update is called once per frame
