@@ -67,6 +67,7 @@ public class NPCMaestro : MonoBehaviour
 {
     MaestroManager manager = MaestroManager.Instance;
     manager.ConfermaInterazioneAvvenuta(); // Spegne l'icona "!"
+    manager.disableComic();
 
     switch (manager.faseAttuale)
     {

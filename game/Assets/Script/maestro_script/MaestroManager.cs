@@ -19,7 +19,7 @@ public class MaestroManager : MonoBehaviour
     public bool falsoDiAltaQualita = false; // Determina se il finale sarà positivo o negativo
 
     [Header("Stato Interazione UI")]
-    public bool iconaDaMostrare = true; // Parte true per il primo saluto
+    private bool showComic = true; // Parte true per il primo saluto
 
     [Header("Memoria Eventi (Legacy)")]
     public bool primoIncontroAvvenuto = false; 
@@ -32,7 +32,8 @@ public class MaestroManager : MonoBehaviour
     void Awake()
     {
         // Singleton Pattern
-        if (Instance == null) { Instance = this; 
+        if (Instance == null) { 
+            Instance = this; 
         DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }
@@ -49,7 +50,6 @@ public class MaestroManager : MonoBehaviour
         if (faseAttuale != QuestMaestro.FineGioco)
         {
             faseAttuale++;
-            iconaDaMostrare = true; // Nuova fase = Nuova cosa da dire!
             Debug.Log("[MaestroManager] Nuova fase : " + faseAttuale);
         }
     }
@@ -59,7 +59,7 @@ public class MaestroManager : MonoBehaviour
     {
         falsoDiAltaQualita = isBuonaQualita;
         faseAttuale = QuestMaestro.FalsoPronto;
-        iconaDaMostrare = true;
+        activeComic();
         Debug.Log("[MaestroManager] Il falso è pronto. Qualità ottima: " + isBuonaQualita);
     }
 
@@ -68,18 +68,19 @@ public class MaestroManager : MonoBehaviour
     private void ReazioneAlCambioStato(GameState nuovoStato)
     {
         // Se il giocatore diventa un ladro, il maestro deve reagire a prescindere dalla quest
+        Debug.Log("[Maestro]: " + statoMentaleMaestro);
+        Debug.Log("[NuovoStato]: " + nuovoStato);
+        if(nuovoStato == GameState.NoPause) return;
         if (statoMentaleMaestro != nuovoStato)
         {
             statoMentaleMaestro = nuovoStato;
-            iconaDaMostrare = true; 
+            activeComic(); 
         }
     }
 
     // Chiamata da NPCMaestro quando il giocatore interagisce
     public void ConfermaInterazioneAvvenuta()
     {
-        iconaDaMostrare = false;
-
         // Segna il primo incontro se siamo all'inizio
         if (faseAttuale == QuestMaestro.Inizio)
         {
@@ -93,6 +94,7 @@ public class MaestroManager : MonoBehaviour
             // controllo per capire che il quadro aperto è quello che dice il maestro
             if (nameObjective == openendPicture){
                 Debug.Log("[Manager] Ottimo, hai trovato il quadro giusto: " + openendPicture);
+                activeComic();
                 AvanzaFase();
             }else{
                 Debug.Log("[Manager] Questo è " + openendPicture + ", ma io cerco " + nameObjective);
@@ -103,5 +105,20 @@ public class MaestroManager : MonoBehaviour
     public void setNameObjective(string name)
     {
         nameObjective = name;
+    }
+
+    public void disableComic()
+    {
+        showComic = false;
+    }
+
+    public void activeComic()
+    {
+        showComic = true;
+    }
+
+    public bool isShowComic()
+    {
+        return showComic;
     }
 }
