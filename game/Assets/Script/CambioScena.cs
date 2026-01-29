@@ -1,25 +1,50 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // <--- FONDAMENTALE!
+using UnityEngine.SceneManagement;
 
 public class CambioScena : MonoBehaviour
 {
-    [Header("Nome della scena dove andare")]
-    public string nomeScenaDaCaricare; // Scrivi qui il nome esatto (es. "Livello2")
+    [Header("Nome della scena standard")]
+    public string nomeScenaDaCaricare; // Es. "Bottega" o "Livello2"
 
-    // Metodo 1: Se entri in un Trigger (es. una porta)
+    [Header("Nome scena finale")]
+    public string nomeScenaFinale = "EndGame"; // Modificabile da inspector se vuoi
+
+    // Metodo 1: Trigger fisico
     void OnTriggerEnter(Collider other)
     {
         if (this.enabled == false) return;
-        if (other.CompareTag("Player") )
+
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Cambio scena in corso...");
-            SceneManager.LoadScene(nomeScenaDaCaricare);
+            EseguiCaricamento();
         }
     }
 
-    // Metodo 2: Se vuoi chiamarlo da un Bottone della UI
+    // Metodo 2: Bottone UI
     public void CaricaScena()
     {
+        EseguiCaricamento();
+    }
+
+    // Logica centralizzata per evitare errori
+    private void EseguiCaricamento()
+    {
+        // 1. Controllo di sicurezza: Il Manager esiste?
+        if (MaestroManager.Instance != null)
+        {
+            Debug.Log($"[CambioScena] Stato attuale Maestro: {MaestroManager.Instance.faseAttuale}");
+
+            // 2. Controllo Stato: È finito il gioco?
+            if (MaestroManager.Instance.faseAttuale == QuestMaestro.FineGioco)
+            {
+                Debug.Log("Caricamento Finale...");
+                SceneManager.LoadScene(nomeScenaFinale); // Carica "EndGame"
+                return; // FERMATI QUI! Non eseguire il codice sotto.
+            }
+        }
+
+        // 3. Se il Manager non c'è O se il gioco non è finito, carica la scena normale
+        Debug.Log("Caricamento Standard...");
         SceneManager.LoadScene(nomeScenaDaCaricare);
     }
 }

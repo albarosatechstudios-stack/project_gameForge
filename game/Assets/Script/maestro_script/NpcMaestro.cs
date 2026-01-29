@@ -21,6 +21,9 @@ public class NPCMaestro : MonoBehaviour
     // Variabile privata per sapere se il giocatore � vicino
     private bool giocatoreInZona = false;
 
+    [Header("Oggetto Risultato")]
+    public Renderer oggettoDaColorare;
+
 
     void Start()
     {
@@ -121,6 +124,19 @@ public class NPCMaestro : MonoBehaviour
                 // 2. VALUTA LA CONDIZIONE
                 // -----------------------------------------------------------
                 // Qui decidiamo se il 'falsoDiAltaQualita' è vero o falso in base al numero
+                if (oggettoDaColorare != null && comparatore.textureRisultato != null)
+                {
+                    // Cambia la texture principale del materiale dell'oggetto
+                    oggettoDaColorare.material.mainTexture = comparatore.textureRisultato;
+
+                    // Opzionale: Se l'immagine appare scura/strana, prova a cambiare lo shader in "Unlit/Texture" nell'editor
+                    Debug.Log("Texture risultato applicata all'oggetto!");
+                }
+                else
+                {
+                    Debug.LogWarning("Impossibile applicare texture: Manca l'oggettoDaColorare o la texture non è stata generata.");
+                }
+                // -------------------------------------------------------------
                 bool isAltaQualita = percentuale >= sogliaVittoria;
 
                 // -----------------------------------------------------------
@@ -129,12 +145,12 @@ public class NPCMaestro : MonoBehaviour
                 if (isAltaQualita)
                 {
                     // VITTORIA
-                    DialogueManager.Instance.MostraMessaggio($"Ottimo lavoro (Score: {percentuale:F0}%), non si accorgeranno di nulla. Fine gioco.");
+                    DialogueManager.Instance.MostraMessaggio($"Ottimo lavoro (Score: {percentuale:F0}%), non si accorgeranno di nulla. Va a vedere alla tela il confronto e poi esci di qui.");
                 }
                 else
                 {
                     // SCONFITTA
-                    DialogueManager.Instance.MostraMessaggio($"Che schifo di falso! (Score: {percentuale:F0}%) Ci scopriranno tutti! Fine gioco.");
+                    DialogueManager.Instance.MostraMessaggio($"Che schifo di falso! (Score: {percentuale:F0}%) Ci scopriranno tutti! Va a vedere alla tela il confronto  e poi esci di qui.");
                 }
 
                 // Caricamento scena o fine logica
