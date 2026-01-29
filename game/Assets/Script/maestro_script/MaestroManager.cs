@@ -18,6 +18,8 @@ public class MaestroManager : MonoBehaviour
     public QuestMaestro faseAttuale = QuestMaestro.Inizio;
     public bool falsoDiAltaQualita = false; // Determina se il finale sarà positivo o negativo
 
+    public bool isRealised {get; set;} = false; //realizzato ma non scambiato
+
     [Header("Stato Interazione UI")]
     private bool showComic = true; // Parte true per il primo saluto
 
@@ -68,8 +70,6 @@ public class MaestroManager : MonoBehaviour
     private void ReazioneAlCambioStato(GameState nuovoStato)
     {
         // Se il giocatore diventa un ladro, il maestro deve reagire a prescindere dalla quest
-        Debug.Log("[Maestro]: " + statoMentaleMaestro);
-        Debug.Log("[NuovoStato]: " + nuovoStato);
         if(nuovoStato == GameState.NoPause) return;
         if (statoMentaleMaestro != nuovoStato)
         {

@@ -68,7 +68,6 @@ public class NPCMaestro : MonoBehaviour
     MaestroManager manager = MaestroManager.Instance;
     manager.ConfermaInterazioneAvvenuta(); // Spegne l'icona "!"
     manager.disableComic();
-
     switch (manager.faseAttuale)
     {
         case QuestMaestro.Inizio:
@@ -86,7 +85,14 @@ public class NPCMaestro : MonoBehaviour
             break;
 
         case QuestMaestro.CreazioneFalso:
-            DialogueManager.Instance.MostraMessaggio("Torna da me quando avrai scambiato i quadri.");
+                // controllo se il quadro falso è stato realizzato per avere due dialoghi
+                // falso pronto -> ora vai e sostituisci i quadri, non farti arrestare!
+                // falso non pronto -> quanto ci vuole a realizzare questo falso? non cincischiare!
+                if (MaestroManager.Instance.isRealised){
+                    DialogueManager.Instance.MostraMessaggio("Vai e sostituisci i quadri, non farti <b>ARRESTARE</b>!\nRicordati di tornare qui dopo lo scambio.");                }
+                else{
+                    DialogueManager.Instance.MostraMessaggio("quanto ci vuole a realizzare questo falso? non cincischiare!");
+                }
             // Qui potresti controllare se il giocatore ha finito il lavoro
             break;
 
