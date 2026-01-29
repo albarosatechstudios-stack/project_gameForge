@@ -117,9 +117,9 @@ public class NemicoScript : MonoBehaviour
         {
             Debug.Log("GIOCATORE ARRESTATO!");
 
+            MaestroManager.Instance.goToBackPhase();
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
             int indexUltimaScena = SceneManager.sceneCountInBuildSettings - 1;
             
             GameManager.lastScena = SceneManager.GetActiveScene().name;

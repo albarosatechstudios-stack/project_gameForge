@@ -1098,7 +1098,7 @@ GameObject:
   - component: {fileID: 732257581}
   - component: {fileID: 732257580}
   - component: {fileID: 732257584}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: scorrevole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1519,7 +1519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -6829431330053898788, guid: 5405a3339b01b094383b63de6e64c194, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -6829431330053898788, guid: 5405a3339b01b094383b63de6e64c194, type: 3}
       propertyPath: m_IsActive
@@ -2399,6 +2399,10 @@ PrefabInstance:
     - target: {fileID: 2644754090091767847, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485283183398357689, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 255
       objectReference: {fileID: 0}
     - target: {fileID: 6842417064163435140, guid: c3fd78f2911f34247b0334c874fe567c, type: 3}
       propertyPath: m_LocalPosition.x

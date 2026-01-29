@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Fondamentale per il New Input System
+using UnityEngine.InputSystem; 
 
 public class NPCMaestro : MonoBehaviour
 {
@@ -7,23 +7,20 @@ public class NPCMaestro : MonoBehaviour
     public MaestroVisuals visuals;
 
     [Header("Obiettivo Attuale")]
-    public string objectiveName = "Ragazza con Perle"; // qui inserire il nome del quadro da vedere
+    public string objectiveName = "Ragazza con Perle"; 
 
-    //[Header("Dialoghi")]
-    //[TextArea] public string dialogoThief = "AL LADRO! GUARDIE!";
-    //[TextArea] public string dialogoPrimaVolta = "Benvenuto viaggiatore! Piacere di conoscerti.";
-    //[TextArea] public string dialogoDopoQuadro = "Quel quadro nasconde un terribile segreto...";
-    //[TextArea] public string dialogoStandard = "Bella giornata, vero?";
     [Header("Valutazione Disegno")]
-    public SimpleLineComparerIgnoreBG comparatore; // Trascina qui il componente SimpleLineComparer
-    public Texture2D immagineReference;            // Trascina qui l'immagine da copiare (es. saveImageDOnna)
-    [Range(0, 100)] public float sogliaVittoria = 70f; // Percentuale minima per vincere
-    // Variabile privata per sapere se il giocatore � vicino
+    public SimpleLineComparerIgnoreBG comparatore; 
+    public Texture2D immagineReference;            
+    [Range(0, 100)] public float sogliaVittoria = 70f; 
+    
     private bool giocatoreInZona = false;
 
     [Header("Oggetto Risultato")]
     public Renderer oggettoDaColorare;
 
+    // MODIFICA 2: Variabile per evitare il doppio click immediato
+    private float inputCooldown = 0f;
 
     void Start()
     {
@@ -32,27 +29,40 @@ public class NPCMaestro : MonoBehaviour
 
     private void Update()
     {
-        // Controlliamo l'input SOLO se il giocatore � nella zona trigger
-        if (giocatoreInZona)
+        // 1. Se il giocatore non è in zona, non fare nulla
+        if (!giocatoreInZona) return;
+
+        // 2. CONTROLLO DIALOGO APERTO (La richiesta principale)
+        // Se il dialogo è aperto, resettiamo un piccolo timer di "protezione"
+        // e usciamo dalla funzione. Il Maestro è "disattivato".
+        if (DialogueManager.Instance.IsDialogoAperto)
         {
-            // Esempio: Tasto "E" della tastiera, oppure Tasto Sinistro del Mouse
-            if (Keyboard.current.eKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                Interagisci();
-            }
+            inputCooldown = 0.2f; // Mantiene il buffer "carico" finché il dialogo è aperto
+            return;
+        }
+
+        // 3. GESTIONE COOLDOWN
+        // Se il dialogo è stato chiuso, questo timer decresce.
+        // Finché è maggiore di 0, ignoriamo qualsiasi click.
+        // Questo "mangia" il click che ha chiuso il dialogo.
+        if (inputCooldown > 0)
+        {
+            inputCooldown -= Time.deltaTime;
+            return; // Esci, non leggere input
+        }
+
+        // 4. Input Normale (Ora siamo sicuri che il dialogo è chiuso da almeno 0.2 secondi)
+        if (Keyboard.current.eKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Interagisci();
         }
     }
 
-    // --- RILEVAMENTO ZONA (TRIGGER) ---
-
     private void OnTriggerEnter(Collider other)
     {
-        // Controlliamo se chi � entrato � il Player
-        // NOTA: Devi assicurarti che il tuo Player abbia il Tag "Player"
         if (other.CompareTag("Player"))
         {
             giocatoreInZona = true;
-            Debug.Log("Sei vicino al Maestro. Premi 'E' o Clicca per parlare.");
         }
     }
 
@@ -61,100 +71,68 @@ public class NPCMaestro : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             giocatoreInZona = false;
-
-            // Opzionale: Se te ne vai mentre il dialogo � aperto, lo chiudiamo?
-            // DialogueManager.Instance.ChiudiDialogo();
-            Debug.Log("Ti sei allontanato.");
         }
     }
-
-    // --- LOGICA INTERAZIONE (IDENTICA A PRIMA) ---
 
     public void Interagisci()
     {
         MaestroManager manager = MaestroManager.Instance;
-        manager.ConfermaInterazioneAvvenuta(); // Spegne l'icona "!"
+        manager.ConfermaInterazioneAvvenuta(); 
         manager.disableComic();
+
         switch (manager.faseAttuale)
         {
             case QuestMaestro.Inizio:
-                DialogueManager.Instance.MostraMessaggio("Benvenuto! Vai a guardare il Quadro " + objectiveName + " nel corridoio.");
-                manager.AvanzaFase(); // Passa a 'DeveVedereQuadro'
+                DialogueManager.Instance.MostraMessaggio("Maestro:Benvenuto! Vai a guardare il Quadro " + objectiveName + " nel museo.");
+                manager.AvanzaFase(); 
                 break;
 
             case QuestMaestro.DeveVedereQuadro:
-                DialogueManager.Instance.MostraMessaggio("Ancora qui? Vai a vedere quel quadro!");
+                DialogueManager.Instance.MostraMessaggio("Maestro:Ancora qui? Guarda il mio capolavoro lì sulla parete allora");
                 break;
 
             case QuestMaestro.QuadroVisto:
-                DialogueManager.Instance.MostraMessaggio("Bello, vero? Ora crea un falso e sostituiscilo all'originale.");
-                manager.AvanzaFase(); // Passa a 'CreazioneFalso'
+                DialogueManager.Instance.MostraMessaggio("Maestro:Bello, vero? Ora crea un falso e sostituiscilo all'originale.");
+                manager.AvanzaFase(); 
                 break;
 
             case QuestMaestro.CreazioneFalso:
-                // controllo se il quadro falso è stato realizzato per avere due dialoghi
-                // falso pronto -> ora vai e sostituisci i quadri, non farti arrestare!
-                // falso non pronto -> quanto ci vuole a realizzare questo falso? non cincischiare!
                 if (MaestroManager.Instance.isRealised)
                 {
-                    DialogueManager.Instance.MostraMessaggio("Vai e sostituisci i quadri, non farti <b>ARRESTARE</b>!\nRicordati di tornare qui dopo lo scambio.");
+                    DialogueManager.Instance.MostraMessaggio("Maestro:Vai e sostituisci i quadri, non farti <b>ARRESTARE</b>!\nRicordati di tornare qui dopo lo scambio.");
                 }
                 else
                 {
-                    DialogueManager.Instance.MostraMessaggio("quanto ci vuole a realizzare questo falso? non cincischiare!");
+                    DialogueManager.Instance.MostraMessaggio("Maestro:quanto ci vuole a realizzare questo falso? non cincischiare!");
                 }
-                // Qui potresti controllare se il giocatore ha finito il lavoro
                 break;
 
             case QuestMaestro.FalsoPronto:
-                // -----------------------------------------------------------
-                // 1. ESEGUI IL CONFRONTO (Calcolo LIVE)
-                // -----------------------------------------------------------
                 if (comparatore == null || immagineReference == null)
                 {
-                    Debug.LogError("ERRORE: Manca il comparatore o l'immagine reference nello script Maestro!");
+                    Debug.LogError("ERRORE: Manca comparatore o reference!");
                     return;
                 }
 
-                // Chiediamo al comparatore la percentuale di somiglianza
                 float percentuale = comparatore.CompareWithSavedDrawing(immagineReference);
-                Debug.Log($"Il Maestro valuta il disegno... Punteggio: {percentuale}%");
+                Debug.Log($"Score: {percentuale}%");
 
-                // -----------------------------------------------------------
-                // 2. VALUTA LA CONDIZIONE
-                // -----------------------------------------------------------
-                // Qui decidiamo se il 'falsoDiAltaQualita' è vero o falso in base al numero
                 if (oggettoDaColorare != null && comparatore.textureRisultato != null)
                 {
-                    // Cambia la texture principale del materiale dell'oggetto
                     oggettoDaColorare.material.mainTexture = comparatore.textureRisultato;
-
-                    // Opzionale: Se l'immagine appare scura/strana, prova a cambiare lo shader in "Unlit/Texture" nell'editor
-                    Debug.Log("Texture risultato applicata all'oggetto!");
                 }
-                else
-                {
-                    Debug.LogWarning("Impossibile applicare texture: Manca l'oggettoDaColorare o la texture non è stata generata.");
-                }
-                // -------------------------------------------------------------
+                
                 bool isAltaQualita = percentuale >= sogliaVittoria;
 
-                // -----------------------------------------------------------
-                // 3. IL TUO IF / ELSE ORIGINALE
-                // -----------------------------------------------------------
                 if (isAltaQualita)
                 {
-                    // VITTORIA
-                    DialogueManager.Instance.MostraMessaggio($"Ottimo lavoro (Score: {percentuale:F0}%), non si accorgeranno di nulla. Va a vedere alla tela il confronto e poi esci di qui.");
+                    DialogueManager.Instance.MostraMessaggio($"Maestro:Ottimo lavoro (Score: {percentuale:F0}%)\nnon si accorgeranno di nulla.\nVa a vedere alla tela il confronto e poi esci di qui.");
                 }
                 else
                 {
-                    // SCONFITTA
-                    DialogueManager.Instance.MostraMessaggio($"Che schifo di falso! (Score: {percentuale:F0}%) Ci scopriranno tutti! Va a vedere alla tela il confronto  e poi esci di qui.");
+                    DialogueManager.Instance.MostraMessaggio($"Maestro:Che schifo di falso! (Score: {percentuale:F0}%)\nCi scopriranno tutti!\nVa a vedere alla tela il confronto  e poi esci di qui.");
                 }
                 MaestroManager.Instance.AvanzaFase();
-                // Caricamento scena o fine logica
-                //GameManager.Instance.LoadLastScena();
                 break;
         }
     }
