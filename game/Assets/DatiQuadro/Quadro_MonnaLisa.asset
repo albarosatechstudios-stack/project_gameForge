@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Quadro_MonnaLisa
   m_EditorClassIdentifier: Assembly-CSharp::DatiQuadro
   titolo: Monna Lisa
-  info: quadro quadretto
+  info: Gioconda
   immaginePrincipale: {fileID: 21300000, guid: 2a408f01be171a64db5a11e4d7c8bcb1, type: 3}
   immagineConfronto: {fileID: 0}

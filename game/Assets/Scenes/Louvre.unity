@@ -6719,6 +6719,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1794446175833329037, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1602069623}
+    - target: {fileID: 1794446175833329037, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 2741584293697293730, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1325.5731
@@ -6768,6 +6776,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
+--- !u!114 &1602069623 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4790003837795103033, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
+  m_PrefabInstance: {fileID: 1602069622}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beb8e874154e1dd428f9691b6a3630a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
 --- !u!1 &1620308218 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6204467759376752060, guid: e4b096623883e7b43b66a103d3c42143, type: 3}

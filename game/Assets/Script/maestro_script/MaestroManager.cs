@@ -121,4 +121,18 @@ public class MaestroManager : MonoBehaviour
     {
         return showComic;
     }
+    public void DistruggiManager()
+    {
+        Debug.Log("[MaestroManager] Reset e autodistruzione in corso...");
+
+        // 1. Rimuoviamo il riferimento statico per evitare errori "MissingReference"
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+
+        // 2. Distruggiamo il GameObject che tiene lo script
+        // Nota: Unity chiamerà automaticamente OnDisable(), quindi l'evento si scollegherà da solo.
+        Destroy(gameObject);
+    }
 }

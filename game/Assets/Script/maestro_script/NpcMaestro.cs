@@ -152,7 +152,7 @@ public class NPCMaestro : MonoBehaviour
                     // SCONFITTA
                     DialogueManager.Instance.MostraMessaggio($"Che schifo di falso! (Score: {percentuale:F0}%) Ci scopriranno tutti! Va a vedere alla tela il confronto  e poi esci di qui.");
                 }
-
+                MaestroManager.Instance.AvanzaFase();
                 // Caricamento scena o fine logica
                 //GameManager.Instance.LoadLastScena();
                 break;

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Quadr_ragazza_con_perle
   m_EditorClassIdentifier: Assembly-CSharp::DatiQuadro
   titolo: Ragazza con Perle
-  info: secondo quadro
+  info: Ragazza col turbante
   immaginePrincipale: {fileID: 21300000, guid: 2d9bfe845f707d24ea57ab2f49cf8e27, type: 3}
   immagineConfronto: {fileID: 21300000, guid: 385f8266e5519a744a62618d581196f1, type: 3}
