@@ -116,8 +116,14 @@ public class NemicoScript : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Thief)
         {
             Debug.Log("GIOCATORE ARRESTATO!");
+            if (MaestroManager.Instance != null)
+            {
+                MaestroManager.Instance.goToBackPhase();
+            }
+            
+           
 
-            MaestroManager.Instance.goToBackPhase();
+            
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             int indexUltimaScena = SceneManager.sceneCountInBuildSettings - 1;
