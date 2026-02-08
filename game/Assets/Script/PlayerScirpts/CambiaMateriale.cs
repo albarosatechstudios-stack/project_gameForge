@@ -16,6 +16,9 @@ public class CambiaMateriale : MonoBehaviour
         {
             Debug.LogError("Nessun componente Renderer trovato sull'oggetto!");
         }
+        if(GameManager.Instance.CurrentState == GameState.Thief){
+            this.ApplicaNuovoMateriale();
+        }
     }
 
     // Questa è la funzione pubblica da chiamare per cambiare il materiale
