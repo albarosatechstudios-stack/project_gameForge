@@ -88,6 +88,7 @@
     <Compile Include="Assets\Script\SpawnCaffettiera.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\ThirdPersonController.cs" />
     <Compile Include="Assets\Script\CambioScena.cs" />
+    <Compile Include="Assets\Script\DisattivaButton.cs" />
     <Compile Include="Assets\Script\OpenDrawningBoard.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\AvviaComparazione.cs" />

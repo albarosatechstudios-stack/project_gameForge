@@ -493,7 +493,7 @@ GameObject:
   - component: {fileID: 667514560}
   - component: {fileID: 667514559}
   m_Layer: 5
-  m_Name: New Play
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -625,6 +625,7 @@ GameObject:
   - component: {fileID: 931531066}
   - component: {fileID: 931531065}
   - component: {fileID: 931531064}
+  - component: {fileID: 931531067}
   m_Layer: 5
   m_Name: RestartButton
   m_TagString: Untagged
@@ -746,6 +747,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931531062}
   m_CullTransparentMesh: 1
+--- !u!114 &931531067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931531062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41ccf3c0bbb7a8a4ab201295d23d1973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisattivaButton
 --- !u!1 &1193487747
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,7 +1529,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Play
+  m_text: Main Menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
