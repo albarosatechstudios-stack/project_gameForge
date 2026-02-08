@@ -4099,6 +4099,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 188.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3399481223594999018, guid: e1ee5e9cbfe7bbe4fbb3c3636f93fc4b, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6869717851034085100, guid: e1ee5e9cbfe7bbe4fbb3c3636f93fc4b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2

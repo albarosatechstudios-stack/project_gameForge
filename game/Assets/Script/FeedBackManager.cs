@@ -21,17 +21,14 @@ public class FeedbackManager : MonoBehaviour
     void Start()
     {
         // Assicuriamoci che il pannello sia chiuso all'avvio
-        if (feedbackPanel != null) feedbackPanel.SetActive(false);
+        //if (feedbackPanel != null) feedbackPanel.SetActive(false);
     }
     void Update()
     {
        
        
     
-        if (Keyboard.current.fKey.wasPressedThisFrame)
-        {
-            OpenPanel(); 
-        }
+        
     
 }
 
