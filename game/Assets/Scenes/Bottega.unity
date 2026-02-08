@@ -691,6 +691,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5446713101832705979, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5446713101832705979, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b37a7778e9d712546aa6f6eab3e577cc, type: 3}
     - target: {fileID: 8872187794568980891, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
       propertyPath: m_Name
       value: PauseManager

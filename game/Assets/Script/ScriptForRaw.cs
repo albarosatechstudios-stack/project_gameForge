@@ -107,7 +107,9 @@ public class DrawingController : MonoBehaviour
 
             Debug.Log($"Disegno salvato in: {filePath}");
             isSaved = true;
-            MaestroManager.Instance.isRealised = true;
+           
+                MaestroManager.Instance.isRealised = true;
+            
         }
     }
 

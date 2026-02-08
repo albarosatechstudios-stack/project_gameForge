@@ -65,6 +65,7 @@
     <Compile Include="Assets\SourceFiles\Scripts\MotionAudioController.cs" />
     <Compile Include="Assets\Script\DestroyManagers.cs" />
     <Compile Include="Assets\Script\MusicPatternSystem.cs" />
+    <Compile Include="Assets\Script\EnemyStatusAudio.cs" />
     <Compile Include="Assets\Script\quadri_script\DatiQuadro.cs" />
     <Compile Include="Assets\Script\ScriptForRaw.cs" />
     <Compile Include="Assets\QuickOutline\Scripts\Outline.cs" />
@@ -72,10 +73,12 @@
     <Compile Include="Assets\Script\maestro_script\MaestroManager.cs" />
     <Compile Include="Assets\Script\triggerCaffettiera.cs" />
     <Compile Include="Assets\Script\MenuController.cs" />
+    <Compile Include="Assets\Script\DisattivaByQuestMaestro.cs" />
     <Compile Include="Assets\Script\quadri_script\QuadroController.cs" />
     <Compile Include="Assets\Script\QuadroInteraction.cs" />
     <Compile Include="Assets\Script\TutorialTrigger.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\UpdateCollectibleCount.cs" />
+    <Compile Include="Assets\Script\DisattivaByGameState.cs" />
     <Compile Include="Assets\Script\maestro_script\MovementMaestro.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\Pickup.cs" />
     <Compile Include="Assets\Script\MusicGameManager.cs" />

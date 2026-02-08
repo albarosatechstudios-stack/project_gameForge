@@ -4990,6 +4990,10 @@ PrefabInstance:
       propertyPath: settingsPanel
       value: 
       objectReference: {fileID: 2003133891}
+    - target: {fileID: 7009367654376087711, guid: df53d34413ab6f044ad9dc430e62c492, type: 3}
+      propertyPath: mouseSensitivity
+      value: 45
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

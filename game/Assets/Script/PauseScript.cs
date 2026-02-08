@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
+    public  GameObject minimap; 
 
     [Header("UI Panels")]
     public GameObject pauseMenuUI;    // Il pannello con i bottoni Resume, Options, Quit
@@ -41,6 +42,7 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         settingsPanel.SetActive(false); // Chiudiamo tutto per sicurezza
+        minimap?.SetActive(true);
 
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -54,6 +56,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         // Assicuriamoci che quando apri la pausa, le settings siano chiuse
         settingsPanel.SetActive(false);
+        minimap?.SetActive(false);
 
         Time.timeScale = 0f;
         GameIsPaused = true;

@@ -39,8 +39,11 @@ public class QuadroController : MonoBehaviour
             pannello.MostraQuadro(dati.immaginePrincipale, dati.info);
             if (!isSee)
             {
-                isSee=true;
-                MaestroManager.Instance.SegnalaQuadroVisto(dati.titolo);
+                isSee = true;
+            
+                
+                    MaestroManager.Instance.SegnalaQuadroVisto(dati.titolo);
+                
             }
         }
     }
