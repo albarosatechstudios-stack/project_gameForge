@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Stato del gioco cambiato in: {newState}");
         if (newState == GameState.Thief) 
         {
-            var cambiaMat = FindObjectOfType<CambiaMateriale>();
+            var cambiaMat = FindAnyObjectByType<CambiaMateriale>();
             if (cambiaMat != null)
             {
                 cambiaMat.ApplicaNuovoMateriale();

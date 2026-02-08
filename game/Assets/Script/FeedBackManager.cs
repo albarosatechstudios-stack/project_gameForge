@@ -24,13 +24,8 @@ public class FeedbackManager : MonoBehaviour
         //if (feedbackPanel != null) feedbackPanel.SetActive(false);
     }
     void Update()
-    {
-       
-       
-    
-        
-    
-}
+    {  
+    }
 
     // Chiamata dal bottone "Apri Feedback" nel menu
     public void OpenPanel()
@@ -71,7 +66,7 @@ public class FeedbackManager : MonoBehaviour
         // Costruiamo il JSON per Discord
         // Discord si aspetta un oggetto JSON con chiave "content"
         // Attenzione: bisogna fare l'escape delle virgolette se presenti nel messaggio, 
-        // ma per semplicità qui costruiamo una stringa JSON base.
+        // ma per semplicitï¿½ qui costruiamo una stringa JSON base.
 
         string jsonPayload = "{\"content\": \"" + EscapeJson(finalMessage) + "\"}";
 
