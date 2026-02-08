@@ -887,6 +887,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3c4d5e6f7890abcdef12345678901a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &765247338
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765247340}
+  - component: {fileID: 765247339}
+  m_Layer: 0
+  m_Name: MaestroManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &765247339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765247338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab21f7857990324ab6133756ba4082e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaestroManager
+  faseAttuale: 0
+  falsoDiAltaQualita: 0
+  primoIncontroAvvenuto: 0
+  statoMentaleMaestro: 0
+--- !u!4 &765247340
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765247338}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -16.17779, y: 0, z: 82.36858}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &830373581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2839,6 +2887,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 695a726b9a5a0604992ebb17d82e7242, type: 3}
+--- !u!1 &1838269041 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6999579059631741860, guid: 695a726b9a5a0604992ebb17d82e7242, type: 3}
+  m_PrefabInstance: {fileID: 1838269040}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1874521339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2960,6 +3013,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4790003837795103033, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
+      propertyPath: minimap
+      value: 
+      objectReference: {fileID: 1838269041}
     - target: {fileID: 8872187794568980891, guid: 40646076373e06c4394a1bc3296c3840, type: 3}
       propertyPath: m_Name
       value: PauseManager
@@ -3450,3 +3507,4 @@ SceneRoots:
   - {fileID: 1874521339}
   - {fileID: 1697389108}
   - {fileID: 190440052}
+  - {fileID: 765247340}

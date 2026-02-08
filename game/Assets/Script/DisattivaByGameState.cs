@@ -1,22 +1,22 @@
 using UnityEngine;
 
-public class DisattivaByQuestMaestro : MonoBehaviour
+public class DisattivaByGameState : MonoBehaviour
 {
-    public QuestMaestro quest;
-
+    public GameState state;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (MaestroManager.Instance.faseAttuale == quest)
-        {
-            gameObject.SetActive(false);
-        }
+        
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (GameManager.Instance.CurrentState == state)
+        {
+            gameObject.SetActive(false);
+        }
+
     }
 }

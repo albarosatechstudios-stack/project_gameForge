@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptDominator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\ScriptDominator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DisattivaButton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\DisattivaButton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptForRaw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\ScriptForRaw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\quadri_script\\QuadroController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\quadri_script\\QuadroController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\MaestroManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,10 +27,6 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\GameManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptForRaw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\ScriptForRaw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\QuickOutline\\Scripts\\Outline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\QuickOutline\\Scripts\\Outline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -34,24 +38,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ScriptDominator.cs",
-              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptDominator.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\ScriptDominator.cs",
-              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptDominator.cs",
-              "RelativeToolTip": "Assets\\Script\\ScriptDominator.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAowEIAAAABAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "QuadroController.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\quadri_script\\QuadroController.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\quadri_script\\QuadroController.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\quadri_script\\QuadroController.cs",
+              "RelativeToolTip": "Assets\\Script\\quadri_script\\QuadroController.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAUwCIAAAB+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T16:04:46.437Z",
+              "WhenOpened": "2026-02-08T20:06:59.061Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "DisattivaButton.cs",
+              "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DisattivaButton.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\DisattivaButton.cs",
+              "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\DisattivaButton.cs",
+              "RelativeToolTip": "Assets\\Script\\DisattivaButton.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T19:32:58.5Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "MaestroManager.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\maestro_script\\MaestroManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\maestro_script\\MaestroManager.cs",
@@ -64,20 +81,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "ScriptForRaw.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptForRaw.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\ScriptForRaw.cs",
               "ToolTip": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\ScriptForRaw.cs",
               "RelativeToolTip": "Assets\\Script\\ScriptForRaw.cs",
-              "ViewState": "AgIAAOEAAAAAAAAAAAAAAAABAAA3AAAAAAAAAA==",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAUwHAAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-08T15:45:11.138Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Outline.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\QuickOutline\\Scripts\\Outline.cs",
               "RelativeDocumentMoniker": "Assets\\QuickOutline\\Scripts\\Outline.cs",
@@ -85,12 +102,11 @@
               "RelativeToolTip": "Assets\\QuickOutline\\Scripts\\Outline.cs",
               "ViewState": "AgIAAFMBAAAAAAAAAAAowHsBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T15:15:24.574Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T15:15:24.574Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\GameManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\GameManager.cs",
@@ -98,12 +114,11 @@
               "RelativeToolTip": "Assets\\Script\\GameManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T15:08:02.583Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T15:08:02.583Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "CambiaMateriale.cs",
               "DocumentMoniker": "C:\\Users\\Selen\\Documents\\GitHub\\project_gameForge\\game\\Assets\\Script\\PlayerScirpts\\CambiaMateriale.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\PlayerScirpts\\CambiaMateriale.cs",
@@ -111,8 +126,7 @@
               "RelativeToolTip": "Assets\\Script\\PlayerScirpts\\CambiaMateriale.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T15:04:38.506Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T15:04:38.506Z"
             }
           ]
         }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DisattivaByQuestMaestro : MonoBehaviour
+public class DisattivaButton : MonoBehaviour
 {
     public QuestMaestro quest;
 
