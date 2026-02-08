@@ -84,6 +84,7 @@
     <Compile Include="Assets\SourceFiles\Scripts\RespawnPlayer.cs" />
     <Compile Include="Assets\Script\maestro_script\NpcMaestro.cs" />
     <Compile Include="Assets\Script\NemicoScript.cs" />
+    <Compile Include="Assets\Script\PlayerScirpts\CambiaMateriale.cs" />
     <Compile Include="Assets\Script\SpawnCaffettiera.cs" />
     <Compile Include="Assets\SourceFiles\Scripts\ThirdPersonController.cs" />
     <Compile Include="Assets\Script\CambioScena.cs" />
