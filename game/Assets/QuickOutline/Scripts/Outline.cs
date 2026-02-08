@@ -2,7 +2,7 @@
 //  QuickOutline
 //
 //  Modified to activate only on Trigger entry
-//
+//  Fixed NullReferenceException on empty MeshFilters
 
 using System;
 using System.Collections.Generic;
@@ -88,13 +88,20 @@ public class Outline : MonoBehaviour
 
     void Awake()
     {
-
         // Cache renderers
         renderers = GetComponentsInChildren<Renderer>();
 
         // Instantiate outline materials
+        // NOTA: Assicurati che i materiali siano nella cartella Resources/Materials
         outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
         outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineFill"));
+
+        if (outlineMaskMaterial == null || outlineFillMaterial == null)
+        {
+            Debug.LogError("Outline.cs: Impossibile trovare i materiali in Resources/Materials/! L'outline non funzionerà.");
+            this.enabled = false;
+            return;
+        }
 
         outlineMaskMaterial.name = "OutlineMask (Instance)";
         outlineFillMaterial.name = "OutlineFill (Instance)";
@@ -105,32 +112,33 @@ public class Outline : MonoBehaviour
         // Apply material properties immediately
         needsUpdate = true;
 
-        // --- MODIFICA: Disabilita lo script all'avvio per non mostrare l'outline ---
+        // Disabilita lo script all'avvio per non mostrare l'outline subito
         this.enabled = false;
     }
 
-    // --- MODIFICA: Attiva l'outline quando il Player entra nel Trigger ---
+    // --- LOGICA TRIGGER ---
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            this.enabled = true; // Questo fa partire OnEnable() che aggiunge i materiali
+            this.enabled = true; // Attiva OnEnable -> Aggiunge i materiali
         }
     }
 
-    // --- MODIFICA: Disattiva l'outline quando il Player esce dal Trigger ---
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            this.enabled = false; // Questo fa partire OnDisable() che rimuove i materiali
+            this.enabled = false; // Attiva OnDisable -> Rimuove i materiali
         }
     }
+    // ---------------------
 
     void OnEnable()
     {
         foreach (var renderer in renderers)
         {
+            if (renderer == null) continue;
 
             // Append outline shaders
             var materials = renderer.sharedMaterials.ToList();
@@ -144,7 +152,6 @@ public class Outline : MonoBehaviour
 
     void OnValidate()
     {
-
         // Update material properties
         needsUpdate = true;
 
@@ -167,7 +174,6 @@ public class Outline : MonoBehaviour
         if (needsUpdate)
         {
             needsUpdate = false;
-
             UpdateMaterialProperties();
         }
     }
@@ -176,6 +182,7 @@ public class Outline : MonoBehaviour
     {
         foreach (var renderer in renderers)
         {
+            if (renderer == null) continue;
 
             // Remove outline shaders
             var materials = renderer.sharedMaterials.ToList();
@@ -189,7 +196,6 @@ public class Outline : MonoBehaviour
 
     void OnDestroy()
     {
-
         // Destroy material instances
         if (outlineMaskMaterial != null) Destroy(outlineMaskMaterial);
         if (outlineFillMaterial != null) Destroy(outlineFillMaterial);
@@ -197,12 +203,13 @@ public class Outline : MonoBehaviour
 
     void Bake()
     {
-
         // Generate smooth normals for each mesh
         var bakedMeshes = new HashSet<Mesh>();
 
         foreach (var meshFilter in GetComponentsInChildren<MeshFilter>())
         {
+            // FIX: Controllo null
+            if (meshFilter.sharedMesh == null) continue;
 
             // Skip duplicates
             if (!bakedMeshes.Add(meshFilter.sharedMesh))
@@ -220,10 +227,14 @@ public class Outline : MonoBehaviour
 
     void LoadSmoothNormals()
     {
-
-        // Retrieve or generate smooth normals
+        // 1. GESTIONE STATIC MESHES
         foreach (var meshFilter in GetComponentsInChildren<MeshFilter>())
         {
+            // --- FIX CRITICO: Se manca la mesh, saltiamo ---
+            if (meshFilter.sharedMesh == null)
+            {
+                continue;
+            }
 
             // Skip if smooth normals have already been adopted
             if (!registeredMeshes.Add(meshFilter.sharedMesh))
@@ -247,9 +258,14 @@ public class Outline : MonoBehaviour
             }
         }
 
-        // Clear UV3 on skinned mesh renderers
+        // 2. GESTIONE UMANOIDI (Skinned Mesh Renderer)
         foreach (var skinnedMeshRenderer in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
+            // --- FIX CRITICO: Anche gli umanoidi possono perdere la mesh ---
+            if (skinnedMeshRenderer.sharedMesh == null)
+            {
+                continue;
+            }
 
             // Skip if UV3 has already been reset
             if (!registeredMeshes.Add(skinnedMeshRenderer.sharedMesh))
@@ -267,7 +283,6 @@ public class Outline : MonoBehaviour
 
     List<Vector3> SmoothNormals(Mesh mesh)
     {
-
         // Group vertices by location
         var groups = mesh.vertices.Select((vertex, index) => new KeyValuePair<Vector3, int>(vertex, index)).GroupBy(pair => pair.Key);
 
@@ -277,7 +292,6 @@ public class Outline : MonoBehaviour
         // Average normals for grouped vertices
         foreach (var group in groups)
         {
-
             // Skip single vertices
             if (group.Count() == 1)
             {
@@ -306,7 +320,6 @@ public class Outline : MonoBehaviour
 
     void CombineSubmeshes(Mesh mesh, Material[] materials)
     {
-
         // Skip meshes with a single submesh
         if (mesh.subMeshCount == 1)
         {
@@ -326,6 +339,7 @@ public class Outline : MonoBehaviour
 
     void UpdateMaterialProperties()
     {
+        if (outlineFillMaterial == null || outlineMaskMaterial == null) return;
 
         // Apply properties according to mode
         outlineFillMaterial.SetColor("_OutlineColor", outlineColor);
