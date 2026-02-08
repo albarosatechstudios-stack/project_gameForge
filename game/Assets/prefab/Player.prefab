@@ -153,6 +153,7 @@ GameObject:
   - component: {fileID: 6842417064163435140}
   - component: {fileID: 3951376122302706184}
   - component: {fileID: 2909961211364739463}
+  - component: {fileID: 2008911175702964042}
   - component: {fileID: 6882250237165732778}
   - component: {fileID: 4275826991647734946}
   - component: {fileID: 6064614691757198866}
@@ -242,6 +243,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2008911175702964042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2644754090091767847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54bed766bd69ac1458bdc62dea796367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CambiaMateriale
+  nuovoMateriale: {fileID: 2100000, guid: 4c810272f69398f4d81edb36a3074aa2, type: 2}
 --- !u!136 &6882250237165732778
 CapsuleCollider:
   m_ObjectHideFlags: 0

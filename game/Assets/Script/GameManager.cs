@@ -75,6 +75,16 @@ public class GameManager : MonoBehaviour
         CurrentState = newState; // Aggiorna la variabile visibile nell'Inspector
 
         Debug.Log($"Stato del gioco cambiato in: {newState}");
+        if (newState == GameState.Thief) 
+        {
+            var cambiaMat = FindObjectOfType<CambiaMateriale>();
+            if (cambiaMat != null)
+            {
+                cambiaMat.ApplicaNuovoMateriale();
+            }
+        }
+            
+
         OnStateChanged?.Invoke(newState);
     }
 
