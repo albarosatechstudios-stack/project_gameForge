@@ -4,49 +4,52 @@ using System.Collections.Generic;
 public class ScriptDominator : MonoBehaviour
 {
     [Header("Configurazione")]
-    [Tooltip("In quale stato questo script deve 'Dominare' (cioè disattivare gli altri)?")]
-    public GameState statoDiAttivazione; // Qui selezioni Visitor, Thief o NoPause nell'Inspector
+    [Tooltip("Aggiungi qui TUTTI gli stati in cui gli script devono essere ATTIVI (funziona come una 'whitelist').")]
+    public QuestMaestro[] statiDiAttivazione; // ORA È UN ARRAY (Lista)
 
     [Header("Eccezioni")]
-    [Tooltip("Trascina qui gli script che NON devono mai essere toccati")]
+    [Tooltip("Trascina qui gli script che NON devono mai essere toccati (rimarranno sempre attivi)")]
     public List<MonoBehaviour> scriptDaSalvare;
 
-    // Lista privata per ricordarci quali script dobbiamo gestire (per non cercarli ogni frame)
+    // Lista privata per ricordarci quali script dobbiamo gestire
     private List<MonoBehaviour> scriptDaControllare = new List<MonoBehaviour>();
 
     void Start()
     {
-
         // 1. Al lancio del gioco, facciamo l'elenco di tutti gli script presenti sull'oggetto
         MonoBehaviour[] tuttiGliScript = GetComponents<MonoBehaviour>();
 
         foreach (MonoBehaviour script in tuttiGliScript)
         {
-            // Non controlliamo noi stessi (altrimenti lo script si suicida e smette di funzionare)
+            // Non controlliamo noi stessi
             if (script == this) continue;
 
             // Non controlliamo quelli nella lista delle eccezioni
             if (scriptDaSalvare.Contains(script)) continue;
 
-            // Aggiungiamo lo script alla lista di quelli che subirono il comando
+            // Aggiungiamo lo script alla lista di quelli che subiranno il comando
             scriptDaControllare.Add(script);
         }
     }
 
     void Update()
     {
-        // 2. Controlliamo ogni frame in che stato siamo
-        if (GameManager.Instance.CurrentState == statoDiAttivazione)
+        // 2. Controlliamo se lo stato attuale è PERMESSO
+        QuestMaestro faseCorrente = MaestroManager.Instance.faseAttuale;
+        bool deveEssereAttivo = false;
+
+        // Scansioniamo l'array: se troviamo la fase corrente nella lista, attiviamo tutto
+        foreach (QuestMaestro statoPermesso in statiDiAttivazione)
         {
-            // SE siamo nello stato scelto (es. Thief): DISATTIVA gli altri script
-            ImpostaStatoScript(false);
+            if (faseCorrente == statoPermesso)
+            {
+                deveEssereAttivo = true;
+                break; // Trovato! Non serve controllare oltre
+            }
         }
-        else
-        {
-            // SE siamo in un altro stato (es. Visitor): RIATTIVA gli altri script
-            // Questo è fondamentale, altrimenti la porta resta rotta per sempre!
-            ImpostaStatoScript(true);
-        }
+
+        // Applichiamo il risultato (True o False) a tutti gli script
+        ImpostaStatoScript(deveEssereAttivo);
     }
 
     // Funzione helper per accendere/spegnere la lista
