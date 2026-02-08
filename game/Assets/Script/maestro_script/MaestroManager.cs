@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public enum QuestMaestro
 {
     Inizio,             // Mai parlato
@@ -31,6 +32,9 @@ public class MaestroManager : MonoBehaviour
 
     string nameObjective ="";
 
+    public static System.Action OnQuestUpdated; 
+
+
     void Awake()
     {
         // Singleton Pattern
@@ -53,6 +57,7 @@ public class MaestroManager : MonoBehaviour
         {
             faseAttuale++;
             Debug.Log("[MaestroManager] Nuova fase : " + faseAttuale);
+            OnQuestUpdated?.Invoke(); 
         }
     }
 
@@ -60,6 +65,7 @@ public class MaestroManager : MonoBehaviour
     {
         if(faseAttuale == QuestMaestro.FalsoPronto)
             faseAttuale--;
+            OnQuestUpdated?.Invoke(); 
     }
 
     /// Chiamata specifica per quando il giocatore finisce il falso.
@@ -69,6 +75,7 @@ public class MaestroManager : MonoBehaviour
         faseAttuale = QuestMaestro.FalsoPronto;
         activeComic();
         Debug.Log("[MaestroManager] Il falso è pronto. Qualità ottima: " + isBuonaQualita);
+        OnQuestUpdated?.Invoke(); 
     }
 
     // --- GESTIONE ICONA E STATI ---
@@ -111,6 +118,11 @@ public class MaestroManager : MonoBehaviour
     public void setNameObjective(string name)
     {
         nameObjective = name;
+    }
+
+    public string getNameObective()
+    {
+        return nameObjective;
     }
 
     public void disableComic()
