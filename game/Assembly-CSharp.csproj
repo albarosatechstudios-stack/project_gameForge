@@ -65,6 +65,7 @@
     <Compile Include="Assets\SourceFiles\Scripts\MotionAudioController.cs" />
     <Compile Include="Assets\Script\DestroyManagers.cs" />
     <Compile Include="Assets\Script\MusicPatternSystem.cs" />
+    <Compile Include="Assets\Script\EnemyStatusAudio.cs" />
     <Compile Include="Assets\Script\quadri_script\DatiQuadro.cs" />
     <Compile Include="Assets\Script\ScriptForRaw.cs" />
     <Compile Include="Assets\QuickOutline\Scripts\Outline.cs" />
