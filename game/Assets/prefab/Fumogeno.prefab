@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73267d5dc480304419195fce8852cb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelfDestroy
-  lifetime: 30
+  lifetime: 15
 --- !u!33 &2687623046652426450
 MeshFilter:
   m_ObjectHideFlags: 0

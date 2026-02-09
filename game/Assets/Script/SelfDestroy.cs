@@ -5,7 +5,7 @@ public class SelfDestroy : MonoBehaviour
 {
     [Header("Impostazioni Tempo")]
     [Tooltip("Dopo quanti secondi l'oggetto deve distruggersi?")]
-    public float lifetime = 30f; // Default: 1 minuto
+    public float lifetime = 15f; // Default: 1 minuto
 
     private float currentCooldownTimer = 0f;
     private SpawnFumogeno player;         // riferimento al player
