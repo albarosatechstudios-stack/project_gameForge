@@ -41,7 +41,7 @@ public class HUDManagerTMP : MonoBehaviour
         {
             if (scriptCaffettiera.IsReady())
             {
-                testoCaffettiera.text = "CAFF� PRONTO [E]";
+                testoCaffettiera.text = "CAFFE' PRONTO [E]";
                 testoCaffettiera.color = Color.green;
             }
             else
