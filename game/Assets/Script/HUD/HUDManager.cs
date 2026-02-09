@@ -10,7 +10,9 @@ public class HUDManagerTMP : MonoBehaviour
 
     // Variabili private per memorizzare i riferimenti trovati
     private SpawnCaffettiera scriptCaffettiera;
-    private SmokeFromBlow scriptFumo;
+    private SmokeFromBlow smokeIntensity;
+    private SelfDestroy smokeLifeTime;
+    private SpawnFumogeno spawnFumogeno;
 
     void Update()
     {
@@ -56,17 +58,19 @@ public class HUDManagerTMP : MonoBehaviour
     void GestisciUI_Fumo()
     {
         // 1. Se non abbiamo il riferimento, proviamo a cercarlo
-        if (scriptFumo == null)
+        if (smokeIntensity == null && smokeLifeTime == null)
         {
-            scriptFumo = FindAnyObjectByType<SmokeFromBlow>();
+            smokeIntensity = FindAnyObjectByType<SmokeFromBlow>();
+            smokeLifeTime = FindAnyObjectByType<SelfDestroy>();
+            spawnFumogeno = FindAnyObjectByType<SpawnFumogeno>();
 
             // Se ancora non lo trova, nascondi il testo e esci
-            if (scriptFumo == null)
+            if (smokeLifeTime == null)
             {
                 if (testoFumo != null && GameManager.Instance.CurrentState == GameState.Thief)
                 {
                     testoFumo.text = "FUMO: PRONTO  [Q]";
-                    testoFumo.color = Color.green; // Verde come il caff� pronto};
+                    testoFumo.color = Color.green; 
                     return;
                 }
             }
@@ -77,22 +81,19 @@ public class HUDManagerTMP : MonoBehaviour
         {
             
             // Calcoli
-            float percentuale = (scriptFumo.currentSmokeLevel / scriptFumo.maxFill) * 100f;
+            float percentuale = (smokeIntensity.currentSmokeLevel / smokeIntensity.maxFill) * 100f;
 
-            float tempoVita = 0f;
-            if (scriptFumo.decayRate > 0)
-                tempoVita = scriptFumo.currentSmokeLevel / scriptFumo.decayRate;
 
-            // Visualizzazione (Mostra solo se c'� un minimo di fumo, es > 1%)
-            if (percentuale > 1f)
-            {
-                testoFumo.text = $"FUMO: {percentuale:F0}% ({tempoVita:F1}s)";
-                testoFumo.color = Color.white;
-            }
-            else
+           // Visualizzazione (Mostra solo se c'� un minimo di fumo, es > 1%)
+            if (spawnFumogeno.IsReady())
             {
                 testoFumo.text = "FUMO: PRONTO  [Q]";
                 testoFumo.color = Color.green; // Verde come il caff� pronto
+            }
+            else
+            {
+                testoFumo.text = $"INTENSITA' FUMO: {percentuale:F0}%\n(RICARICA: {smokeLifeTime.GetTimeRemaining():F1}s)";
+                testoFumo.color = Color.red;
             }
         }
     }

@@ -25,7 +25,7 @@
 //    public float emissionFactor = 10f; // Aumenta drasticamente il numero di particelle
 //    public float speedFactor = 2f;     // Spinta in avanti/alto
 //    public float noiseFactor = 1.5f;   // Il fumo impazzisce e si sparge ai lati
-//    public float sizeFactor = 0.5f;    // Diventa un po' più grosso
+//    public float sizeFactor = 0.5f;    // Diventa un po' piï¿½ grosso
 //    public float angleFactor = 20f;    // Il cono si apre (es. +20 gradi)
 
 //    [Header("Room Fill Logic")]
@@ -64,20 +64,20 @@
 
 //        // --- 1. CONTROLLO DINAMICO DELLE PARTICELLE ---
 
-//        // Emissione: Più soffi, più fumo esce
+//        // Emissione: Piï¿½ soffi, piï¿½ fumo esce
 //        emissionModule.rateOverTime = baseEmission + (s * emissionFactor);
 
-//        // Velocità: Più soffi, più va veloce (assicurati che Gravity sia negativo nell'editor!)
+//        // Velocitï¿½: Piï¿½ soffi, piï¿½ va veloce (assicurati che Gravity sia negativo nell'editor!)
 //        velocityModule.z = baseSpeed + (s * speedFactor); // Nota: se hai ruotato l'oggetto, potrebbe essere Y o Z
 
-//        // Noise (Turbolenza): Questo è il segreto per riempire la stanza.
+//        // Noise (Turbolenza): Questo ï¿½ il segreto per riempire la stanza.
 //        // Se soffi forte, il valore sale e il fumo si sparge ovunque.
 //        noiseModule.strengthMultiplier = baseNoise + (s * noiseFactor);
 
-//        // Grandezza: Particelle più grosse occupano più spazio visivo
+//        // Grandezza: Particelle piï¿½ grosse occupano piï¿½ spazio visivo
 //        mainModule.startSizeMultiplier = baseSize + (s * sizeFactor);
 
-//        // Angolo: Apriamo il cono per spruzzare fumo in un'area più ampia
+//        // Angolo: Apriamo il cono per spruzzare fumo in un'area piï¿½ ampia
 //        shapeModule.angle = baseAngle + (s * angleFactor);
 
 
@@ -221,7 +221,7 @@ public class SmokeFromBlow : MonoBehaviour
 
     // --- NUOVA PARTE: Interazione con il Nemico ---
 
-    // OnTriggerStay viene chiamato ogni frame finché un altro collider è dentro questo trigger
+    // OnTriggerStay viene chiamato ogni frame finchï¿½ un altro collider ï¿½ dentro questo trigger
     private void OnTriggerStay(Collider other)
     {
         // Controlliamo se l'oggetto toccato ha il tag "Nemico"
@@ -233,7 +233,7 @@ public class SmokeFromBlow : MonoBehaviour
             // Se lo script esiste, chiamiamo il metodo pubblico per addormentarlo
             if (nemico != null)
             {
-                // Passiamo 'this.gameObject' così il nemico sa chi lo sta tenendo addormentato
+                // Passiamo 'this.gameObject' cosï¿½ il nemico sa chi lo sta tenendo addormentato
                 nemico.ForzaSonno(this.gameObject);
             }
         }
