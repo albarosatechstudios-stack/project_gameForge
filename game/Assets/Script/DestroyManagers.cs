@@ -5,6 +5,7 @@ public class DestroyManagers : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        PauseMenu.GameIsPaused = false;
         if (MaestroManager.Instance != null)
         {
             MaestroManager.Instance.DistruggiManager();
@@ -13,6 +14,7 @@ public class DestroyManagers : MonoBehaviour
         {
             TutorialManager.instance.DistruggiManager();
         }
+       
     }
 
     // Update is called once per frame

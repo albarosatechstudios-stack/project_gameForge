@@ -95,4 +95,9 @@ public class PauseMenu : MonoBehaviour
     {
         Application.Quit();
     }
+    public void onDestroy()
+    {
+        GameIsPaused = false;
+        Destroy(gameObject);
+    }
 }

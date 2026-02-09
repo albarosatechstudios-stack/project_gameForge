@@ -31,7 +31,7 @@ public class QuadroController : MonoBehaviour
 
     void Update()
     {
-        if (PauseMenu.GameIsPaused) return;
+        if (PauseMenu.GameIsPaused) { Debug.Log("PauseMenu gameISpaused true"); return; }
         if (inTrigger && Mouse.current.leftButton.wasPressedThisFrame && GameManager.Instance.CurrentState != GameState.Thief)
         {
             Debug.Log(dati.titolo);
