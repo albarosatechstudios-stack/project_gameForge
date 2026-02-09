@@ -41,7 +41,7 @@ public class QuadroController : MonoBehaviour
             {
                 isSee = true;
             
-                
+                if(MaestroManager.Instance != null)
                     MaestroManager.Instance.SegnalaQuadroVisto(dati.titolo);
                 
             }
