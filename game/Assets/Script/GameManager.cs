@@ -62,10 +62,10 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // Debug rapido per cambiare stato con T
-        if (Keyboard.current.tKey.wasPressedThisFrame)
-        {
-            ChangeState(GameState.Thief);
-        }
+        //if (Keyboard.current.tKey.wasPressedThisFrame)
+        //{
+        //    ChangeState(GameState.Thief);
+        //}
     }
 
     public void ChangeState(GameState newState)
