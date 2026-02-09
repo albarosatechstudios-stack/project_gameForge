@@ -141,6 +141,10 @@ PrefabInstance:
       propertyPath: blow
       value: 
       objectReference: {fileID: 7516884529592297587}
+    - target: {fileID: 556648116079431177, guid: 802ec92caac47dd4fb6512198d09abfe, type: 3}
+      propertyPath: currentSmokeLevel
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5167692807680410522, guid: 802ec92caac47dd4fb6512198d09abfe, type: 3}
       propertyPath: m_LocalScale.x
       value: 10

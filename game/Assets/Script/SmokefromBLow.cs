@@ -158,6 +158,7 @@ public class SmokeFromBlow : MonoBehaviour
 
     void Start()
     {
+        currentSmokeLevel = 3f;
         emissionModule = smoke.emission;
         velocityModule = smoke.velocityOverLifetime;
         noiseModule = smoke.noise;

@@ -26,7 +26,12 @@ public class QuestHUD : MonoBehaviour
 
     public void UpdateHud()
     {
-        if (MaestroManager.Instance == null) return;
+        if (MaestroManager.Instance == null)
+        {
+            textQuest.text = "Trova il Maestro e parlagli.";
+            return;
+        }
+      
 
         QuestMaestro fase = MaestroManager.Instance.faseAttuale;
         string text = "";
@@ -44,10 +49,10 @@ public class QuestHUD : MonoBehaviour
                 text = "Hai visto il quadro. Torna a riferire al Maestro.";
                 break;
             case QuestMaestro.CreazioneFalso:
-                text = "Lavora sulla tela per creare il falso.";
+                text = "Lavora sulla tela per creare il falso e scambialo";
                 break;
             case QuestMaestro.FalsoPronto:
-                text = "Il falso è pronto. Scambialo o parla col Maestro.";
+                text = "Scambio effettuato .Torna dal Maestro";
                 break;
             case QuestMaestro.FineGioco:
                 text = "Incrociamo le dita.";
