@@ -26,7 +26,7 @@ public class HUDManagerTMP : MonoBehaviour
         // 1. Se non abbiamo il riferimento, proviamo a cercarlo
         if (scriptCaffettiera == null)
         {
-            scriptCaffettiera = FindObjectOfType<SpawnCaffettiera>();
+            scriptCaffettiera = FindAnyObjectByType<SpawnCaffettiera>();
 
             // Se ancora non lo trova, nascondi il testo e esci
             if (scriptCaffettiera == null)
@@ -41,7 +41,7 @@ public class HUDManagerTMP : MonoBehaviour
         {
             if (scriptCaffettiera.IsReady())
             {
-                testoCaffettiera.text = "CAFFÈ PRONTO [E]";
+                testoCaffettiera.text = "CAFFï¿½ PRONTO [E]";
                 testoCaffettiera.color = Color.green;
             }
             else
@@ -58,7 +58,7 @@ public class HUDManagerTMP : MonoBehaviour
         // 1. Se non abbiamo il riferimento, proviamo a cercarlo
         if (scriptFumo == null)
         {
-            scriptFumo = FindObjectOfType<SmokeFromBlow>();
+            scriptFumo = FindAnyObjectByType<SmokeFromBlow>();
 
             // Se ancora non lo trova, nascondi il testo e esci
             if (scriptFumo == null)
@@ -66,7 +66,7 @@ public class HUDManagerTMP : MonoBehaviour
                 if (testoFumo != null && GameManager.Instance.CurrentState == GameState.Thief)
                 {
                     testoFumo.text = "FUMO: PRONTO  [Q]";
-                    testoFumo.color = Color.green; // Verde come il caffè pronto};
+                    testoFumo.color = Color.green; // Verde come il caffï¿½ pronto};
                     return;
                 }
             }
@@ -83,7 +83,7 @@ public class HUDManagerTMP : MonoBehaviour
             if (scriptFumo.decayRate > 0)
                 tempoVita = scriptFumo.currentSmokeLevel / scriptFumo.decayRate;
 
-            // Visualizzazione (Mostra solo se c'è un minimo di fumo, es > 1%)
+            // Visualizzazione (Mostra solo se c'ï¿½ un minimo di fumo, es > 1%)
             if (percentuale > 1f)
             {
                 testoFumo.text = $"FUMO: {percentuale:F0}% ({tempoVita:F1}s)";
@@ -92,7 +92,7 @@ public class HUDManagerTMP : MonoBehaviour
             else
             {
                 testoFumo.text = "FUMO: PRONTO  [Q]";
-                testoFumo.color = Color.green; // Verde come il caffè pronto
+                testoFumo.color = Color.green; // Verde come il caffï¿½ pronto
             }
         }
     }
