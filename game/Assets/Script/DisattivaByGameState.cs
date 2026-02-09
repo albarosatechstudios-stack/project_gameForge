@@ -3,20 +3,32 @@ using UnityEngine;
 public class DisattivaByGameState : MonoBehaviour
 {
     public GameState state;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
+        // Se lo stato corrente corrisponde allo stato target
         if (GameManager.Instance.CurrentState == state)
         {
-            gameObject.SetActive(false);
+            // Itera su tutti i figli immediati di questo oggetto
+            foreach (Transform child in transform)
+            {
+                // Controllo se è già inattivo per evitare chiamate inutili (ottimizzazione)
+                if (child.gameObject.activeSelf)
+                {
+                    child.gameObject.SetActive(false);
+                }
+            }
         }
-
+        else
+        {
+            foreach (Transform child in transform)
+            {
+                // Controllo se è già inattivo per evitare chiamate inutili (ottimizzazione)
+                if (child.gameObject.activeSelf)
+                {
+                    child.gameObject.SetActive(true);
+                }
+            }
+        }
     }
 }

@@ -39,9 +39,14 @@ public class SpawnFumogeno : MonoBehaviour
         }
     }
 
-    //metodo da richiamare per ripristinare l'item
     public void RestoreItem()
     {
         numberOfItem = 1;
     }
+
+    public bool IsReady()
+    {
+        return numberOfItem > 0;
+    }
+
 }

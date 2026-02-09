@@ -42,8 +42,10 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         settingsPanel.SetActive(false); // Chiudiamo tutto per sicurezza
-        minimap?.SetActive(true);
 
+        if (minimap != null) {
+            minimap.SetActive(true);
+        }
         Time.timeScale = 1f;
         GameIsPaused = false;
 
@@ -56,7 +58,9 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         // Assicuriamoci che quando apri la pausa, le settings siano chiuse
         settingsPanel.SetActive(false);
-        minimap?.SetActive(false);
+        if (minimap != null) {
+            minimap.SetActive(false);
+        }
 
         Time.timeScale = 0f;
         GameIsPaused = true;
@@ -90,5 +94,10 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    public void onDestroy()
+    {
+        GameIsPaused = false;
+        Destroy(gameObject);
     }
 }

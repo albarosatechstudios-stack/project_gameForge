@@ -5,7 +5,9 @@ public class SelfDestroy : MonoBehaviour
 {
     [Header("Impostazioni Tempo")]
     [Tooltip("Dopo quanti secondi l'oggetto deve distruggersi?")]
-    public float lifetime = 30f; // Default: 1 minuto
+    public float lifetime = 15f; // Default: 1 minuto
+
+    private float currentCooldownTimer = 0f;
     private SpawnFumogeno player;         // riferimento al player
 
 
@@ -14,7 +16,13 @@ public class SelfDestroy : MonoBehaviour
         player = FindFirstObjectByType<SpawnFumogeno>();
 
         // Pianifica la distruzione di questo GameObject dopo 'lifeTime' secondi
+       currentCooldownTimer = lifetime;
        StartCoroutine(DestroyAfterTime());
+    }
+
+    void Update()
+    {
+        currentCooldownTimer -= Time.deltaTime;
     }
 
     IEnumerator DestroyAfterTime()
@@ -31,5 +39,10 @@ public class SelfDestroy : MonoBehaviour
 
         // Distruggi l'oggetto
         Destroy(gameObject);
+    }
+
+        public float GetTimeRemaining()
+    {
+        return Mathf.Max(currentCooldownTimer, 0f);
     }
 }
