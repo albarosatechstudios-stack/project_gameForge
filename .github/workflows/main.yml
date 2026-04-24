@@ -10,21 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout corretto (fetch-depth: 0)
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
+      # 2. Debug commit message
+      - name: Debug commit message
+        run: |
+          echo "Commit message:"
+          git log -1 --pretty=%B
+
+      # 3. Setup Node
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # 4. Install Firebase Admin SDK
       - name: Install Firebase Admin
         run: npm install firebase-admin
 
+      # 5. Estrarre commit message
       - name: Estrarre messaggio commit
         id: commitmsg
         run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
 
+      # 6. Process Smart Commit
       - name: Process Smart Commit (Firestore Admin)
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
