@@ -1,30 +1,3 @@
-name: Smart Commit Processor
-
-on:
-  push:
-    branches:
-      - "**"
-
-jobs:
-  process-smart-commit:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install Firebase Admin
-        run: npm install firebase-admin
-
-      - name: Estrarre messaggio commit
-        id: commitmsg
-        run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
-
       - name: Process Smart Commit (Firestore Admin)
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
@@ -45,8 +18,8 @@ jobs:
 
           console.log("Commit message:", msg);
 
-          // Regex per ID tipo OP-0 o ITEM-123
-          const match = msg.match(/(OP|ITEM)-\d+/);
+          // Trova ID tipo OP-0, OP-1, OP-99 ecc.
+          const match = msg.match(/OP-\d+/);
           if (!match) {
             console.log("Nessun task ID trovato");
             process.exit(0);
@@ -54,18 +27,16 @@ jobs:
 
           const taskId = match[0];
 
-          let status = null;
-          if (msg.includes("#done")) status = "Done";
-          if (msg.includes("#in-progress")) status = "In Progress";
-          if (msg.includes("#todo")) status = "To Do";
-
           async function run() {
-            if (status) {
-              await db.collection("tasks").doc(taskId).update({ status });
-              console.log("Aggiornato:", taskId, "→", status);
-            } else {
-              console.log("Nessuna transizione trovata");
-            }
+            const ref = db.collection("tasks").doc(taskId);
+
+            await ref.update({
+              status: "proposal",
+              "rawData.status": "proposal",
+              "rawData.Status": "proposal"
+            });
+
+            console.log("Aggiornato:", taskId, "→ proposal");
           }
 
           run();
