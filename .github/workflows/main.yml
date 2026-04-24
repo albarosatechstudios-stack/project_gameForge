@@ -1,3 +1,30 @@
+name: Smart Commit Processor
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  process-smart-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Firebase Admin
+        run: npm install firebase-admin
+
+      - name: Estrarre messaggio commit
+        id: commitmsg
+        run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+
       - name: Process Smart Commit (Firestore Admin)
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
@@ -13,7 +40,6 @@
           });
 
           const db = admin.firestore();
-
           const msg = process.env.COMMIT_MESSAGE;
 
           console.log("Commit message:", msg);
