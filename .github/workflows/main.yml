@@ -1,4 +1,4 @@
-- name: Process Smart Commit (Firestore Admin)
+  name: Process Smart Commit (Firestore Admin)
   env:
     FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
     COMMIT_MESSAGE: ${{ steps.commitmsg.outputs.msg }}
