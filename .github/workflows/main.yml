@@ -10,21 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout corretto (fetch-depth: 0)
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
+      # 2. Debug commit message
+      - name: Debug commit message
+        run: |
+          echo "Commit message:"
+          git log -1 --pretty=%B
+
+      # 3. Setup Node
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # 4. Install Firebase Admin SDK
       - name: Install Firebase Admin
         run: npm install firebase-admin
 
+      # 5. Estrarre commit message
       - name: Estrarre messaggio commit
         id: commitmsg
         run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
 
+      # 6. Process Smart Commit
       - name: Process Smart Commit (Firestore Admin)
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
@@ -40,32 +53,45 @@ jobs:
           });
 
           const db = admin.firestore();
-
           const msg = process.env.COMMIT_MESSAGE;
 
           console.log("Commit message:", msg);
 
-          // Regex per ID tipo OP-0 o ITEM-123
-          const match = msg.match(/(OP|ITEM)-\d+/);
+          // 1. Trova OP-X nel commit
+          const match = msg.match(/OP-\d+/);
           if (!match) {
-            console.log("Nessun task ID trovato");
+            console.log("Nessun task ID OP-X trovato");
             process.exit(0);
           }
 
-          const taskId = match[0];
+          const opId = match[0];
+          console.log("Trovato OP-ID:", opId);
 
-          let status = null;
-          if (msg.includes("#done")) status = "Done";
-          if (msg.includes("#in-progress")) status = "In Progress";
-          if (msg.includes("#todo")) status = "To Do";
-
+          // 2. Cerca il documento Firestore tramite titolo
           async function run() {
-            if (status) {
-              await db.collection("tasks").doc(taskId).update({ status });
-              console.log("Aggiornato:", taskId, "→", status);
-            } else {
-              console.log("Nessuna transizione trovata");
+            const snap = await db.collection("tasks")
+              .where("title", ">=", opId)
+              .where("title", "<=", opId + "\uf8ff")
+              .get();
+
+            if (snap.empty) {
+              console.log("Nessun documento trovato con title che inizia con:", opId);
+              return;
             }
+
+            const doc = snap.docs[0];
+            const docId = doc.id;
+
+            console.log("Documento trovato:", docId);
+
+            // 3. Aggiorna lo stato a proposal
+            await db.collection("tasks").doc(docId).update({
+              status: "proposal",
+              "rawData.status": "proposal",
+              "rawData.Status": "proposal"
+            });
+
+            console.log("Aggiornato:", docId, "→ proposal");
           }
 
           run();
