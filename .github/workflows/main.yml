@@ -44,25 +44,41 @@ jobs:
 
           console.log("Commit message:", msg);
 
-          // Trova ID tipo OP-0, OP-1, OP-99 ecc.
+          // 1. Trova OP-X nel commit
           const match = msg.match(/OP-\d+/);
           if (!match) {
-            console.log("Nessun task ID trovato");
+            console.log("Nessun task ID OP-X trovato");
             process.exit(0);
           }
 
-          const taskId = match[0];
+          const opId = match[0];
+          console.log("Trovato OP-ID:", opId);
 
+          // 2. Cerca il documento Firestore tramite titolo
           async function run() {
-            const ref = db.collection("tasks").doc(taskId);
+            const snap = await db.collection("tasks")
+              .where("title", ">=", opId)
+              .where("title", "<=", opId + "\uf8ff")
+              .get();
 
-            await ref.update({
+            if (snap.empty) {
+              console.log("Nessun documento trovato con title che inizia con:", opId);
+              return;
+            }
+
+            const doc = snap.docs[0];
+            const docId = doc.id;
+
+            console.log("Documento trovato:", docId);
+
+            // 3. Aggiorna lo stato a proposal
+            await db.collection("tasks").doc(docId).update({
               status: "proposal",
               "rawData.status": "proposal",
               "rawData.Status": "proposal"
             });
 
-            console.log("Aggiornato:", taskId, "→ proposal");
+            console.log("Aggiornato:", docId, "→ proposal");
           }
 
           run();
