@@ -26,6 +26,6 @@ jobs:
                   \"action\": \"process_smart_commit\",
                   \"payload\": {
                     \"fullMessage\": \"${{ steps.commitmsg.outputs.msg }}\",
-                    \"projectId\": \"VZ7nj8WTqXmLOHRFh4ZT\"
+                    \"projectId\": \"ynNKnBkpKwG6D6zN053P\"
                   }
                 }"
