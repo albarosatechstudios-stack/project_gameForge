@@ -1,57 +1,89 @@
-  name: Process Smart Commit (Firestore Admin)
-  env:
-    FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-    COMMIT_MESSAGE: ${{ steps.commitmsg.outputs.msg }}
-  run: |
-    node << 'EOF'
-    const admin = require('firebase-admin');
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
-    });
-    const db = admin.firestore();
-    const msg = process.env.COMMIT_MESSAGE.trim();
-    console.log("Commit message:", msg);
+name: Smart Commit Processor
 
-    const match = msg.match(/OP-\d+/i);
-    if (!match) {
-      console.log("Nessun task ID OP-X trovato");
-      process.exit(0);
-    }
-    const opId = match[0];
-    console.log("Trovato OP-ID:", opId);
+on:
+  push:
+    branches:
+      - testAction
 
-    async function run() {
-      // === DEBUG ===
-      console.log("=== DEBUG primi 5 documenti ===");
-      const debug = await db.collection("tasks").limit(5).get();
-      debug.forEach(d => {
-        const data = d.data();
-        console.log(`ID: ${d.id} | title: "${data.title || 'undefined'}"`);
-      });
+jobs:
+  process-smart-commit:
+    runs-on: ubuntu-latest
 
-      // Query principale
-      const snap = await db.collection("tasks")
-        .where("title", ">=", opId)
-        .where("title", "<=", opId + "\uf8ff")
-        .get();
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      if (snap.empty) {
-        console.log(`Nessun documento trovato con title che inizia con: ${opId}`);
-        return;
-      }
+      - name: Extract commit message
+        id: commitmsg
+        run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
 
-      const doc = snap.docs[0];
-      console.log("Documento trovato:", doc.id, "→ title:", doc.data().title);
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-      await db.collection("tasks").doc(doc.id).update({
-        status: "proposal",
-        "rawData.status": "proposal",
-        "rawData.Status": "proposal"
-      });
+      - name: Install Firebase Admin
+        run: npm install firebase-admin
 
-      console.log("Aggiornato:", doc.id, "→ proposal");
-    }
+      - name: Process Smart Commit (Firestore Admin)
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          COMMIT_MESSAGE: ${{ steps.commitmsg.outputs.msg }}
+        run: |
+          node << 'EOF'
+          const admin = require('firebase-admin');
 
-    run().catch(console.error);
-    EOF
+          const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+          admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+          });
+
+          const db = admin.firestore();
+          const msg = process.env.COMMIT_MESSAGE.trim();
+
+          console.log("Commit message:", msg);
+
+          const match = msg.match(/OP-\d+/i);
+          if (!match) {
+            console.log("Nessun task ID OP-X trovato");
+            process.exit(0);
+          }
+
+          const opId = match[0];
+          console.log("Trovato OP-ID:", opId);
+
+          async function run() {
+            console.log("=== DEBUG primi 5 documenti ===");
+            const debug = await db.collection("tasks").limit(5).get();
+            debug.forEach(d => {
+              const data = d.data();
+              console.log(`ID: ${d.id} | title: "${data.title || 'undefined'}"`);
+            });
+
+            const snap = await db.collection("tasks")
+              .where("title", ">=", opId)
+              .where("title", "<=", opId + "\uf8ff")
+              .get();
+
+            if (snap.empty) {
+              console.log(`Nessun documento trovato con title che inizia con: ${opId}`);
+              return;
+            }
+
+            const doc = snap.docs[0];
+            console.log("Documento trovato:", doc.id, "→ title:", doc.data().title);
+
+            await db.collection("tasks").doc(doc.id).update({
+              status: "proposal",
+              "rawData.status": "proposal",
+              "rawData.Status": "proposal"
+            });
+
+            console.log("Aggiornato:", doc.id, "→ proposal");
+          }
+
+          run().catch(console.error);
+          EOF
