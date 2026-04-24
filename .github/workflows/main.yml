@@ -3,41 +3,30 @@ name: Smart Commit Processor
 on:
   push:
     branches:
-      - "**"
+      - '**'
 
 jobs:
   process-smart-commit:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout corretto (fetch-depth: 0)
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      # 2. Debug commit message
-      - name: Debug commit message
-        run: |
-          echo "Commit message:"
-          git log -1 --pretty=%B
-
-      # 3. Setup Node
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      # 4. Install Firebase Admin SDK
-      - name: Install Firebase Admin
-        run: npm install firebase-admin
-
-      # 5. Estrarre commit message
-      - name: Estrarre messaggio commit
+      - name: Extract commit message
         id: commitmsg
         run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
 
-      # 6. Process Smart Commit
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Firebase Admin
+        run: npm install firebase-admin
+
       - name: Process Smart Commit (Firestore Admin)
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
@@ -53,12 +42,11 @@ jobs:
           });
 
           const db = admin.firestore();
-          const msg = process.env.COMMIT_MESSAGE;
+          const msg = process.env.COMMIT_MESSAGE.trim();
 
           console.log("Commit message:", msg);
 
-          // 1. Trova OP-X nel commit
-          const match = msg.match(/OP-\d+/);
+          const match = msg.match(/OP-\d+/i);
           if (!match) {
             console.log("Nessun task ID OP-X trovato");
             process.exit(0);
@@ -67,32 +55,35 @@ jobs:
           const opId = match[0];
           console.log("Trovato OP-ID:", opId);
 
-          // 2. Cerca il documento Firestore tramite titolo
           async function run() {
-            const snap = await db.collection("tasks")
+            console.log("=== DEBUG primi 5 documenti ===");
+            const debug = await db.collection("leads").limit(5).get();
+            debug.forEach(d => {
+              const data = d.data();
+              console.log(`ID: ${d.id} | title: "${data.title || 'undefined'}"`);
+            });
+
+            const snap = await db.collection("leads")
               .where("title", ">=", opId)
               .where("title", "<=", opId + "\uf8ff")
               .get();
 
             if (snap.empty) {
-              console.log("Nessun documento trovato con title che inizia con:", opId);
+              console.log(`Nessun documento trovato con title che inizia con: ${opId}`);
               return;
             }
 
             const doc = snap.docs[0];
-            const docId = doc.id;
+            console.log("Documento trovato:", doc.id, "→ title:", doc.data().title);
 
-            console.log("Documento trovato:", docId);
-
-            // 3. Aggiorna lo stato a proposal
-            await db.collection("tasks").doc(docId).update({
+            await db.collection("leads").doc(doc.id).update({
               status: "proposal",
               "rawData.status": "proposal",
               "rawData.Status": "proposal"
             });
 
-            console.log("Aggiornato:", docId, "→ proposal");
+            console.log("Aggiornato:", doc.id, "→ proposal");
           }
 
-          run();
+          run().catch(console.error);
           EOF
