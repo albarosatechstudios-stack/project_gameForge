@@ -1,82 +1,115 @@
-name: Close Leads on Merge
+name: Mini Kanban Sync (Push & Merge)
 
 on:
+  push:
+    branches:
+      - '**' # Attivo su tutti i branch per i push
   pull_request:
     types: [closed]
     branches:
-      - main # O il tuo branch di produzione/destinazione
+      - main # O il tuo branch principale (es. testAction se usi quello come base)
 
 jobs:
-  move-leads-to-won:
-    if: github.event.pull_request.merged == true
+  # JOB 1: Gestisce i push singoli (Stato -> proposal)
+  process-push:
+    # Parte solo se è un push normale e NON un merge di una PR
+    if: github.event_name == 'push' && !startsWith(github.event.head_commit.message, 'Merge pull request')
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Fondamentale per avere la cronologia dei commit
+        uses: actions/checkout@v4
 
       - name: Install Firebase Admin
         run: npm install firebase-admin
 
-      - name: Process Merge Commits
+      - name: Update to Proposal
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          # Prende i messaggi di tutti i commit della PR
-          COMMIT_MESSAGES: ${{ github.event.pull_request.title }} 
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           node << 'EOF'
           const admin = require('firebase-admin');
-          const { execSync } = require('child_process');
-
           const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
           admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
           const db = admin.firestore();
 
           async function run() {
-            // 1. Recuperiamo i messaggi di tutti i commit nel merge
-            // Usiamo git log per vedere cosa c'è tra il commit base e quello attuale
-            const baseSha = "${{ github.event.pull_request.base.sha }}";
-            const headSha = "${{ github.event.pull_request.head.sha }}";
-            
-            const logOutput = execSync(`git log ${baseSha}..${headSha} --pretty=%B`).toString();
-            console.log("Analisi messaggi nel merge:\n", logOutput);
+            const msg = process.env.COMMIT_MESSAGE || "";
+            const match = msg.match(/OP-\d+/i);
+            if (!match) return console.log("Nessun ID OP-X trovato.");
 
-            // 2. Troviamo tutti gli OP-X univoci
-            const matches = logOutput.match(/OP-\d+/gi) || [];
-            const uniqueOpIds = [...new Set(matches.map(m => m.toUpperCase()))];
+            const opId = match[0].toUpperCase();
+            const snap = await db.collection("leads")
+              .where("name", ">=", opId)
+              .where("name", "<=", opId + "\uf8ff")
+              .get();
 
-            if (uniqueOpIds.length === 0) {
-              console.log("Nessun ID OP-X trovato nei commit mergiati.");
-              return;
-            }
+            if (snap.empty) return console.log(`Lead ${opId} non trovato.`);
 
-            console.log("ID da spostare in WON:", uniqueOpIds);
+            const doc = snap.docs[0];
+            await db.collection("leads").doc(doc.id).update({
+              Status: "proposal",
+              "rawData.Status": "proposal"
+            });
+            console.log(`✅ ${opId} aggiornato a PROPOSAL`);
+          }
+          run().catch(console.error);
+          EOF
 
-            for (const opId of uniqueOpIds) {
-              const snap = await db.collection("leads")
-                .where("name", ">=", opId)
-                .where("name", "<=", opId + "\uf8ff")
-                .get();
+  # JOB 2: Gestisce il Merge della PR (Stato -> won)
+  process-merge:
+    # Parte solo se la PR è stata effettivamente mergiata
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Prende tutta la cronologia per leggere i commit della PR
 
-              if (!snap.empty) {
+      - name: Install Firebase Admin
+        run: npm install firebase-admin
+
+      - name: Update to Won
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          node << 'EOF'
+          const admin = require('firebase-admin');
+          const { execSync } = require('child_process');
+          const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+          admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+          const db = admin.firestore();
+
+          async function run() {
+            try {
+              const baseSha = "${{ github.event.pull_request.base.sha }}";
+              const headSha = "${{ github.event.pull_request.head.sha }}";
+              
+              // Estrae tutti i messaggi dei commit inclusi nel merge
+              const logOutput = execSync(`git log ${baseSha}..${headSha} --pretty=%B`).toString();
+              const matches = logOutput.match(/OP-\d+/gi) || [];
+              const uniqueOpIds = [...new Set(matches.map(m => m.toUpperCase()))];
+
+              if (uniqueOpIds.length === 0) return console.log("Nessun ID trovato nei commit mergiati.");
+
+              for (const opId of uniqueOpIds) {
+                const snap = await db.collection("leads")
+                  .where("name", ">=", opId)
+                  .where("name", "<=", opId + "\uf8ff")
+                  .get();
+
                 for (const doc of snap.docs) {
                   await db.collection("leads").doc(doc.id).update({
-                    status: "won",
-                    "rawData.Status": "won",
-                    "rawData.status":"won
+                    Status: "won",
+                    "rawData.Status": "won"
                   });
-                  console.log(`Oggetto ${opId} (ID: ${doc.id}) spostato in WON`);
+                  console.log(`🏆 ${opId} aggiornato a WON`);
                 }
-              } else {
-                console.log(`ID ${opId} non trovato nel database.`);
               }
+            } catch (e) {
+              console.error("Errore:", e.message);
             }
           }
-
-          run().catch(err => {
-            console.error(err);
-            process.exit(1);
-          });
+          run();
           EOF
