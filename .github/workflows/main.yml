@@ -13,19 +13,60 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Firebase Admin
+        run: npm install firebase-admin
+
       - name: Estrarre messaggio commit
         id: commitmsg
         run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
 
-      - name: Inviare messaggio al tuo backend
+      - name: Process Smart Commit (Firestore Admin)
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          COMMIT_MESSAGE: ${{ steps.commitmsg.outputs.msg }}
         run: |
-          curl -X POST https://ais-dev-enq7ijgfqwq632z2mscwqq-66986737941.europe-west1.run.app/api/agent/action \
-            -H "Content-Type: application/json" \
-            -H "x-agent-api-key: default_agent_key_123" \
-            -d "{
-                  \"action\": \"process_smart_commit\",
-                  \"payload\": {
-                    \"fullMessage\": \"${{ steps.commitmsg.outputs.msg }}\",
-                    \"projectId\": \"ynNKnBkpKwG6D6zN053P\"
-                  }
-                }"
+          node << 'EOF'
+          const admin = require('firebase-admin');
+
+          const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+          admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+          });
+
+          const db = admin.firestore();
+
+          const msg = process.env.COMMIT_MESSAGE;
+
+          console.log("Commit message:", msg);
+
+          // Regex per ID tipo OP-0 o ITEM-123
+          const match = msg.match(/(OP|ITEM)-\d+/);
+          if (!match) {
+            console.log("Nessun task ID trovato");
+            process.exit(0);
+          }
+
+          const taskId = match[0];
+
+          let status = null;
+          if (msg.includes("#done")) status = "Done";
+          if (msg.includes("#in-progress")) status = "In Progress";
+          if (msg.includes("#todo")) status = "To Do";
+
+          async function run() {
+            if (status) {
+              await db.collection("tasks").doc(taskId).update({ status });
+              console.log("Aggiornato:", taskId, "→", status);
+            } else {
+              console.log("Nessuna transizione trovata");
+            }
+          }
+
+          run();
+          EOF
