@@ -3,7 +3,7 @@ name: Smart Commit Processor
 on:
   push:
     branches:
-      - testAction
+      - '**'
 
 jobs:
   process-smart-commit:
