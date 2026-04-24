@@ -102,9 +102,8 @@ jobs:
                 for (const doc of snap.docs) {
                   await db.collection("leads").doc(doc.id).update({
                     status: "won",
-                    "rawData.status": "won",
-                    "rawData.Status":"won"
-                  });
+                    "rawData.status": "won"
+                 });
                   console.log(`🏆 ${opId} aggiornato a WON`);
                 }
               }
