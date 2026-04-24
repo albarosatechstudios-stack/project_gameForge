@@ -1,0 +1,82 @@
+name: Close Leads on Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main # O il tuo branch di produzione/destinazione
+
+jobs:
+  move-leads-to-won:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fondamentale per avere la cronologia dei commit
+
+      - name: Install Firebase Admin
+        run: npm install firebase-admin
+
+      - name: Process Merge Commits
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          # Prende i messaggi di tutti i commit della PR
+          COMMIT_MESSAGES: ${{ github.event.pull_request.title }} 
+        run: |
+          node << 'EOF'
+          const admin = require('firebase-admin');
+          const { execSync } = require('child_process');
+
+          const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+          admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+          const db = admin.firestore();
+
+          async function run() {
+            // 1. Recuperiamo i messaggi di tutti i commit nel merge
+            // Usiamo git log per vedere cosa c'è tra il commit base e quello attuale
+            const baseSha = "${{ github.event.pull_request.base.sha }}";
+            const headSha = "${{ github.event.pull_request.head.sha }}";
+            
+            const logOutput = execSync(`git log ${baseSha}..${headSha} --pretty=%B`).toString();
+            console.log("Analisi messaggi nel merge:\n", logOutput);
+
+            // 2. Troviamo tutti gli OP-X univoci
+            const matches = logOutput.match(/OP-\d+/gi) || [];
+            const uniqueOpIds = [...new Set(matches.map(m => m.toUpperCase()))];
+
+            if (uniqueOpIds.length === 0) {
+              console.log("Nessun ID OP-X trovato nei commit mergiati.");
+              return;
+            }
+
+            console.log("ID da spostare in WON:", uniqueOpIds);
+
+            for (const opId of uniqueOpIds) {
+              const snap = await db.collection("leads")
+                .where("name", ">=", opId)
+                .where("name", "<=", opId + "\uf8ff")
+                .get();
+
+              if (!snap.empty) {
+                for (const doc of snap.docs) {
+                  await db.collection("leads").doc(doc.id).update({
+                    status: "won",
+                    "rawData.Status": "won",
+                    "rawData.status":"won
+                  });
+                  console.log(`Oggetto ${opId} (ID: ${doc.id}) spostato in WON`);
+                }
+              } else {
+                console.log(`ID ${opId} non trovato nel database.`);
+              }
+            }
+          }
+
+          run().catch(err => {
+            console.error(err);
+            process.exit(1);
+          });
+          EOF
