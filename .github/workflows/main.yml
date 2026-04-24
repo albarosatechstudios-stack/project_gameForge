@@ -57,13 +57,13 @@ jobs:
 
           async function run() {
             console.log("=== DEBUG primi 5 documenti ===");
-            const debug = await db.collection("tasks").limit(5).get();
+            const debug = await db.collection("leads").limit(5).get();
             debug.forEach(d => {
               const data = d.data();
               console.log(`ID: ${d.id} | title: "${data.title || 'undefined'}"`);
             });
 
-            const snap = await db.collection("tasks")
+            const snap = await db.collection("leads")
               .where("title", ">=", opId)
               .where("title", "<=", opId + "\uf8ff")
               .get();
@@ -76,7 +76,7 @@ jobs:
             const doc = snap.docs[0];
             console.log("Documento trovato:", doc.id, "→ title:", doc.data().title);
 
-            await db.collection("tasks").doc(doc.id).update({
+            await db.collection("leads").doc(doc.id).update({
               status: "proposal",
               "rawData.status": "proposal",
               "rawData.Status": "proposal"
