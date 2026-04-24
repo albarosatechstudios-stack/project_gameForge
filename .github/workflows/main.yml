@@ -1,0 +1,31 @@
+name: Smart Commit Processor
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  process-smart-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Estrarre messaggio commit
+        id: commitmsg
+        run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+
+      - name: Inviare messaggio al tuo backend
+        run: |
+          curl -X POST https://ais-dev-enq7ijgfqwq632z2mscwqq-66986737941.europe-west1.run.app/api/agent/action \
+            -H "Content-Type: application/json" \
+            -H "x-agent-api-key: default_agent_key_123" \
+            -d "{
+                  \"action\": \"process_smart_commit\",
+                  \"payload\": {
+                    \"fullMessage\": \"${{ steps.commitmsg.outputs.msg }}\",
+                    \"projectId\": \"VZ7nj8WTqXmLOHRFh4ZT\"
+                  }
+                }"
