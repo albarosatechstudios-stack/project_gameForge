@@ -103,7 +103,7 @@ jobs:
                   await db.collection("leads").doc(doc.id).update({
                     status: "won",
                     "rawData.status": "won",
-		    "rawData.Status":"won"
+                    "rawData.Status":"won"
                   });
                   console.log(`🏆 ${opId} aggiornato a WON`);
                 }
